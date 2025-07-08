@@ -33,7 +33,7 @@ uvicorn app.main:app --reload  # http://localhost:8000
 ```bash
 cd frontend
 npm install
-npm run dev  # http://localhost:5173
+npm run dev  # http://localhost:3000
 ```
 
 ---
