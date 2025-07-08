@@ -127,3 +127,28 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+.env
+.venv/
+build/
+dist/
+
+# Node
+node_modules/
+frontend/.cache/
+frontend/dist/
+
+# OS
+.DS_Store
+
+# Docker
+*.log
+
+# IDEs
+.vscode/
+.idea/
