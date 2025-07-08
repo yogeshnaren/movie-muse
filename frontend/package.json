@@ -26,6 +26,7 @@
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/node": "^20.11.17",
-    "jsdom": "^22.1.0"
+    "jsdom": "^22.1.0",
+    "@types/jest": "^29.5.11"
   }
 }
