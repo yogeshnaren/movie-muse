@@ -14,7 +14,12 @@ import json
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict
+from movie_muse.schemas.serialization import (
+    dataclass_from_dict,
+    dataclass_to_dict,
+    freeze_json,
+    to_json_dict,
+)
 
 #: Closed catalogue of canonical event types named in architecture §3.3.
 #: Additional event types are an additive schema change (new enum member),
@@ -62,7 +67,7 @@ def compute_integrity_hash(
             "schema_version": schema_version,
             "causal_id": causal_id,
             "correlation_id": correlation_id,
-            "payload": payload,
+            "payload": to_json_dict(payload),
         },
         sort_keys=True,
         separators=(",", ":"),
@@ -93,6 +98,7 @@ class ProjectEvent:
     schema_version: str = "1.0"
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "payload", freeze_json(self.payload) if self.payload is not None else None)
         if self.event_type not in EVENT_TYPES:
             raise ValueError(f"unknown event_type: {self.event_type!r}")
         expected = compute_integrity_hash(

@@ -8,22 +8,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from types import MappingProxyType
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, tuple_of
-
-
-def freeze_json(value: Any) -> Any:
-    """Recursively freeze JSON-like mappings and lists so nested payloads cannot mutate."""
-
-    if isinstance(value, MappingProxyType):
-        return MappingProxyType({str(key): freeze_json(item) for key, item in value.items()})
-    if isinstance(value, dict):
-        return MappingProxyType({str(key): freeze_json(item) for key, item in value.items()})
-    if isinstance(value, list | tuple):
-        return tuple(freeze_json(item) for item in value)
-    return value
+from movie_muse.schemas.serialization import (
+    dataclass_from_dict,
+    dataclass_to_dict,
+    freeze_json,
+    tuple_of,
+)
 
 
 class OperationType(str, Enum):
