@@ -350,3 +350,12 @@ This file records orchestrator actions that the schema cannot store.
   policy implementation is in progress. Status remains IN_PROGRESS; do not
   self-PASS. EXT-REMOTE-MODEL stays NOT_RUN until a real configured provider
   is available.
+
+## 2026-09-01T16:09:26Z
+
+- MM-009 implementation commit `35b79c09389016c2a7449b643e21aa534915446a`
+  (feature `94da62290f41c6aee46be8e81f8d2c1dd226fe6e`, then ruff/mypy fix).
+- Fingerprint at `35b79c0`: `a3eda7bba96e49d334887e9eb471d51d42c3b407048fd2f3552612534a8ccc20`
+- Focused pytest 35 passed; affected 81; full pytest 393 passed, 1 warning.
+- Status remains IN_PROGRESS; independent verification required before PASS.
+- EXT-REMOTE-MODEL remains NOT_RUN (remote env unset; smoke fail-closed).
