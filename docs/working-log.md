@@ -265,6 +265,24 @@ This file records orchestrator actions that the schema cannot store.
 - Focused pytest 43 passed; affected 88; full pytest 321 passed, 1 warning.
 - Status remains IN_PROGRESS; independent re-verification required before PASS.
 
+## 2026-09-01T14:36:32Z
+
+- Independent verifier FAIL for MM-006 at `4a90ca9737553a37b41b39d2fb083ea4653a3867`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:36:32Z`
+- Prior FAILs re-probed PASS. Integration-to-human `register_actor` overwrite
+  allowed craft confirmation without snapshot/epoch change.
+- Status remains IN_PROGRESS; do not self-PASS.
+
+## 2026-09-01T14:40:26Z
+
+- MM-006 follow-up at `6b2460032d81a2356130dbffb076ab24caeb2b43`
+- Fingerprint at that commit: `886781ca4d93707bb135c97fc32ef2892f2c40bf41bba9718eed7a8ee8caf96f`
+- Actor principal kind and tenant binding are immutable; snapshots include
+  actor identity.
+- Focused pytest 45 passed; affected 90; full pytest 323 passed, 1 warning.
+- Status remains IN_PROGRESS; independent re-verification required before PASS.
+
+
 
 
 

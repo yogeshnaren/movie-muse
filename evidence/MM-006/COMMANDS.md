@@ -32,6 +32,9 @@ source, `tests/__init__.py`, or the status ledger.
    otherwise). `accept_invitation` remains invitee-only. Identity does not
    import `authorization.policy` (cycle + public-sibling boundary); the local
    `_MANAGE_ACL_ROLES` set must match `ROLE_ACTIONS` for `Action.MANAGE_ACL`.
+   Registered actor principal kind and tenant binding are immutable
+   (`ActorImmutableError` on overwrite). `permission_snapshot_id` hashes actor
+   identity as well as memberships and ACL epoch.
 
 2. **Authorization.** Deny-by-default `authorize(principal, action, resource, *, acl_epoch, context) -> Decision`.
    Resources: organization, project, document, branch, artifact, operation.
@@ -117,25 +120,36 @@ quarantine FAILed: owner and writer queued envelopes both became
 `actor_id` and `project_id` match the revoked membership; regression
 `test_revoke_quarantines_only_the_revoked_principal_outbox`.
 
+## Independent FAIL at `4a90ca9` and follow-up
+
+Verifier `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:36:32Z`
+FAILED `4a90ca9737553a37b41b39d2fb083ea4653a3867`. Prior FAILs re-probed PASS.
+`register_actor` overwrote an integration actor as human without changing
+epoch or snapshot, after which `confirm_craft_decision` succeeded. Fix:
+immutable principal kind/tenant binding; snapshot includes actor identity;
+regressions
+`test_integration_actor_cannot_be_reclassified_as_human_for_craft` and
+`test_register_actor_is_idempotent_and_rejects_kind_overwrite`.
+
 ## Commands
 
 See `quality-commands.txt`. Headline (implementation commit
-`7e6ae2c428129540ad8a2b9a601a72238520cd50`):
+`6b2460032d81a2356130dbffb076ab24caeb2b43`):
 
 | Command | Result |
 |---|---|
 | `python3 scripts/validate_handoff.py` | `HANDOFF_VALIDATION=PASS` |
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy src` | Success: no issues found in 91 source files |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 43 passed |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 88 passed |
-| `PYTHONPATH=src python3 -m pytest` | 321 passed, 1 warning |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 45 passed |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 90 passed |
+| `PYTHONPATH=src python3 -m pytest` | 323 passed, 1 warning |
 | `PYTHONPATH=src python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py check-scopes` | `SCOPE_COVERAGE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py runnable` | `MM-006` only |
 | `PYTHONPATH=src python3 scripts/mm_status.py boundaries` | 0 violations |
 | `PYTHONPATH=src python3 scripts/mm_status.py secrets` | 0 hits |
-| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5` |
+| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `886781ca4d93707bb135c97fc32ef2892f2c40bf41bba9718eed7a8ee8caf96f` |
 | `./scripts/verify_all.sh` | fail-closed `NOT_READY` missing `migrations_backup_and_recovery` |
 
 The named `scripts/gates/migrations_backup_and_recovery.sh` is not added
@@ -143,9 +157,9 @@ because introducing it requires changing MM-001-owned `tests/release/` (the
 fail-closed test currently asserts that missing gate name). That would STALE
 MM-001. Expected for this package.
 
-Implementation commit (code + tests): `7e6ae2c428129540ad8a2b9a601a72238520cd50`
-Input fingerprint at that commit: `8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5`
-UTC: `2026-09-01T14:29:54Z`
+Implementation commit (code + tests): `6b2460032d81a2356130dbffb076ab24caeb2b43`
+Input fingerprint at that commit: `886781ca4d93707bb135c97fc32ef2892f2c40bf41bba9718eed7a8ee8caf96f`
+UTC: `2026-09-01T14:40:26Z`
 
 An evidence-only follow-up commit changes HEAD, so `fingerprint MM-006` at
 the evidence commit will differ because `verification_commit` is hashed.
@@ -168,10 +182,10 @@ None for MM-006. Live/sandbox gates belong to later packages.
 ## Verifier instructions
 
 1. Fresh detached checkout of implementation commit
-   `7e6ae2c428129540ad8a2b9a601a72238520cd50` or this evidence commit.
+   `6b2460032d81a2356130dbffb076ab24caeb2b43` or this evidence commit.
    Recompute `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006`
-   at that HEAD. At `7e6ae2c` it must be
-   `8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5`.
+   at that HEAD. At `6b24600` it must be
+   `886781ca4d93707bb135c97fc32ef2892f2c40bf41bba9718eed7a8ee8caf96f`.
    Do not edit the canonical ledger or `/workspace`.
 2. Confirm MM-001 through MM-005 are current PASS and MM-006 is IN_PROGRESS.
 3. Run ruff, mypy src, focused pytest (`tests/identity tests/authorization tests/audit`),
@@ -197,7 +211,9 @@ None for MM-006. Live/sandbox gates belong to later packages.
      `queued_for_sync`, `flush_outbox` does not upload the revoked work,
      blobs remain, remaining owner can still save.
    - **Craft-decision AI deny:** human department contributor matching the
-     department is allowed; integration principal is denied.
+     department is allowed; integration principal is denied. Re-registering
+     the same actor id as `human` raises `ActorImmutableError`; epoch and
+     snapshot stay unchanged; `confirm_craft_decision` remains denied.
    - **Modes same canon:** writer and director (and composed modes) `project_view`
      head revision ids equal `RevisionService.canon_head_id()`; no forked project copy.
    - **Audit hash:** append-only; `update`/`delete` fail; replay recomputes
