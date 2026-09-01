@@ -12,6 +12,7 @@ from movie_muse.persistence.api import (
     CURRENT_SCHEMA_VERSION,
     LocalSaveState,
     LocalWorkspace,
+    PersistenceError,
     SaveNotAcknowledgedError,
     recover_if_corrupt,
 )
@@ -205,4 +206,17 @@ def test_replace_does_not_drop_export_column(
     workspace.open_project(project, replace(document, title=document.title), branch_id=branch_id)
     row = workspace.store.fetchone("SELECT last_export_at FROM documents WHERE id=?", (document.id,))
     assert row is not None and row["last_export_at"]
+    workspace.close()
+
+
+def test_unauthorized_actor_cannot_save(
+    tmp_path: Path, project_bundle: tuple[Project, ScreenplayDocument, str]
+) -> None:
+    project, document, branch_id = project_bundle
+    workspace = LocalWorkspace(tmp_path / "ws")
+    workspace.open_project(project, document, branch_id=branch_id)
+    head = workspace.head_revision_id(document.id)
+    with pytest.raises(PersistenceError, match="not authorized"):
+        workspace.save(workspace.reopen(), actor_id=new_id("actor"), device_id="dev_a")
+    assert workspace.head_revision_id(document.id) == head
     workspace.close()

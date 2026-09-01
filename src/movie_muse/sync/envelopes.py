@@ -111,3 +111,24 @@ def cross_field_integrity_errors(
     if envelope.acl_epoch != expected_acl_epoch:
         errors.append("acl_epoch")
     return tuple(errors)
+
+
+def authorization_errors(
+    envelope: SyncEnvelope,
+    *,
+    authorized_actor_ids: frozenset[str],
+) -> tuple[str, ...]:
+    """Deny-by-default actor authorization required by architecture §4.
+
+    Integrity of hashes and revision bindings is not authorization. An
+    envelope whose actor is not a principal for this project/branch at the
+    current ACL epoch must not apply. The authorized set is empty until a
+    project owner (or later ACL grant) is present.
+    """
+
+    errors: list[str] = []
+    if not authorized_actor_ids:
+        errors.append("authorization")
+    if not envelope.actor_id or envelope.actor_id not in authorized_actor_ids:
+        errors.append("actor_id")
+    return tuple(errors)

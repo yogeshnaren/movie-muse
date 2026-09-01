@@ -30,7 +30,9 @@ verifier may do that.
    unknown bases buffered then applied; non-head ancestry is an explicit
    conflict (no last-writer-wins). Apply is fail-closed: `resulting_revision_id`
    must equal `document.base_revision_id`, and project/branch/schema/ACL-epoch
-   must match the local document row. A forged resulting revision is conflicted
+   must match the local document row. Authorization is deny-by-default: only
+   the project owner (plus any later ACL grants) may author an envelope at the
+   current ACL epoch. A forged `actor_id` or resulting revision is conflicted
    and must not advance the peer head. Revoked unsynced work is quarantined
    recovery-only, never uploaded or destroyed.
 7. Unambiguous workspace status: saved locally, queued for sync, synced,
@@ -46,8 +48,8 @@ See `quality-commands.txt`. Headline:
 |---|---|
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy src` | Success: no issues found in 61 source files |
-| `python3 -m pytest tests/persistence tests/sync -q` | 22 passed |
-| `python3 -m pytest` | 255 passed, 1 warning |
+| `python3 -m pytest tests/persistence tests/sync -q` | 24 passed |
+| `python3 -m pytest` | 257 passed, 1 warning |
 | `python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `python3 scripts/mm_status.py boundaries` | 0 violations |
 | `python3 scripts/mm_status.py secrets` | 0 hits |
@@ -79,5 +81,9 @@ after independent verification of this package.
    base. Outcome must be `conflicted` (or rejected). Peer head must not change
    to the forged revision. Repeat for project_id, branch_id, schema_version,
    and acl_epoch mismatches.
+5d. Probe envelope authorization: take a valid owner-authored envelope, alter
+   only `actor_id` to another valid actor id, ingest into a peer whose head
+   equals the envelope base. Outcome must be `conflicted` (or rejected). Peer
+   head must not advance. A valid unmodified envelope must still apply.
 6. Confirm other modules import `movie_muse.persistence.api` and
    `movie_muse.sync.api` only.

@@ -176,3 +176,25 @@ def test_valid_envelope_still_applies_to_peer(
     assert outcome == "applied"
     assert head_after == ack.revision_id
     assert loaded.base_revision_id == ack.revision_id
+
+
+def test_forged_actor_id_is_conflicted_and_does_not_advance_head(
+    tmp_path: Path, project_bundle: tuple[Project, ScreenplayDocument, str]
+) -> None:
+    """Architecture §4: ingest must verify authorization, not only integrity."""
+
+    project, document, branch_id = project_bundle
+    source = LocalWorkspace(tmp_path / "source")
+    source.open_project(project, document, branch_id=branch_id)
+    ack = source.save(source.reopen(), actor_id=project.owner_actor_id, device_id="dev_a")
+    envelope = dict(_envelopes(source)[ack.operation_id])
+    envelope["actor_id"] = new_id("actor")
+    source.close()
+
+    outcome, head_after, loaded = _peer_ingest(
+        tmp_path, project, document, branch_id, envelope, label="peer-forged-actor"
+    )
+    assert outcome == "conflicted"
+    assert head_after == document.base_revision_id
+    assert loaded.base_revision_id == document.base_revision_id
+    assert head_after != ack.revision_id

@@ -163,6 +163,19 @@ This file records orchestrator actions that the schema cannot store.
   tests cover forged revision and sibling field mismatches. Status remains
   IN_PROGRESS; do not self-PASS.
 
+## 2026-09-01T12:22:52Z
+
+- Independent verifier FAIL for MM-004 at `67664090381dbb0e7e5189c805954e5fadbf06c0`
+- Verifier: `movie-muse-independent-verifier-gpt-5.6-sol/2026-09-01T12:22:52Z`
+- Integrity, interrupted migration, crash-safe save, and outage probes PASSed.
+  Authorization FAILed: altering only `actor_id` on a valid envelope was applied
+  on a peer whose head equalled the envelope base.
+- Fix: deny-by-default actor authorization at save and ingest against the
+  project owner (and any later ACL grants) at the current ACL epoch. Actor-only
+  forgery and unauthorized local save tests added. Status remains IN_PROGRESS;
+  do not self-PASS.
+
+
 
 
 

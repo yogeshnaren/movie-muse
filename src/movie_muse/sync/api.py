@@ -8,6 +8,7 @@ from __future__ import annotations
 from movie_muse.sync.envelopes import (
     ENVELOPE_SCHEMA_VERSION,
     SyncEnvelope,
+    authorization_errors,
     cross_field_integrity_errors,
 )
 from movie_muse.sync.errors import DuplicateEnvelopeError, SyncError, SyncUploadBlockedError
@@ -20,5 +21,6 @@ __all__ = [
     "SyncError",
     "SyncProtocol",
     "SyncUploadBlockedError",
+    "authorization_errors",
     "cross_field_integrity_errors",
 ]

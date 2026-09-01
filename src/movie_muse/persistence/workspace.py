@@ -79,6 +79,33 @@ class LocalWorkspace:
         self.store.set_meta("active_project_id", project.id)
         self.store.set_meta("active_branch_id", branch_id)
 
+    def authorized_actor_ids(self, project_id: str) -> frozenset[str]:
+        """Deny-by-default principals allowed to mutate this project.
+
+        MM-004 binds authorization to the project owner at the current ACL
+        epoch. MM-006 may extend the set; unknown actors remain denied.
+        """
+
+        row = self.store.fetchone(
+            "SELECT payload_json FROM projects WHERE id=?",
+            (project_id,),
+        )
+        if row is None:
+            return frozenset()
+        project = Project.from_dict(json.loads(str(row["payload_json"])))
+        actors = {project.owner_actor_id}
+        extra = self.store.get_meta("authorized_actor_ids")
+        if extra:
+            try:
+                parsed = json.loads(extra)
+            except json.JSONDecodeError:
+                parsed = []
+            if isinstance(parsed, list):
+                for actor_id in parsed:
+                    if isinstance(actor_id, str) and actor_id:
+                        actors.add(actor_id)
+        return frozenset(actor_id for actor_id in actors if actor_id)
+
     def save(
         self,
         document: ScreenplayDocument,
@@ -98,6 +125,8 @@ class LocalWorkspace:
         branch_id = self.store.get_meta("active_branch_id")
         if branch_id is None:
             raise SaveNotAcknowledgedError("workspace has no active branch")
+        if actor_id not in self.authorized_actor_ids(current.project_id):
+            raise PersistenceError("actor is not authorized to save this project")
         parent = current.base_revision_id
         revision_id = new_id("revision")
         persisted = replace(current, base_revision_id=revision_id)

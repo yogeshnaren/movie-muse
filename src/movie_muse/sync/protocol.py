@@ -12,7 +12,11 @@ from movie_muse.persistence.api import (
     utc_now,
 )
 from movie_muse.schemas.api import ScreenplayDocument
-from movie_muse.sync.envelopes import SyncEnvelope, cross_field_integrity_errors
+from movie_muse.sync.envelopes import (
+    SyncEnvelope,
+    authorization_errors,
+    cross_field_integrity_errors,
+)
 from movie_muse.sync.errors import SyncUploadBlockedError
 
 
@@ -49,7 +53,7 @@ class SyncProtocol:
         Ancestry that does not match the current head becomes an explicit
         conflict. Cross-field integrity failures (resulting revision, project,
         branch, schema version, ACL epoch) are conflicted and must not advance
-        head.
+        head. Unauthorized actors are conflicted even when integrity holds.
         """
 
         envelope = SyncEnvelope.from_dict(payload)
@@ -116,9 +120,17 @@ class SyncProtocol:
             )
         )
 
+    def _authorization_conflict(self, envelope: SyncEnvelope) -> bool:
+        return bool(
+            authorization_errors(
+                envelope,
+                authorized_actor_ids=self.workspace.authorized_actor_ids(envelope.project_id),
+            )
+        )
+
     def _apply_one(self, payload: dict[str, Any]) -> str:
         envelope = SyncEnvelope.from_dict(payload)
-        if self._integrity_conflict(envelope):
+        if self._integrity_conflict(envelope) or self._authorization_conflict(envelope):
             self._mark_inbox(envelope.operation_id, LocalSaveState.CONFLICTED.value)
             return "conflicted"
         if self.workspace.has_revision(envelope.resulting_revision_id):
