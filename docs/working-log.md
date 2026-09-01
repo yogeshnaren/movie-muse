@@ -116,5 +116,14 @@ This file records orchestrator actions that the schema cannot store.
 - Nested immutability, enum-narrowing BREAKING classification, fixtures, migrations, IDs, and API boundaries reproduced
 - Wave 2 is DAG-runnable: MM-003 (implemented, pending independent verify) and MM-004 (persistence/sync not yet implemented)
 
+## 2026-09-01T11:45:00Z
+
+- MM-004 implemented: embedded SQLite + content-addressed blobs, crash-safe
+  save/outbox transaction, forward migrations, backup/recovery, airplane-mode
+  and outage continuity, idempotent outbox/inbox (duplicate / out-of-order /
+  conflict / quarantine). Status remains IN_PROGRESS; independent verification
+  required. Named `migrations_backup_and_recovery` shell gate deferred so
+  MM-001-owned fail-closed tests are not STALEd before MM-003 verification.
+
 
 
