@@ -42,11 +42,14 @@ Role: implementer. This record is not a PASS record and does not populate
   projected from review records.
 - Investor listing returns approved versions only.
 - Preview persists a checksum-bound `ArtifactRender` without delivery. Delivery
-  requires `Action.EXPORT`, a matching preview id/checksum, and explicit
-  `confirm=True`. It creates and audits a `DeliveryRecord` but deliberately
-  performs no network send.
-- Export requires `Action.EXPORT`, deterministically re-renders, and writes the
-  exact bytes to the caller-selected filesystem path.
+  requires `Action.EXPORT`, an approved review status, a matching preview
+  id/checksum, and explicit `confirm=True`. It creates and audits a
+  `DeliveryRecord` but deliberately performs no network send.
+- Export requires `Action.EXPORT` and an approved version, deterministically
+  re-renders, and writes the exact bytes to the caller-selected filesystem path.
+- Index load-modify-commit runs inside `workspace.store.transaction()`
+  (`BEGIN IMMEDIATE`) so concurrent LocalWorkspace writers cannot
+  last-writer-win the artifact catalog.
 - Revision links validate the source through `RevisionService`. Unknown
   artifacts, versions, templates, revisions, principals, and unconfirmed or
   mismatched delivery fail closed.
@@ -61,6 +64,8 @@ Role: implementer. This record is not a PASS record and does not populate
   inputs when regenerating/re-rendering.
 - `52ccb97651cc3805540e1168a9b6889a0200aea5` — bind immutable-operation
   rejection and editor attribution to the authorized acting principal.
+- `562f80ef9f4c09f9f62e9fd16e72ba20768552ff` — serialize index writes with
+  BEGIN IMMEDIATE; export/delivery require approved review status.
 
 The first focused run at `6f1e554` had 12 passing and 2 failing parametrized
 render cases. Runtime evidence showed nested `mappingproxy` values reaching
@@ -76,10 +81,10 @@ Full output summary is in `quality-commands.txt`.
   `HANDOFF_VALIDATION=PASS`.
 - `python3 -m ruff check src tests scripts backend` — exit 0, all checks passed.
 - `python3 -m mypy src` — exit 0, no issues in 97 source files.
-- `PYTHONPATH=src python3 -m pytest tests/artifacts -q` — exit 0, 14 passed.
+- `PYTHONPATH=src python3 -m pytest tests/artifacts -q` — exit 0, 15 passed.
 - `PYTHONPATH=src python3 -m pytest tests/artifacts tests/authorization tests/revisions tests/persistence -q`
-  — exit 0, 75 passed.
-- `PYTHONPATH=src python3 -m pytest` — exit 0, 338 passed, one pre-existing
+  — exit 0, 76 passed.
+- `PYTHONPATH=src python3 -m pytest` — exit 0, 339 passed, one pre-existing
   HTTPX deprecation warning.
 - `PYTHONPATH=src python3 scripts/mm_status.py validate` — exit 0,
   `STATUS_VALIDATE=PASS`.
@@ -91,8 +96,8 @@ Full output summary is in `quality-commands.txt`.
   zero violations.
 - `PYTHONPATH=src python3 scripts/mm_status.py secrets` — exit 0, zero hits.
 - `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007` — exit 0;
-  at `52ccb97`, fingerprint
-  `98b6523c634e857a93fa17d1dde72d907e9c4171147d38ed222d73b059e35c80`.
+  at `562f80e`, fingerprint
+  `f764825392d8c8cf139641e8216444384e998a88dab164cabdd29ffe557a69fd`.
 - `./scripts/verify_all.sh` — exit 1 as designed:
   `MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY
   missing_executable_gate=migrations_backup_and_recovery`.
@@ -125,14 +130,13 @@ None for MM-007.
 
 ## Independent verifier instructions
 
-1. Use a clean detached checkout containing commits `6f1e554`, `1c0f96f`, and
-   `52ccb97`.
+1. Use a clean detached checkout containing implementation commit `562f80e`.
    Confirm MM-002/MM-004/MM-005/MM-006 are current PASS, MM-007 is
    IN_PROGRESS with `pass_record: null`, and no other status changed.
 2. Recompute
    `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007` at the
-   checkout HEAD. At implementation commit `52ccb97`, the expected fingerprint
-   is `98b6523c634e857a93fa17d1dde72d907e9c4171147d38ed222d73b059e35c80`.
+   checkout HEAD. At implementation commit `562f80e`, the expected fingerprint
+   is `f764825392d8c8cf139641e8216444384e998a88dab164cabdd29ffe557a69fd`.
    An evidence-only commit changes the hashed verification commit, while
    fingerprinted owned/shared paths remain unchanged.
 3. Run every exact quality command in the prior section. Do not treat the
@@ -145,10 +149,11 @@ None for MM-007.
    version/review/render/link lifecycle, and create no SQL tables.
 6. Render one version repeatedly and regenerate it against the same source.
    Bytes/checksums must match exactly while version ids differ.
-7. Preview a version, then call delivery as owner with `confirm=False`.
-   It must fail and write no `DeliveryRecord`. A viewer must fail export and
-   confirmed delivery. Owner delivery with matching preview plus
-   `confirm=True` must append exactly one local record and an
+7. Preview a version. Owner export/delivery of a draft must fail. After
+   explicit in_review then approved, call delivery as owner with
+   `confirm=False`. It must fail and write no `DeliveryRecord`. A viewer must
+   fail export and confirmed delivery. Owner delivery with matching preview
+   plus `confirm=True` must append exactly one local record and an
    `artifact_delivery_confirmed` audit record with `network_sent=False`.
 8. Confirm a generated version is draft, direct draft-to-approved fails, and
    investor listing hides it. Submit for review and explicitly approve as an
@@ -161,5 +166,7 @@ None for MM-007.
     source/checksum changed and inputs unchanged.
 11. Verify unknown source revision/template/version and airplane-mode behavior,
     plus the AST/public-boundary test preventing imports of sibling internals.
-12. Do not mark PASS unless independent verification succeeds and the
+12. Two LocalWorkspace connections, two-party barrier, concurrent
+    `create_artifact`; both succeed with distinct ids; list retains both.
+13. Do not mark PASS unless independent verification succeeds and the
     orchestrator records a committed pass record.

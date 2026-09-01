@@ -309,3 +309,9 @@ This file records orchestrator actions that the schema cannot store.
 
 - MM-007 moved to IN_PROGRESS after confirming all dependencies are current PASS.
 - Implementing the generic content-addressed artifact lifecycle; independent verification is required before PASS.
+
+## 2026-09-01T15:20:00Z
+
+- MM-007 follow-up: serialize artifact index writes with BEGIN IMMEDIATE;
+  export and delivery require an approved version.
+- Status remains IN_PROGRESS; independent verification required before PASS.
