@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T11:33:30Z"
+last_updated_utc: "2026-09-01T12:04:07Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -212,10 +212,58 @@ items:
     title: Professional screenplay document kernel
     milestone: A
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-001, MM-002]
     scope_keys: [module.document]
-    pass_record: null
+    pass_record:
+      verification_commit: 71f93c2c51e795a300dc6c35278d588e541e80d0
+      input_fingerprint: 0794d7a86e40c8055877cc8c5833b3fa47c66bda94fed9d4f498e6b37940fc9c
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-003
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/document -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-003/COMMANDS.md
+        - evidence/MM-003/quality-commands.txt
+        - src/movie_muse/document/
+        - tests/document/
+      completed_at_utc: "2026-09-01T12:04:07Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T12:04:07Z
+        independence_basis: Independent verifier agent; did not implement MM-003. Reproduced acceptance from a remotely fetched, fresh detached worktree without changing product code or the completion ledger. Re-probed the prior 222b2f6 sequence-membership failure independently.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm003-independent-verify-remote-71f93c2
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-003
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/document -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-003/COMMANDS.md
+          - evidence/MM-003/quality-commands.txt
+          - src/movie_muse/document/
+          - tests/document/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 251 tests with one unrelated HTTPX deprecation warning.
+          - GUI authoring, outage, persistence, crash and provider behavior belong to later packages; no required MM-003 check was skipped.
     blocker: null
   - id: MM-004
     title: Local-first persistence, migrations, and sync primitives

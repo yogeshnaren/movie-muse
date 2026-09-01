@@ -142,5 +142,13 @@ This file records orchestrator actions that the schema cannot store.
   `insert_scene` supports index and exact `scene_ids` replacement. Replay-equals-target
   tests cover add/reorder/remove. Status remains IN_PROGRESS pending re-verification.
 
+## 2026-09-01T12:04:07Z
+
+- Independent verifier PASS for MM-003 at `71f93c2c51e795a300dc6c35278d588e541e80d0`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T12:04:07Z`
+- Orchestrator recorded canonical PASS; fingerprint `0794d7a86e40c8055877cc8c5833b3fa47c66bda94fed9d4f498e6b37940fc9c`
+- Prior sequence-membership FAIL at `222b2f6` was independently re-probed and passed
+- MM-004 remains IN_PROGRESS pending independent re-verification of the migration-resume fix
+
 
 
