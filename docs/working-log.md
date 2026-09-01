@@ -342,3 +342,11 @@ This file records orchestrator actions that the schema cannot store.
 - Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-01T15:43:56Z`
 - Orchestrator recorded canonical PASS; fingerprint `2cea51a5d51bcc4f6f6ba2c62c92008c6d3d72a9299cfaa8868fc1f4670a5242`
 - Next runnable: MM-009, MM-010, MM-011
+
+## 2026-09-01T16:10:00Z
+
+- MM-009 moved to IN_PROGRESS after confirming MM-008 is current PASS and
+  MM-009 is DAG-runnable. Model router, provider adapters, local models, and
+  policy implementation is in progress. Status remains IN_PROGRESS; do not
+  self-PASS. EXT-REMOTE-MODEL stays NOT_RUN until a real configured provider
+  is available.

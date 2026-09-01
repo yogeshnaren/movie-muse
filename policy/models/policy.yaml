@@ -1,0 +1,25 @@
+# Movie Muse model-routing policy. Version is recorded on every RoutingDecision.
+version: "1.0.0"
+schema_version: "1.0"
+description: >
+  Capability-based routing across deterministic doubles, local models, and remote
+  providers. AI is optional at project and capability level. Paid remote routes
+  require Action.RUN_PAID_PROVIDER. Live gate EXT-REMOTE-MODEL stays NOT_RUN
+  until a real configured provider is available; unset env fails closed.
+quality_tier_preferences:
+  fast:
+    - deterministic_double
+    - local_stub
+  standard:
+    - local_stub
+    - deterministic_double
+    - remote_http
+  premium:
+    - remote_http
+    - finetune_script_adapter
+    - local_stub
+default_prompt_id: builtin.default
+default_prompt_version: "1.0.0"
+remote_base_url_env: MOVIE_MUSE_REMOTE_MODEL_BASE_URL
+remote_api_key_env: MOVIE_MUSE_REMOTE_MODEL_API_KEY
+local_runtime_env: MOVIE_MUSE_LOCAL_MODEL_RUNTIME

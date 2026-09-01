@@ -1,0 +1,46 @@
+# Explicit epistemic contracts. Actor/audience may not calculate production
+# numbers. production_analyst may calculate. executor may propose structured
+# ops. expert/researcher retrieve. divergence proposes alternatives.
+role_contracts:
+  actor:
+    may: [interpret, experience]
+    may_not: [calculate_production]
+    capabilities: [experience, generate_text]
+  audience:
+    may: [interpret, experience]
+    may_not: [calculate_production]
+    capabilities: [experience, generate_text]
+  expert:
+    may: [retrieve]
+    may_not: [calculate_production]
+    capabilities:
+      - retrieve
+      - extract_structure
+      - generate_text
+      - script_suggest
+      - remote_only
+      - remote_preferred
+      - restricted_remote_only
+      - disabled_capability
+  researcher:
+    may: [retrieve]
+    may_not: [calculate_production]
+    capabilities: [retrieve, extract_structure, generate_text]
+  divergence:
+    may: [propose_alternatives]
+    may_not: [calculate_production]
+    capabilities: [propose_alternatives, generate_text]
+  executor:
+    may: [propose_structured_ops]
+    may_not: [calculate_production]
+    capabilities:
+      - propose_structured_ops
+      - generate_text
+      - script_suggest
+      - extract_structure
+      - remote_only
+      - remote_preferred
+  production_analyst:
+    may: [calculate]
+    may_not: []
+    capabilities: [calculate_production, extract_structure, generate_text]

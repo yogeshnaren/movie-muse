@@ -1,0 +1,11 @@
+# Data classification ranks. Higher rank is more sensitive. A provider may serve
+# a request only when rank(request) <= rank(provider.max_classification).
+classification:
+  ranks:
+    public: 0
+    internal: 1
+    confidential: 2
+    restricted: 3
+  remote_max: internal
+  local_max: restricted
+  double_max: restricted
