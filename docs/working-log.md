@@ -375,3 +375,14 @@ This file records orchestrator actions that the schema cannot store.
 - Orchestrator recorded canonical PASS; fingerprint `baf2e69d463ccbd9613ddfe1048ddbaa77f77952b4ed80c850f78e95558ff793`
 - EXT-REMOTE-MODEL remains NOT_RUN
 - MM-010 remains IN_PROGRESS; MM-011 is DAG-runnable
+
+## 2026-09-01T16:31:14Z
+
+- Implementer: `movie-muse-implementer` on branch `cursor/mm-001-toolchain-baseline-04ec`
+- MM-010 (Rights registry, provenance, sources, and Evidence Bundles) implemented:
+  `src/movie_muse/rights/` (public surface `movie_muse.rights.api`) and
+  `src/movie_muse/provenance/` (public surface `movie_muse.provenance.api`),
+  plus `tests/rights/**` and `tests/provenance/**`.
+- Status intentionally left at `IN_PROGRESS`; `pass_record` intentionally left
+  `null`. The implementer does not self-PASS; independent verification is required.
+- MM-009 pass_record was not modified.
