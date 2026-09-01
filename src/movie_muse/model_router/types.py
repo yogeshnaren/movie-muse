@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Mapping
+from typing import Any
 
 
 class RoleContract(str, Enum):
@@ -57,7 +58,7 @@ def contains_chain_of_thought(value: object) -> bool:
             if contains_chain_of_thought(inner):
                 return True
         return False
-    if isinstance(value, (list, tuple)):
+    if isinstance(value, list | tuple):
         return any(contains_chain_of_thought(item) for item in value)
     if isinstance(value, str):
         lowered = value.lower()

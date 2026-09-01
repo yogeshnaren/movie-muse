@@ -4,7 +4,13 @@ from __future__ import annotations
 
 import pytest
 
-from movie_muse.model_router.api import AiOffError, CapabilityDisabledError, ConsentRequiredError, ModelRequest, ModelRouter
+from movie_muse.model_router.api import (
+    AiOffError,
+    CapabilityDisabledError,
+    ConsentRequiredError,
+    ModelRequest,
+    ModelRouter,
+)
 from movie_muse.schemas.api import ChangeSet, ChangeSetOperation, OperationType, new_id
 
 

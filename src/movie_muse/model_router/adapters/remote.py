@@ -103,7 +103,8 @@ class RemoteProviderAdapter:
         output_raw = response.get("output")
         if not isinstance(output_raw, dict):
             raise ProviderUnavailableError("remote provider omitted object output")
-        usage = response.get("usage") if isinstance(response.get("usage"), dict) else {}
+        usage_raw = response.get("usage")
+        usage: dict[str, Any] = dict(usage_raw) if isinstance(usage_raw, dict) else {}
         model_version = str(response.get("model_version") or decision.model_version)
         return AdapterResult(
             output=dict(output_raw),
