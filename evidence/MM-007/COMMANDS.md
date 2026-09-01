@@ -59,6 +59,8 @@ Role: implementer. This record is not a PASS record and does not populate
   subsystem, tests, and IN_PROGRESS bookkeeping.
 - `1c0f96fa8d0f73bb4e711e141b96f32abf52801d` — preserve nested immutable
   inputs when regenerating/re-rendering.
+- `52ccb97651cc3805540e1168a9b6889a0200aea5` — bind immutable-operation
+  rejection and editor attribution to the authorized acting principal.
 
 The first focused run at `6f1e554` had 12 passing and 2 failing parametrized
 render cases. Runtime evidence showed nested `mappingproxy` values reaching
@@ -89,8 +91,8 @@ Full output summary is in `quality-commands.txt`.
   zero violations.
 - `PYTHONPATH=src python3 scripts/mm_status.py secrets` — exit 0, zero hits.
 - `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007` — exit 0;
-  at `1c0f96f`, fingerprint
-  `51c34e36f68e7ab91a1b264f9dc381bbe1f03392f630c4e4b5667286388fae50`.
+  at `52ccb97`, fingerprint
+  `98b6523c634e857a93fa17d1dde72d907e9c4171147d38ed222d73b059e35c80`.
 - `./scripts/verify_all.sh` — exit 1 as designed:
   `MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY
   missing_executable_gate=migrations_backup_and_recovery`.
@@ -123,13 +125,14 @@ None for MM-007.
 
 ## Independent verifier instructions
 
-1. Use a clean detached checkout containing commits `6f1e554` and `1c0f96f`.
+1. Use a clean detached checkout containing commits `6f1e554`, `1c0f96f`, and
+   `52ccb97`.
    Confirm MM-002/MM-004/MM-005/MM-006 are current PASS, MM-007 is
    IN_PROGRESS with `pass_record: null`, and no other status changed.
 2. Recompute
    `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007` at the
-   checkout HEAD. At implementation commit `1c0f96f`, the expected fingerprint
-   is `51c34e36f68e7ab91a1b264f9dc381bbe1f03392f630c4e4b5667286388fae50`.
+   checkout HEAD. At implementation commit `52ccb97`, the expected fingerprint
+   is `98b6523c634e857a93fa17d1dde72d907e9c4171147d38ed222d73b059e35c80`.
    An evidence-only commit changes the hashed verification commit, while
    fingerprinted owned/shared paths remain unchanged.
 3. Run every exact quality command in the prior section. Do not treat the
