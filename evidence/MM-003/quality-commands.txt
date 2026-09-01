@@ -1,0 +1,7 @@
+MM-003 document kernel — quality command evidence
+Captured: 2026-09-01T11:15:48Z
+
+python3 -m ruff check src tests scripts backend  -> All checks passed
+python3 -m mypy -> Success: no issues found in 45 source files
+python3 -m pytest tests/document -q -> 18 passed
+python3 -m pytest -> passed (1 httpx deprecation warning)
