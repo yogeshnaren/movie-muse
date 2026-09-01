@@ -518,7 +518,7 @@ items:
     title: Durable worker and transactional job infrastructure
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-001, MM-004, MM-006]
     scope_keys: [module.jobs, runtime.worker]
     pass_record: null

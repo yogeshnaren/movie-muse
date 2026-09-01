@@ -322,3 +322,9 @@ This file records orchestrator actions that the schema cannot store.
 - Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T15:28:26Z`
 - Orchestrator recorded canonical PASS; fingerprint `a53bc2333b8b37bda47b59d8897cc36109be546d61d118809f08850180bd0dd8`
 - Next runnable: MM-008
+
+## 2026-09-01T15:32:00Z
+
+- MM-008 moved to IN_PROGRESS. Durable jobs/worker implementation continues
+  after the previous implementer stopped mid-execution.
+- Independent verification is required before PASS.
