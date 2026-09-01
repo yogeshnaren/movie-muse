@@ -18,6 +18,12 @@ This file records orchestrator actions that the schema cannot store.
 - Orchestrator recorded canonical PASS; fingerprint `3fb992a3f29b60c1c36bcf46e7e32a5fa6f47cc5c24e3869fd4f20c6acee3952`
 - Next runnable: MM-002
 
+## 2026-09-01T10:15:39Z
+
+- Toolchain tests updated so runnable selection is status-invariant
+- MM-001 marked STALE (global.toolchain test change); historical pass_record retained
+- MM-002 remains IN_PROGRESS and cannot PASS until MM-001 is re-verified
+
 ## 2026-09-01T09:28:00Z
 
 - MM-002 moved to IN_PROGRESS

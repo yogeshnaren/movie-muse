@@ -20,10 +20,27 @@ from movie_muse.toolchain.scopes import load_scope_catalog, map_files_to_scopes
 
 
 @pytest.mark.toolchain
-def test_only_mm001_is_runnable_at_baseline() -> None:
+def test_only_mm001_is_runnable_when_nothing_has_passed() -> None:
     root = repo_root()
     manifest = load_manifest_data(root)
+    for item in manifest["items"]:
+        item["status"] = "NOT_STARTED"
+        item["pass_record"] = None
     assert list_runnable_items(manifest) == ["MM-001"]
+
+
+@pytest.mark.toolchain
+def test_runnable_items_match_dependency_pass_rule() -> None:
+    root = repo_root()
+    manifest = load_manifest_data(root)
+    items = items_by_id(manifest)
+    expected = [
+        item_id
+        for item_id, item in items.items()
+        if item.get("status") != "PASS"
+        and all(items[str(dep)].get("status") == "PASS" for dep in (item.get("depends_on") or []))
+    ]
+    assert list_runnable_items(manifest) == expected
 
 
 @pytest.mark.toolchain
@@ -97,7 +114,7 @@ def test_mm001_change_does_not_stale_unstarted_dependents() -> None:
     report = invalidate_from_files(manifest, catalog, ["src/movie_muse/toolchain/engine.py"])
     assert "MM-001" in report["directly_affected"]
     assert items["MM-001"]["status"] == "STALE"
-    assert items["MM-002"]["status"] == "NOT_STARTED"
+    assert items["MM-002"]["status"] != "STALE"
 
 
 @pytest.mark.toolchain
