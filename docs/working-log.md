@@ -125,6 +125,15 @@ This file records orchestrator actions that the schema cannot store.
   required. Named `migrations_backup_and_recovery` shell gate deferred so
   MM-001-owned fail-closed tests are not STALEd before MM-003 verification.
 
+## 2026-09-01T12:00:07Z
+
+- Independent verifier FAIL for MM-004 at `1c8c6e9`: crash after v2 ADD COLUMN
+  and before the schema_migrations row made reopen fail with duplicate column.
+- Fix: migrations run in an explicit transaction; already-present ADD COLUMN
+  DDL is skipped and the version row is recorded. Fault-injection test added.
+  Status remains IN_PROGRESS pending re-verification.
+
+
 ## 2026-09-01T11:52:00Z
 
 - Independent verifier FAIL for MM-003 at `222b2f6`: `structural_diff()` ignored

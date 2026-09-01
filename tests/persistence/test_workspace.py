@@ -149,6 +149,37 @@ def test_forward_migration_from_v1(tmp_path: Path) -> None:
     workspace.close()
 
 
+def test_interrupted_v2_ddl_before_version_row_is_resumable(tmp_path: Path) -> None:
+    """Crash after ADD COLUMN but before schema_migrations insert must reopen."""
+
+    import sqlite3
+
+    from movie_muse.persistence.migrations import SCHEMA_V1, column_exists
+    from movie_muse.persistence.store import DB_NAME
+
+    db_path = tmp_path / "crashed" / DB_NAME
+    db_path.parent.mkdir(parents=True)
+    connection = sqlite3.connect(str(db_path))
+    connection.executescript(
+        SCHEMA_V1
+        + "INSERT INTO schema_migrations(version, name, applied_at) "
+        "VALUES (1, 'initial_local_store', '2026-01-01T00:00:00Z');"
+        + "ALTER TABLE documents ADD COLUMN last_export_at TEXT;"
+    )
+    versions = {row[0] for row in connection.execute("SELECT version FROM schema_migrations")}
+    assert versions == {1}
+    assert column_exists(connection, "documents", "last_export_at")
+    connection.close()
+
+    workspace = LocalWorkspace(tmp_path / "crashed")
+    assert workspace.store.schema_version() == CURRENT_SCHEMA_VERSION
+    workspace.store.execute("SELECT last_export_at FROM documents LIMIT 1")
+    workspace.close()
+    again = LocalWorkspace(tmp_path / "crashed")
+    assert again.store.schema_version() == CURRENT_SCHEMA_VERSION
+    again.close()
+
+
 def test_status_is_unambiguous_after_save(
     tmp_path: Path, project_bundle: tuple[Project, ScreenplayDocument, str]
 ) -> None:

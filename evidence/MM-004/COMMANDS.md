@@ -21,8 +21,9 @@ verifier may do that.
    Rolled-back transactions are not acknowledged.
 3. Airplane-mode / auth / subscription / sync / AI outages cannot lock
    open/edit/save/reopen/export of already-local work. Upload flush is refused.
-4. Forward migrations (v1 initial schema, v2 additive `last_export_at`) that are
-   idempotent and retry the unfinished version after a crash.
+4. Forward migrations (v1 initial schema, v2 additive `last_export_at`) in an
+   explicit transaction. If ADD COLUMN committed without a version row, reopen
+   skips the existing column and records the version (crash-safe / idempotent).
 5. Backup (sqlite backup API + blob copy) and corruption recovery from backup.
 6. Idempotent sync envelopes (project, branch, base/resulting revision, hash,
    actor, device, operation ID, schema version, ACL epoch). Duplicates ignored;
@@ -42,7 +43,7 @@ See `quality-commands.txt`. Headline:
 |---|---|
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy src` | Success: no issues found in 61 source files |
-| `python3 -m pytest tests/persistence tests/sync -q` | 18 passed |
+| `python3 -m pytest tests/persistence tests/sync -q` | 19 passed |
 | `python3 -m pytest` | 248 passed, 1 warning |
 | `python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `python3 scripts/mm_status.py boundaries` | 0 violations |
@@ -67,5 +68,8 @@ after independent verification of this package.
    backup; v1 database migrates to current; duplicate envelopes; out-of-order
    envelopes apply after the missing base arrives; conflicting heads are
    conflicted, not last-writer-wins.
+5b. Probe interrupted migration: apply v2 ADD COLUMN without inserting the
+   schema_migrations row, then reopen. Must succeed and record v2. Re-open
+   again must stay idempotent.
 6. Confirm other modules import `movie_muse.persistence.api` and
    `movie_muse.sync.api` only.
