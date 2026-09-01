@@ -123,6 +123,61 @@ def test_revoke_bumps_epoch_and_quarantines_unsynced_outbox(
         pass
 
 
+def test_revoke_quarantines_only_the_revoked_principal_outbox(
+    bound_identity: tuple[IdentityService, LocalWorkspace, Project, ScreenplayDocument, Actor],
+) -> None:
+    identity, workspace, project, document, owner = bound_identity
+    writer = make_human_actor(
+        organization_id=project.organization_id, display_name="Writer"
+    )
+    identity.register_actor(writer)
+    invitation = identity.invite(
+        inviter_actor_id=owner.id,
+        invitee_actor_id=writer.id,
+        project_id=project.id,
+        role=Role.WRITER,
+    )
+    membership = identity.accept_invitation(invitation.id, actor_id=writer.id)
+    owner_ack = workspace.save(document, actor_id=owner.id, device_id="dev_owner")
+    writer_ack = workspace.save(
+        workspace.reopen(document.id), actor_id=writer.id, device_id="dev_writer"
+    )
+    assert owner_ack.state is LocalSaveState.QUEUED_FOR_SYNC
+    assert writer_ack.state is LocalSaveState.QUEUED_FOR_SYNC
+
+    identity.revoke_membership(membership.id, actor_id=owner.id)
+
+    owner_row = workspace.store.fetchone(
+        "SELECT status FROM outbox WHERE operation_id=?",
+        (owner_ack.operation_id,),
+    )
+    writer_row = workspace.store.fetchone(
+        "SELECT status FROM outbox WHERE operation_id=?",
+        (writer_ack.operation_id,),
+    )
+    assert owner_row is not None
+    assert writer_row is not None
+    assert str(owner_row["status"]) == LocalSaveState.QUEUED_FOR_SYNC.value
+    assert str(writer_row["status"]) == LocalSaveState.RECOVERY_ONLY.value
+    pending_ids = {
+        str(item["operation_id"]) for item in workspace.pending_outbox()
+    }
+    assert owner_ack.operation_id in pending_ids
+    assert writer_ack.operation_id not in pending_ids
+
+    flushed = SyncProtocol(workspace).flush_outbox()
+    assert owner_ack.operation_id in flushed
+    assert writer_ack.operation_id not in flushed
+    still_writer = workspace.store.fetchone(
+        "SELECT status FROM outbox WHERE operation_id=?",
+        (writer_ack.operation_id,),
+    )
+    assert still_writer is not None
+    assert str(still_writer["status"]) == LocalSaveState.RECOVERY_ONLY.value
+    assert workspace.has_revision(writer_ack.revision_id)
+    assert workspace.has_revision(owner_ack.revision_id)
+
+
 def test_cannot_revoke_project_owner(
     bound_identity: tuple[IdentityService, LocalWorkspace, Project, ScreenplayDocument, Actor],
 ) -> None:

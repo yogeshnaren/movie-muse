@@ -25,9 +25,9 @@ from movie_muse.identity.types import (
     PrincipalKind,
     Role,
 )
-from movie_muse.persistence.api import LocalWorkspace, digest_payload, utc_now
+from movie_muse.persistence.api import LocalSaveState, LocalWorkspace, digest_payload, utc_now
 from movie_muse.schemas.api import Project, new_id, new_ulid
-from movie_muse.sync.api import SyncProtocol
+from movie_muse.sync.api import SyncEnvelope
 
 # Must match authorization.policy.ROLE_ACTIONS for Action.MANAGE_ACL.
 # Identity cannot import authorization.policy: that would cycle through
@@ -318,8 +318,10 @@ class IdentityService:
         revoked["revoked_at"] = now
         index["memberships"][membership.id] = revoked
         self._commit(index)
-        SyncProtocol(self.workspace).quarantine_unsynced(
-            reason=f"acl_revocation:{membership.actor_id}:epoch:{new_epoch}"
+        self._quarantine_revoked_unsynced(
+            actor_id=membership.actor_id,
+            project_id=membership.project_id,
+            reason=f"acl_revocation:{membership.actor_id}:epoch:{new_epoch}",
         )
         return Membership.from_dict(revoked)
 
@@ -368,6 +370,25 @@ class IdentityService:
         membership = self._membership_for_actor(index, actor_id, project_id)
         if membership.role not in _MANAGE_ACL_ROLES:
             raise AclDeniedError(f"actor {actor_id} is denied manage_acl on {project_id}")
+
+    def _quarantine_revoked_unsynced(self, *, actor_id: str, project_id: str, reason: str) -> int:
+        """Preserve only the revoked principal's unsynced work as recovery-only.
+
+        Architecture §4: revoked unsynced work is never uploaded and never
+        destroyed. Authorized collaborators remain queued for sync.
+        """
+
+        quarantined = 0
+        for payload in self.workspace.pending_outbox():
+            envelope = SyncEnvelope.from_dict(payload)
+            if envelope.actor_id != actor_id or envelope.project_id != project_id:
+                continue
+            self.workspace.put_outbox_status(
+                envelope.operation_id, LocalSaveState.RECOVERY_ONLY.value
+            )
+            quarantined += 1
+        self.workspace.store.set_meta("quarantine_reason", reason)
+        return quarantined
 
     def _membership_for_actor(self, index: dict[str, Any], actor_id: str, project_id: str) -> Membership:
         for raw in index["memberships"].values():
