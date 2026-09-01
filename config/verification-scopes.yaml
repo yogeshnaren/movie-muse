@@ -1,0 +1,587 @@
+# Maps every movie_muse_build_status.yaml scope_key to owned/shared paths.
+# Fingerprints hash owned+shared paths after applying fingerprint_exclude_globs.
+# A changed file that matches no scope fails status validation.
+schema_version: "2.0"
+unmatched_paths_fail: true
+empty_owned_paths_fail_when_item_exists:
+  statuses: [IN_PROGRESS, PASS, STALE, FAIL]
+fingerprint_exclude_globs:
+  - movie_muse_build_status.yaml
+  - docs/working-log.md
+  - evidence/**
+  - "**/.gitkeep"
+  - "**/__pycache__/**"
+  - "**/*.pyc"
+  - "**/.pytest_cache/**"
+  - "**/.mypy_cache/**"
+  - "**/.ruff_cache/**"
+  - "**/node_modules/**"
+  - "**/.venv/**"
+  - "**/dist/**"
+  - "**/coverage/**"
+shared_ignore_globs:
+  - "**/.git/**"
+scopes:
+  global.toolchain:
+    owned:
+      - src/movie_muse/toolchain/**
+      - src/movie_muse/__init__.py
+      - src/movie_muse/py.typed
+      - pyproject.toml
+      - requirements-dev.txt
+      - Makefile
+      - scripts/bootstrap.sh
+      - scripts/mm_status.py
+      - .tool-versions
+      - .python-version
+      - .nvmrc
+      - config/runtimes.yaml
+      - config/module-layout.yaml
+      - config/module-boundaries.yaml
+      - config/secrets-policy.yaml
+      - docs/adr/**
+      - tests/architecture/**
+      - tests/toolchain/**
+      - tests/security/**
+      - .env.example
+    shared:
+      - config/verification-scopes.yaml
+      - dependency_dag.yaml
+      - schemas/build-status.schema.json
+      - scripts/validate_handoff.py
+      - AGENTS.md
+      - .cursor/rules/**
+      - .cursor/agents/**
+  global.ci:
+    owned:
+      - .github/workflows/ci.yml
+      - scripts/verify_all.sh
+      - scripts/gates/manifest_and_staleness.sh
+      - scripts/gates/static_quality_and_boundaries.sh
+      - docker-compose.yml
+      - backend/Dockerfile
+      - frontend/Dockerfile
+    shared:
+      - config/verification-scopes.yaml
+      - config/runtimes.yaml
+      - .github/workflows/**
+  global.manifest:
+    owned:
+      - movie_muse_build_status.yaml
+      - docs/working-log.md
+      - evidence/**
+    shared: []
+    fingerprint: false
+  domain.schemas:
+    owned:
+      - src/movie_muse/schemas/**
+      - schemas/domain/**
+      - tests/schemas/**
+    shared:
+      - schemas/build-status.schema.json
+  module.document:
+    owned:
+      - src/movie_muse/document/**
+      - tests/document/**
+    shared:
+      - src/movie_muse/schemas/**
+      - schemas/domain/**
+  module.persistence:
+    owned:
+      - src/movie_muse/persistence/**
+      - tests/persistence/**
+    shared:
+      - src/movie_muse/schemas/**
+  module.sync:
+    owned:
+      - src/movie_muse/sync/**
+      - tests/sync/**
+    shared:
+      - src/movie_muse/persistence/**
+  module.revisions:
+    owned:
+      - src/movie_muse/revisions/**
+      - tests/revisions/**
+    shared:
+      - src/movie_muse/document/**
+      - src/movie_muse/persistence/**
+  module.identity:
+    owned:
+      - src/movie_muse/identity/**
+      - tests/identity/**
+    shared:
+      - src/movie_muse/schemas/**
+  module.authorization:
+    owned:
+      - src/movie_muse/authorization/**
+      - tests/authorization/**
+    shared:
+      - src/movie_muse/identity/**
+  module.audit:
+    owned:
+      - src/movie_muse/audit/**
+      - tests/audit/**
+    shared:
+      - src/movie_muse/identity/**
+      - src/movie_muse/authorization/**
+  module.artifacts:
+    owned:
+      - src/movie_muse/artifacts/**
+      - tests/artifacts/**
+    shared:
+      - src/movie_muse/revisions/**
+      - src/movie_muse/authorization/**
+  module.jobs:
+    owned:
+      - src/movie_muse/jobs/**
+      - tests/jobs/**
+    shared:
+      - src/movie_muse/authorization/**
+      - src/movie_muse/persistence/**
+  runtime.worker:
+    owned:
+      - src/movie_muse/worker/**
+      - tests/worker/**
+    shared:
+      - src/movie_muse/jobs/**
+  module.model_router:
+    owned:
+      - src/movie_muse/model_router/**
+      - tests/model_router/**
+    shared:
+      - src/movie_muse/jobs/**
+      - src/movie_muse/worker/**
+      - policy/models/**
+  policy.models:
+    owned:
+      - policy/models/**
+      - tests/policy/models/**
+    shared:
+      - src/movie_muse/model_router/**
+  module.rights:
+    owned:
+      - src/movie_muse/rights/**
+      - tests/rights/**
+    shared:
+      - src/movie_muse/artifacts/**
+      - src/movie_muse/authorization/**
+  module.provenance:
+    owned:
+      - src/movie_muse/provenance/**
+      - tests/provenance/**
+    shared:
+      - src/movie_muse/rights/**
+  module.dependencies:
+    owned:
+      - src/movie_muse/dependencies/**
+      - tests/dependencies/**
+    shared:
+      - src/movie_muse/revisions/**
+      - src/movie_muse/jobs/**
+  test.fixtures:
+    owned:
+      - fixtures/**
+      - tests/fixtures/**
+    shared:
+      - src/movie_muse/document/**
+      - src/movie_muse/rights/**
+  test.harness:
+    owned:
+      - tests/harness/**
+      - src/movie_muse/testkit/**
+    shared:
+      - fixtures/**
+  module.fdx:
+    owned:
+      - src/movie_muse/fdx/**
+      - tests/fdx/**
+    shared:
+      - src/movie_muse/document/**
+      - fixtures/**
+  test.fdx:
+    owned:
+      - tests/fdx/**
+      - fixtures/fdx/**
+    shared:
+      - src/movie_muse/fdx/**
+  module.layout:
+    owned:
+      - src/movie_muse/layout/**
+      - tests/layout/**
+    shared:
+      - src/movie_muse/document/**
+      - src/movie_muse/fdx/**
+  module.production_revisions:
+    owned:
+      - src/movie_muse/production_revisions/**
+      - tests/production_revisions/**
+    shared:
+      - src/movie_muse/layout/**
+      - src/movie_muse/revisions/**
+  test.render:
+    owned:
+      - tests/render/**
+      - fixtures/render/**
+    shared:
+      - src/movie_muse/layout/**
+  app.editor:
+    owned:
+      - apps/editor/**
+      - frontend/src/editor/**
+      - tests/editor/**
+    shared:
+      - src/movie_muse/document/**
+      - src/movie_muse/layout/**
+      - frontend/src/**
+  ux.authoring:
+    owned:
+      - frontend/src/**
+      - apps/editor/**
+      - tests/ux/authoring/**
+    shared:
+      - src/movie_muse/document/**
+  test.competitive:
+    owned:
+      - tests/competitive/**
+      - docs/competitive/**
+    shared:
+      - fixtures/**
+      - src/movie_muse/fdx/**
+      - src/movie_muse/layout/**
+  module.context:
+    owned:
+      - src/movie_muse/context/**
+      - tests/context/**
+    shared:
+      - src/movie_muse/model_router/**
+      - src/movie_muse/rights/**
+  module.retrieval:
+    owned:
+      - src/movie_muse/retrieval/**
+      - tests/retrieval/**
+    shared:
+      - src/movie_muse/context/**
+      - src/movie_muse/rights/**
+  module.compiler:
+    owned:
+      - src/movie_muse/compiler/**
+      - tests/compiler/**
+    shared:
+      - src/movie_muse/document/**
+      - src/movie_muse/model_router/**
+  module.film_ir:
+    owned:
+      - src/movie_muse/film_ir/**
+      - tests/film_ir/**
+    shared:
+      - src/movie_muse/compiler/**
+  module.state_engine:
+    owned:
+      - src/movie_muse/state_engine/**
+      - tests/state_engine/**
+    shared:
+      - src/movie_muse/film_ir/**
+  module.creative_intent:
+    owned:
+      - src/movie_muse/creative_intent/**
+      - tests/creative_intent/**
+    shared:
+      - src/movie_muse/film_ir/**
+      - src/movie_muse/state_engine/**
+  module.proposals:
+    owned:
+      - src/movie_muse/proposals/**
+      - tests/proposals/**
+    shared:
+      - src/movie_muse/revisions/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/creative_intent/**
+  capability.writer_unblock:
+    owned:
+      - src/movie_muse/writer_unblock/**
+      - tests/writer_unblock/**
+    shared:
+      - src/movie_muse/proposals/**
+  capability.reference_lens:
+    owned:
+      - src/movie_muse/reference_lens/**
+      - tests/reference_lens/**
+    shared:
+      - src/movie_muse/rights/**
+      - src/movie_muse/retrieval/**
+  capability.continuity:
+    owned:
+      - src/movie_muse/continuity/**
+      - tests/continuity/**
+    shared:
+      - src/movie_muse/film_ir/**
+      - src/movie_muse/state_engine/**
+  capability.impact:
+    owned:
+      - src/movie_muse/impact/**
+      - tests/impact/**
+    shared:
+      - src/movie_muse/continuity/**
+      - src/movie_muse/proposals/**
+  module.project_memory:
+    owned:
+      - src/movie_muse/project_memory/**
+      - tests/project_memory/**
+    shared:
+      - src/movie_muse/artifacts/**
+      - src/movie_muse/rights/**
+  capability.room_mode:
+    owned:
+      - src/movie_muse/room_mode/**
+      - tests/room_mode/**
+    shared:
+      - src/movie_muse/project_memory/**
+      - src/movie_muse/authorization/**
+  module.collaboration:
+    owned:
+      - src/movie_muse/collaboration/**
+      - tests/collaboration/**
+    shared:
+      - src/movie_muse/sync/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/authorization/**
+  capability.meeting_capture:
+    owned:
+      - src/movie_muse/meeting_capture/**
+      - tests/meeting_capture/**
+    shared:
+      - src/movie_muse/artifacts/**
+      - src/movie_muse/project_memory/**
+  adapter.zoom:
+    owned:
+      - src/movie_muse/adapters/zoom/**
+      - tests/adapters/zoom/**
+    shared:
+      - src/movie_muse/meeting_capture/**
+  adapter.google_meet:
+    owned:
+      - src/movie_muse/adapters/google_meet/**
+      - tests/adapters/google_meet/**
+    shared:
+      - src/movie_muse/meeting_capture/**
+  capability.beats:
+    owned:
+      - src/movie_muse/beats/**
+      - tests/beats/**
+    shared:
+      - src/movie_muse/film_ir/**
+      - src/movie_muse/creative_intent/**
+  module.director:
+    owned:
+      - src/movie_muse/director/**
+      - tests/director/**
+    shared:
+      - src/movie_muse/film_ir/**
+      - src/movie_muse/creative_intent/**
+  module.shot_ir:
+    owned:
+      - src/movie_muse/shot_ir/**
+      - tests/shot_ir/**
+    shared:
+      - src/movie_muse/director/**
+  capability.storyboard:
+    owned:
+      - src/movie_muse/storyboard/**
+      - tests/storyboard/**
+    shared:
+      - src/movie_muse/shot_ir/**
+      - src/movie_muse/model_router/**
+      - src/movie_muse/artifacts/**
+  capability.visual_language:
+    owned:
+      - src/movie_muse/visual_language/**
+      - tests/visual_language/**
+    shared:
+      - src/movie_muse/director/**
+      - src/movie_muse/rights/**
+  capability.video_previs:
+    owned:
+      - src/movie_muse/video_previs/**
+      - tests/video_previs/**
+    shared:
+      - src/movie_muse/shot_ir/**
+      - src/movie_muse/storyboard/**
+      - src/movie_muse/model_router/**
+  module.breakdown:
+    owned:
+      - src/movie_muse/breakdown/**
+      - tests/breakdown/**
+    shared:
+      - src/movie_muse/film_ir/**
+      - src/movie_muse/continuity/**
+  module.department_handoff:
+    owned:
+      - src/movie_muse/department_handoff/**
+      - tests/department_handoff/**
+    shared:
+      - src/movie_muse/breakdown/**
+      - src/movie_muse/proposals/**
+  capability.correspondence:
+    owned:
+      - src/movie_muse/correspondence/**
+      - tests/correspondence/**
+    shared:
+      - src/movie_muse/artifacts/**
+      - src/movie_muse/department_handoff/**
+  module.scheduling:
+    owned:
+      - src/movie_muse/scheduling/**
+      - tests/scheduling/**
+    shared:
+      - src/movie_muse/breakdown/**
+      - src/movie_muse/department_handoff/**
+  module.budget:
+    owned:
+      - src/movie_muse/budget/**
+      - tests/budget/**
+    shared:
+      - src/movie_muse/scheduling/**
+      - src/movie_muse/rights/**
+  capability.insurance_readiness:
+    owned:
+      - src/movie_muse/insurance_readiness/**
+      - tests/insurance_readiness/**
+    shared:
+      - src/movie_muse/artifacts/**
+      - src/movie_muse/budget/**
+      - src/movie_muse/scheduling/**
+  module.audience_lab:
+    owned:
+      - src/movie_muse/audience_lab/**
+      - tests/audience_lab/**
+    shared:
+      - src/movie_muse/model_router/**
+      - src/movie_muse/rights/**
+  capability.rubric:
+    owned:
+      - src/movie_muse/rubric/**
+      - tests/rubric/**
+    shared:
+      - src/movie_muse/film_ir/**
+      - src/movie_muse/creative_intent/**
+  module.commercial_forecast:
+    owned:
+      - src/movie_muse/commercial_forecast/**
+      - tests/commercial_forecast/**
+    shared:
+      - src/movie_muse/budget/**
+      - src/movie_muse/audience_lab/**
+  capability.investor_artifacts:
+    owned:
+      - src/movie_muse/investor_artifacts/**
+      - tests/investor_artifacts/**
+    shared:
+      - src/movie_muse/artifacts/**
+      - src/movie_muse/commercial_forecast/**
+  module.api:
+    owned:
+      - src/movie_muse/api/**
+      - backend/app/**
+      - tests/api/**
+    shared:
+      - src/movie_muse/authorization/**
+      - src/movie_muse/artifacts/**
+  module.mcp:
+    owned:
+      - src/movie_muse/mcp/**
+      - tests/mcp/**
+    shared:
+      - src/movie_muse/api/**
+  module.webhooks:
+    owned:
+      - src/movie_muse/webhooks/**
+      - tests/webhooks/**
+    shared:
+      - src/movie_muse/api/**
+  app.web:
+    owned:
+      - frontend/**
+      - apps/web/**
+      - tests/apps/web/**
+    shared:
+      - src/movie_muse/api/**
+      - backend/app/**
+  app.macos:
+    owned:
+      - apps/macos/**
+      - tests/apps/macos/**
+    shared:
+      - src/movie_muse/persistence/**
+      - src/movie_muse/document/**
+  app.windows:
+    owned:
+      - apps/windows/**
+      - tests/apps/windows/**
+    shared:
+      - src/movie_muse/persistence/**
+      - src/movie_muse/document/**
+  app.ios:
+    owned:
+      - apps/ios/**
+      - tests/apps/ios/**
+    shared:
+      - src/movie_muse/persistence/**
+      - src/movie_muse/sync/**
+  app.android:
+    owned:
+      - apps/android/**
+      - tests/apps/android/**
+    shared:
+      - src/movie_muse/persistence/**
+      - src/movie_muse/sync/**
+  global.security:
+    owned:
+      - src/movie_muse/security/**
+      - tests/security/**
+      - docs/security/**
+      - config/secrets-policy.yaml
+    shared:
+      - src/movie_muse/authorization/**
+  global.privacy:
+    owned:
+      - src/movie_muse/privacy/**
+      - tests/privacy/**
+      - docs/privacy/**
+    shared:
+      - src/movie_muse/security/**
+  global.observability:
+    owned:
+      - src/movie_muse/observability/**
+      - tests/observability/**
+    shared:
+      - src/movie_muse/jobs/**
+  global.evaluation:
+    owned:
+      - src/movie_muse/evaluation/**
+      - tests/evaluation/**
+      - bench/**
+    shared:
+      - src/movie_muse/model_router/**
+      - fixtures/**
+  global.operations:
+    owned:
+      - docs/operations/**
+      - tests/operations/**
+    shared:
+      - .github/workflows/**
+      - scripts/verify_all.sh
+  test.golden_path:
+    owned:
+      - tests/golden_path/**
+      - fixtures/golden_path/**
+    shared:
+      - scripts/verify_all.sh
+      - movie_muse_build_status.yaml
+  script.verify_all:
+    owned:
+      - scripts/verify_all.sh
+      - scripts/gates/**
+    shared:
+      - movie_muse_build_status.yaml
+      - dependency_dag.yaml
+      - config/verification-scopes.yaml

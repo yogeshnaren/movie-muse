@@ -1,0 +1,17 @@
+# Pinned runtimes for Movie Muse V2.1. CI and bootstrap must honor these.
+schema_version: "2.0"
+python:
+  version: "3.11"
+  compatible: [">=3.11", "<3.13"]
+  package_manager: pip
+  lockfiles:
+    - requirements-dev.txt
+    - backend/requirements.txt
+nodejs:
+  version: "20"
+  package_manager: npm
+  lockfiles:
+    - frontend/package-lock.json
+    - package-lock.json
+editors:
+  note: "Lockfiles are the reproducibility contract; floating ranges are not allowed in production lockfiles."
