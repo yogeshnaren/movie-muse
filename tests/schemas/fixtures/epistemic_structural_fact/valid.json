@@ -1,0 +1,10 @@
+{
+  "attribute": "scene_count",
+  "derived_from_revision_id": "rev_01M1E62D76RATSCXCXASR9GKGC",
+  "extractor_version": "1.0.0",
+  "id": "fcs_01M1E62D7BJBKXYGVKWG149K6S",
+  "kind": "structural",
+  "schema_version": "1.0",
+  "subject_id": "char-ada",
+  "value": 12
+}

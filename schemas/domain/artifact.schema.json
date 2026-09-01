@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/artifact-v1.json",
+  "title": "Artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "project_id", "artifact_type", "title", "created_at", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/artifactId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "artifact_type": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

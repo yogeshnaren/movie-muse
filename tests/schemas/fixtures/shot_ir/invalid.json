@@ -1,0 +1,21 @@
+{
+  "camera": {
+    "height_m": 1.6,
+    "lens_mm": -10,
+    "movement": "static",
+    "orientation_degrees": 10.0,
+    "position_x": 0.0,
+    "position_y": -2.0,
+    "sensor": "full_frame"
+  },
+  "composition_notes": "over-the-shoulder on Ada",
+  "created_at": "2026-09-01T12:00:00Z",
+  "eyeline_subject_ids": [
+    "char-ada"
+  ],
+  "id": "sht_01M1E62D7A6TG1KDN800R0SB4V",
+  "light_direction": "window, camera left",
+  "performance_intent": "guarded, watching the door",
+  "scene_space_id": "ssp_01M1E62D797VFFMEWZK0B1ZK5K",
+  "schema_version": "1.0"
+}

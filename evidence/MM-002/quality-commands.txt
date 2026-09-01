@@ -1,0 +1,53 @@
+MM-002 Domain constitution and versioned schemas — quality command evidence
+Captured: 2026-09-01T10:40:00Z (approx, see git commit timestamp for exact)
+Environment: Linux 6.12.94+ x86_64; python 3.12.3; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
+
+See quality-commands.log for full captured stdout/stderr of all commands below.
+
+Commands run (in order):
+  export PYTHONPATH=src
+  python3 -m ruff check src tests scripts backend
+  python3 -m mypy
+  python3 -m pytest tests/schemas -v
+  python3 -m pytest tests/architecture tests/security tests/toolchain backend/tests -v
+  python3 -m pytest
+  python3 scripts/mm_status.py validate
+  python3 scripts/mm_status.py check-scopes
+  python3 scripts/mm_status.py runnable
+  python3 scripts/mm_status.py boundaries
+  python3 scripts/mm_status.py secrets
+
+Summary of results:
+  ruff check src tests scripts backend      -> All checks passed!
+  mypy (package-wide, pyproject config)     -> Success: no issues found in 35 source files
+  pytest tests/schemas                       -> 172 passed
+  pytest tests/architecture tests/security
+        tests/toolchain backend/tests        -> 20 passed, 2 failed (pre-existing, see below)
+  pytest (full suite)                        -> 192 passed, 3 failed (pre-existing, see below)
+  mm_status.py validate                      -> HANDOFF_VALIDATION=PASS packages=47, STATUS_VALIDATE=PASS
+  mm_status.py check-scopes                  -> SCOPE_COVERAGE=PASS
+  mm_status.py runnable                      -> {"count": 1, "runnable": ["MM-002"]}
+  mm_status.py boundaries                    -> {"count": 0, "violations": []}
+  mm_status.py secrets                       -> {"count": 0, "hits": []}
+
+Pre-existing failures (NOT introduced by MM-002; verified present at branch HEAD
+b73668852f98ff06c3565169088cbed19f9bfb54 before any MM-002 file existed, via
+`git stash` bisection re-run):
+  - tests/toolchain/test_status_tool.py::test_only_mm001_is_runnable_at_baseline
+  - tests/toolchain/test_status_tool.py::test_mm001_change_does_not_stale_unstarted_dependents
+  - tests/release/test_verify_all_fail_closed.py::test_verify_all_stays_fail_closed_until_all_gates_exist
+      (this one fails as a downstream consequence of the two above: verify_all.sh's
+      static_quality_and_boundaries.sh gate script exits non-zero because of the
+      pre-existing toolchain test failures, so the test's expectation of the specific
+      "NOT_READY" string is not met even though verify_all.sh does correctly and
+      fail-closed reject the checkout with a non-zero exit code and without printing
+      the PASS sentinel.)
+  Root cause: these three tests hard-code the assumption that MM-002's status is
+  NOT_STARTED / not runnable. That assumption stopped holding the moment
+  movie_muse_build_status.yaml moved MM-002 to IN_PROGRESS in commit b736688
+  ("Start MM-002 domain constitution after MM-001 PASS"), which happened before this
+  implementation task began and is outside MM-002's scope_keys ([domain.schemas]).
+  These three tests live under global.toolchain / global.ci scope (MM-001-owned).
+  Per operating rules, an MM-002 implementer must not edit MM-001-owned files or
+  MM-001's pass_record, so this is recorded as a known limitation/follow-up rather
+  than patched here.

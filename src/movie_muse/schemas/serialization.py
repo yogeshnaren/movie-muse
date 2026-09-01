@@ -1,0 +1,69 @@
+"""Generic dataclass <-> JSON-compatible dict conversion helpers.
+
+Every domain type in this package is a frozen dataclass. These helpers keep
+``to_dict``/``from_dict`` implementations short and consistent instead of
+hand-rolling ad-hoc JSON mapping for each of the sixteen-plus domain schemas.
+"""
+
+from __future__ import annotations
+
+import dataclasses
+import enum
+from collections.abc import Callable, Mapping
+from typing import Any, TypeVar
+
+T = TypeVar("T")
+
+
+def to_json_dict(value: Any) -> Any:
+    """Recursively convert dataclasses/enums/tuples into plain JSON values."""
+
+    if dataclasses.is_dataclass(value) and not isinstance(value, type):
+        return {f.name: to_json_dict(getattr(value, f.name)) for f in dataclasses.fields(value)}
+    if isinstance(value, enum.Enum):
+        return value.value
+    if isinstance(value, list | tuple):
+        return [to_json_dict(item) for item in value]
+    if isinstance(value, Mapping):
+        return {str(key): to_json_dict(item) for key, item in value.items()}
+    return value
+
+
+def dataclass_to_dict(value: Any) -> dict[str, Any]:
+    """Type-narrowing wrapper for ``to_json_dict`` when ``value`` is a dataclass instance."""
+
+    result = to_json_dict(value)
+    if not isinstance(result, dict):
+        raise TypeError(f"expected a dataclass instance, got {type(value).__name__}")
+    return result
+
+
+def dataclass_from_dict(
+    cls: type[T],
+    data: Mapping[str, Any],
+    *,
+    converters: Mapping[str, Callable[[Any], Any]] | None = None,
+) -> T:
+    """Build ``cls`` from ``data``, applying ``converters`` per field name.
+
+    Fields absent from ``data`` are omitted so dataclass defaults apply.
+    """
+
+    converters = converters or {}
+    field_names = {f.name for f in dataclasses.fields(cls)}  # type: ignore[arg-type]
+    kwargs: dict[str, Any] = {}
+    for name, value in data.items():
+        if name not in field_names:
+            continue
+        converter = converters.get(name)
+        kwargs[name] = converter(value) if converter is not None else value
+    return cls(**kwargs)
+
+
+def tuple_of(converter: Callable[[Any], Any]) -> Callable[[Any], tuple[Any, ...]]:
+    """Return a converter that maps ``converter`` over an iterable into a tuple."""
+
+    def _convert(values: Any) -> tuple[Any, ...]:
+        return tuple(converter(item) for item in (values or ()))
+
+    return _convert

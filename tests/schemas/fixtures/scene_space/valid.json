@@ -1,0 +1,17 @@
+{
+  "geometry_description": "kitchen, table center, window upstage",
+  "id": "ssp_01M1E62D797VFFMEWZK0B1ZK5K",
+  "locked_attributes": [
+    "window_direction"
+  ],
+  "scene_id": "scn_01M1E62D76714367YC1WWF2F3F",
+  "schema_version": "1.0",
+  "subject_positions": [
+    {
+      "orientation_degrees": 90.0,
+      "subject_id": "char-ada",
+      "x": 1.0,
+      "y": 2.0
+    }
+  ]
+}

@@ -23,3 +23,22 @@ This file records orchestrator actions that the schema cannot store.
 - MM-002 moved to IN_PROGRESS
 - Owner: cursor-orchestrator
 - Independent verification required before PASS
+
+## 2026-09-01T10:40:00Z
+
+- Implementer: `movie-muse-implementer` on branch `cursor/mm-001-toolchain-baseline-04ec`
+- MM-002 (Domain constitution and versioned schemas) implemented: `schemas/domain/*.schema.json`
+  (Draft 2020-12), `src/movie_muse/schemas/` (public surface `movie_muse.schemas.api`),
+  `tests/schemas/**` (fixtures, property tests, mypy-fixture nominal-typing proofs).
+- Status intentionally left at `IN_PROGRESS`; `pass_record` intentionally left `null`.
+  The implementer does not self-PASS; independent verification is required.
+- Known pre-existing, out-of-scope finding: `tests/toolchain/test_status_tool.py::
+  test_only_mm001_is_runnable_at_baseline` and `::test_mm001_change_does_not_stale_unstarted_dependents`
+  fail at this branch's HEAD (`b73668852f98ff06c3565169088cbed19f9bfb54`) before any MM-002 file
+  existed, because they assert `MM-002` is `NOT_STARTED`/not runnable — an assumption that stopped
+  holding the moment `movie_muse_build_status.yaml` moved MM-002 to `IN_PROGRESS` in the prior
+  commit. These are `global.toolchain`-scoped (MM-001-owned) tests; MM-002 does not touch them.
+  `./scripts/gates/static_quality_and_boundaries.sh` and `./scripts/verify_all.sh` therefore still
+  fail closed (as required), but at this pre-existing MM-001 test-suite/baseline-assumption gap
+  rather than at a missing-gate check. This needs a follow-up MM-001-scoped fix (or an accepted
+  reinterpretation of "baseline") independent of MM-002.

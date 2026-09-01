@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/change-set-v1.json",
+  "title": "ChangeSet",
+  "$defs": {
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "order", "op_type", "target_id", "schema_version"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "order": {"type": "integer", "minimum": 0},
+        "op_type": {
+          "enum": ["insert_block", "delete_block", "update_block", "move_block", "insert_scene", "update_metadata"]
+        },
+        "target_id": {"type": "string", "minLength": 1},
+        "payload": {"type": "object"},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "base_revision_id", "author_actor_id", "created_at", "operations", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/changeSetId"},
+    "base_revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+    "author_actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "operations": {"type": "array", "items": {"$ref": "#/$defs/operation"}},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "claim": "scene 12 contradicts scene 4",
+  "confidence": 0.8,
+  "created_at": "2026-09-01T12:00:00Z",
+  "human_validation_state": "unreviewed",
+  "id": "evb_01M1E62D797A1HRTYSQ77H6YJD",
+  "method_summary": "continuity reducer",
+  "model_id": "continuity-reducer",
+  "model_version": "1.0.0",
+  "schema_version": "1.0"
+}

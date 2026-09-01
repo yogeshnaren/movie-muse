@@ -1,0 +1,44 @@
+{
+  "blocks": [
+    {
+      "id": "blk_01M1E62D76990WNDTF9RK0EN8H",
+      "kind": "scene_heading",
+      "scene_id": "scn_01M1E62D76714367YC1WWF2F3F",
+      "scene_number": "1",
+      "schema_version": "1.0",
+      "text": "INT. KITCHEN - DAY"
+    },
+    {
+      "character_cue_id": "cue_01M1E62D768NEFNA1HXQ91JY2Y",
+      "id": "blk_01M1E62D76RKRFF0E9FCZJ78H0",
+      "kind": "character",
+      "schema_version": "1.0",
+      "text": "ADA"
+    }
+  ],
+  "id": "doc_01M1E62D762ACEBCVK4JGSN7HH",
+  "notes": [
+    {
+      "author_actor_id": "act_01M1E62D76BMKXW2Q4NM6BD84F",
+      "block_id": "blk_01M1E62D76990WNDTF9RK0EN8H",
+      "created_at": "2026-09-01T12:00:00Z",
+      "id": "note_01M1E62D76PNM0Q233G6JFZNJE",
+      "schema_version": "1.0",
+      "text": "check continuity"
+    }
+  ],
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "schema_version": "1.0",
+  "sequences": [
+    {
+      "id": "seq_01M1E62D76C4XKF5C22KSSB33D",
+      "order": 0,
+      "scene_ids": [
+        "scn_01M1E62D76714367YC1WWF2F3F"
+      ],
+      "schema_version": "1.0",
+      "title": "Act One"
+    }
+  ],
+  "title": "Pilot"
+}
