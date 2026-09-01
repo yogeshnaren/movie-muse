@@ -1,0 +1,10 @@
+classification: user_owned
+license: CC0-1.0
+consent: explicit_fixture_dedication
+origin: original_authored_for_movie_muse
+allow_training: false
+permitted_uses:
+- retrieval
+- citation
+- generation
+- export_disclosure

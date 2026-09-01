@@ -417,3 +417,23 @@ This file records orchestrator actions that the schema cannot store.
 - Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-01T17:23:13Z`
 - Orchestrator recorded canonical PASS; fingerprint `2c6c8a7da82d57b6adb884859246ed6c1448983ee3913779e759f0a660e2d6fb`
 - Next runnable: MM-012
+
+## 2026-09-01T17:28:39Z
+
+- Implementer: `movie-muse-implementer` on branch `cursor/mm-001-toolchain-baseline-04ec`
+- MM-012 moved to IN_PROGRESS after confirming MM-003, MM-005, MM-010, and
+  MM-011 are current PASS at HEAD `37c3f25`. MM-012 is DAG-runnable.
+- Implementing golden fixtures and the MovieMuse Bench / test harness.
+- Status remains IN_PROGRESS; do not self-PASS. Independent verification is
+  required before PASS. Did not implement MM-013 or later.
+
+## 2026-09-01T17:36:21Z
+
+- MM-012 golden fixtures and test harness implemented on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Public surface: `movie_muse.testkit.api`. Fixtures live under repo-root
+  `fixtures/**`; tests under `tests/fixtures` and `tests/harness`.
+- Layout/FilmIR goldens are deferred (`awaiting_mm014` / `awaiting_mm018`)
+  with fail-closed producer checks. AST goldens are current and compared.
+- Status remains IN_PROGRESS; `pass_record` is null. Independent verification
+  is required before PASS. Did not implement MM-013 or later.
