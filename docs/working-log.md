@@ -63,3 +63,22 @@ This file records orchestrator actions that the schema cannot store.
   `ProductionProjection.data`, changeset/event payloads).
 - Full pytest: 205 passed. Status left `IN_PROGRESS`; independent verification
   required before PASS.
+
+## 2026-09-01T10:52:12Z
+
+- Independent verifier FAIL for MM-002 at `14aa1f14ca895b0e71dfb62d8455b44649f66876`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T10:52:12Z`
+- Root cause: `classify_schema_change()` compared only property `type`, so
+  narrowing an existing enum classified as additive. Nested immutability,
+  fixtures, migrations, IDs, and epistemic probes passed.
+- Next action: treat existing-property constraint edits (enum, const, `$ref`,
+  pattern, bounds, nested schema) as breaking; add negative regression tests.
+
+## 2026-09-01T10:55:30Z
+
+- MM-002 compatibility classifier now deep-compares instance constraints.
+  Enum narrowing/widening, const/$ref/pattern/bounds, nested property, and
+  `$defs` edits are BREAKING; annotation-only and new optional properties
+  remain additive.
+- Status remains `IN_PROGRESS`; independent re-verification required.
+

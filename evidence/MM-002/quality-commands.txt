@@ -1,5 +1,5 @@
 MM-002 Domain constitution and versioned schemas — quality command evidence
-Captured: 2026-09-01T10:44:42Z
+Captured: 2026-09-01T10:55:30Z
 Environment: Linux 6.12.94+ x86_64; python 3.12.3; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
 
 Commands run (in order):
@@ -18,8 +18,8 @@ Commands run (in order):
 Summary of results:
   ruff check src tests scripts backend      -> All checks passed!
   mypy (package-wide, pyproject config)     -> Success: no issues found in 35 source files
-  pytest tests/schemas                       -> 181 passed (schema-focused suite)
-  pytest (full suite)                        -> 205 passed, 1 warning
+  pytest tests/schemas                       -> 188 passed (schema-focused suite)
+  pytest (full suite)                        -> 212 passed, 1 warning
   mm_status.py validate                      -> HANDOFF_VALIDATION=PASS packages=47, STATUS_VALIDATE=PASS
   mm_status.py check-scopes                  -> SCOPE_COVERAGE=PASS
   mm_status.py runnable                      -> {"count": 1, "runnable": ["MM-002"]}
@@ -31,3 +31,6 @@ Notes:
   via movie_muse.schemas.serialization.sealed wrapping __init__ after dataclass
   construction. Regression tests cover Block.unknown_extensions, AuthoredFact.value,
   ProductionProjection.data, ChangeSetOperation.payload, and ProjectEvent.payload.
+  Compatibility policy classifies enum/const/$ref/pattern/bounds/nested-schema
+  changes on existing properties as breaking; only new optional properties and
+  annotation-only edits are additive.

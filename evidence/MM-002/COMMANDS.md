@@ -43,8 +43,8 @@ implementation revision:
 |---|---|
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy` | Success: no issues found in 35 source files |
-| `python3 -m pytest tests/schemas -q` | 181 passed |
-| `python3 -m pytest` | 205 passed, 1 warning |
+| `python3 -m pytest tests/schemas -q` | 188 passed |
+| `python3 -m pytest` | 212 passed, 1 warning |
 | `python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `python3 scripts/mm_status.py check-scopes` | `SCOPE_COVERAGE=PASS` |
 | `python3 scripts/mm_status.py runnable` | `{"runnable": ["MM-002"]}` |
@@ -76,5 +76,8 @@ packages exist; it is not an MM-002 acceptance waiver.
 13. Probe nested mutation of `Block.unknown_extensions`, `AuthoredFact.value`,
     `ProductionProjection.data`, and event/changeset payloads. PASS only if
     nested mutation raises and integrity hashes cannot go stale.
-14. Do NOT set `pass_record` in this checkout; return PASS/FAIL for the
+14. Probe compatibility: narrowing an existing enum (and const/`$ref`/pattern/
+    bounds/nested-schema edits) must be BREAKING; adding an optional property
+    remains additive.
+15. Do NOT set `pass_record` in this checkout; return PASS/FAIL for the
     orchestrator to record.
