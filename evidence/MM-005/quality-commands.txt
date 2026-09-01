@@ -1,0 +1,46 @@
+# MM-005 implementer quality commands
+# UTC: 2026-09-01T13:01:53Z
+# implementation commit: ae8e647f86a660a82b6ac3a6a9ccbff0a0cbb058
+# input_fingerprint: 6687f03743146eb3a35ff5a81eea8df4681b8deabb469bde2bcc5712e7f55544
+
+$ python3 -m ruff check src tests scripts backend
+All checks passed!
+
+$ python3 -m mypy src
+Success: no issues found in 70 source files
+
+$ PYTHONPATH=src python3 -m pytest tests/revisions tests/document tests/persistence tests/sync -q
+.................................................................        [100%]
+(65 passed)
+
+$ PYTHONPATH=src python3 -m pytest
+277 passed, 1 warning in 32.07s
+warning: httpx app= shortcut DeprecationWarning in backend/tests/test_health.py
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{
+  "count": 0,
+  "violations": []
+}
+
+$ PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-005
+{
+  "input_fingerprint": "6687f03743146eb3a35ff5a81eea8df4681b8deabb469bde2bcc5712e7f55544",
+  "item_id": "MM-005",
+  "verification_commit": "ae8e647f86a660a82b6ac3a6a9ccbff0a0cbb058"
+}
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+
+$ ./scripts/verify_all.sh
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+(exit 1; expected — do not add migrations_backup_and_recovery; that would STALE MM-001)
