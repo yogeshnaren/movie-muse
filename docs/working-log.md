@@ -444,3 +444,20 @@ This file records orchestrator actions that the schema cannot store.
 - Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-01T17:45:57Z`
 - Orchestrator recorded canonical PASS; fingerprint `7cb2643b077923dac716164928a41cfb67a461b1c19804abc48c99b941a47bbb`
 - Next runnable: MM-013
+
+## 2026-09-01T18:20:00Z
+
+- Implementer: MM-013 FDX compatibility program on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-013 moved to IN_PROGRESS after confirming MM-003, MM-005, and MM-012
+  are current PASS. MM-013 is DAG-runnable.
+- Public surface: `movie_muse.fdx.api` (`FdxService`). Canonical
+  ScreenplayDocument round-trips the Movie Muse FDX profile. Fountain and
+  plain-text imports are lossy with a visible LossReport. PDF and Final
+  Draft live gates fail closed (`PdfImportUnavailableError`,
+  `FinalDraftUnavailableError`) without pytest.skip.
+- `movie_muse.fdx` is not listed in MM-001-owned `config/module-layout.yaml`
+  so MM-001 PASS is not invalidated. Hosts import `movie_muse.fdx.api`.
+- Status remains IN_PROGRESS; `pass_record` is null. Independent verification
+  is required before PASS. Did not implement MM-014 or later. Did not mark
+  EXT-FDX-FINAL-DRAFT.

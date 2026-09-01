@@ -1,0 +1,22 @@
+id: fdx_compatibility_corpus
+owner_item: MM-013
+profile: movie_muse_fdx
+copied_from_final_draft: false
+license_file: LICENSE.md
+rights_file: rights.yaml
+files:
+  - path: ordinary_kitchen.fdx
+    class: ordinary
+    edges: [title_page, scene_heading, action, character, parenthetical, dialogue, transition]
+  - path: feature_complete_harbor.fdx
+    class: feature_complete
+    edges: [title_page, dual_dialogue, shot, lyrics, general_text, notes, attachments]
+  - path: production_locks.fdx
+    class: production
+    edges: [locked_pages, locked_scenes, omitted_scenes, ab_scenes, revisions, tags]
+  - path: adversarial_unicode_rtl.fdx
+    class: adversarial
+    edges: [unicode, rtl, dual_dialogue, page_break]
+  - path: unknown_extension.fdx
+    class: adversarial
+    edges: [unknown_extensions, custom_formatting]

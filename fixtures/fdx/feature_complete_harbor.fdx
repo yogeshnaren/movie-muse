@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FinalDraft DocumentType="Script" Template="MovieMuse" Version="1" xmlns:mm="https://movie-muse.dev/fdx">
+  <Content>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE393R000000000000003R" mm:schema-version="1.0">
+      <Text>HARBOR NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE393S000000000000003S" mm:schema-version="1.0">
+      <Text>Written by Jordan Hale</Text>
+    </Paragraph>
+    <Paragraph Number="1" Type="Scene Heading" mm:block-id="blk_01J6NE393T000000000000003T" mm:note-ids="note_01J6NE393K000000000000003K" mm:production-tag-ids="ptg_01J6NE393M000000000000003M" mm:scene-id="scn_01J6NE393C000000000000003C" mm:scene-number="1" mm:schema-version="1.0">
+      <Text>INT. HARBOR OFFICE - NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Action" mm:block-id="blk_01J6NE393V000000000000003V" mm:revision-mark-ids="rvm_01J6NE393N000000000000003N" mm:scene-id="scn_01J6NE393C000000000000003C" mm:schema-version="1.0" mm:spans='[{"end_offset":4,"id":"spn_01J6NE393Q000000000000003Q","ref_id":null,"schema_version":"1.0","span_kind":"emphasis","start_offset":0}]'>
+      <Text>Rain needles the glass. Jordan keeps the ledger closed.</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Character" mm:block-id="blk_01J6NE393W000000000000003W" mm:character-cue-id="cue_01J6NE393E000000000000003E" mm:dialogue-pair-id="dlg_01J6NE393G000000000000003G" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE393J000000000000003J" mm:is-dual-dialogue="true" mm:scene-id="scn_01J6NE393C000000000000003C" mm:schema-version="1.0">
+      <Text>JORDAN</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Dialogue" mm:block-id="blk_01J6NE393X000000000000003X" mm:dialogue-pair-id="dlg_01J6NE393G000000000000003G" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE393J000000000000003J" mm:is-dual-dialogue="true" mm:scene-id="scn_01J6NE393C000000000000003C" mm:schema-version="1.0">
+      <Text>We leave at first light.</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Character" mm:block-id="blk_01J6NE393Y000000000000003Y" mm:character-cue-id="cue_01J6NE393F000000000000003F" mm:dialogue-pair-id="dlg_01J6NE393H000000000000003H" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE393J000000000000003J" mm:is-dual-dialogue="true" mm:scene-id="scn_01J6NE393C000000000000003C" mm:schema-version="1.0">
+      <Text>MIRA</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Dialogue" mm:block-id="blk_01J6NE393Z000000000000003Z" mm:dialogue-pair-id="dlg_01J6NE393H000000000000003H" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE393J000000000000003J" mm:is-dual-dialogue="true" mm:scene-id="scn_01J6NE393C000000000000003C" mm:schema-version="1.0">
+      <Text>The tide will not wait.</Text>
+    </Paragraph>
+    <Paragraph Type="Shot" mm:attachment-ids="att_01J6NE393P000000000000003P" mm:block-id="blk_01J6NE39400000000000000040" mm:scene-id="scn_01J6NE393C000000000000003C" mm:schema-version="1.0">
+      <Text>CLOSE ON the unopened ledger.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition" mm:block-id="blk_01J6NE39410000000000000041" mm:scene-id="scn_01J6NE393C000000000000003C" mm:schema-version="1.0">
+      <Text>CUT TO:</Text>
+    </Paragraph>
+    <Paragraph Number="2" Type="Scene Heading" mm:block-id="blk_01J6NE39420000000000000042" mm:scene-id="scn_01J6NE393D000000000000003D" mm:scene-number="2" mm:schema-version="1.0">
+      <Text>EXT. PIER - NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Lyrics" mm:block-id="blk_01J6NE39430000000000000043" mm:scene-id="scn_01J6NE393D000000000000003D" mm:schema-version="1.0">
+      <Text>Harbor lights, keep our names.</Text>
+    </Paragraph>
+    <Paragraph Type="General" mm:block-id="blk_01J6NE39440000000000000044" mm:scene-id="scn_01J6NE393D000000000000003D" mm:schema-version="1.0">
+      <Text>SUPER: Two hours before the storm.</Text>
+    </Paragraph>
+    <Paragraph Type="Page Break" mm:block-id="blk_01J6NE39450000000000000045" mm:schema-version="1.0"/>
+    <Paragraph Type="Character" mm:block-id="blk_01J6NE39460000000000000046" mm:character-cue-id="cue_01J6NE393E000000000000003E" mm:is-continued="true" mm:scene-id="scn_01J6NE393D000000000000003D" mm:schema-version="1.0">
+      <Text>JORDAN</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue" mm:block-id="blk_01J6NE39470000000000000047" mm:dialogue-pair-id="dlg_01J6NE39480000000000000048" mm:is-continued="true" mm:scene-id="scn_01J6NE393D000000000000003D" mm:schema-version="1.0">
+      <Text>Hold the line.</Text>
+    </Paragraph>
+  </Content>
+  <TitlePage>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE393R000000000000003R" mm:schema-version="1.0">
+      <Text>HARBOR NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE393S000000000000003S" mm:schema-version="1.0">
+      <Text>Written by Jordan Hale</Text>
+    </Paragraph>
+  </TitlePage>
+  <mm:Document base-revision-id="rev_01J6NE39380000000000000038" id="doc_01J6NE39370000000000000037" paper-size="us_letter" profile="movie_muse_fdx" profile-version="1.0.0" project-id="proj_01J6NE39360000000000000036" schema-version="1.0" style="standard_screenplay" title="Harbor Night"/>
+  <mm:Sequences>
+    <mm:Sequence id="seq_01J6NE393B000000000000003B" order="0" schema-version="1.0" title="Night Tide">
+      <mm:SceneRef id="scn_01J6NE393C000000000000003C"/>
+      <mm:SceneRef id="scn_01J6NE393D000000000000003D"/>
+    </mm:Sequence>
+  </mm:Sequences>
+  <mm:Notes>
+    <mm:Note author-actor-id="act_01J6NE39350000000000000035" block-id="blk_01J6NE393T000000000000003T" created-at="2026-09-01T00:00:00Z" id="note_01J6NE393K000000000000003K" resolved="false" schema-version="1.0">Keep the rain practical, not decorative.</mm:Note>
+  </mm:Notes>
+  <mm:RevisionMarks>
+    <mm:RevisionMark block-id="blk_01J6NE393V000000000000003V" created-at="2026-09-01T00:00:00Z" id="rvm_01J6NE393N000000000000003N" revision-color="blue" revision-label="Blue" schema-version="1.0"/>
+  </mm:RevisionMarks>
+  <mm:ProductionTags>
+    <mm:ProductionTag block-id="blk_01J6NE393T000000000000003T" department="art" id="ptg_01J6NE393M000000000000003M" schema-version="1.0" tag-type="set" value="harbor office"/>
+  </mm:ProductionTags>
+  <mm:Attachments>
+    <mm:Attachment block-id="blk_01J6NE39400000000000000040" checksum="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" id="att_01J6NE393P000000000000003P" kind="reference_still" schema-version="1.0" uri="fixture://harbor-night/ledger.png"/>
+  </mm:Attachments>
+</FinalDraft>
