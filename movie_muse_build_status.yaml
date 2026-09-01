@@ -2,11 +2,11 @@ schema_version: "2.0"
 package_version: "2.1.0"
 project: movie-muse-working-prototype
 manifest_role: canonical_completion_ledger
-overall_status: STALE
+overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T10:15:39Z"
+last_updated_utc: "2026-09-01T10:19:23Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -91,12 +91,12 @@ items:
     title: Repository, toolchain, and quality baseline
     milestone: A
     priority: critical
-    status: STALE
+    status: PASS
     depends_on: []
     scope_keys: [global.toolchain, global.ci]
     pass_record:
-      verification_commit: 5320c04d6b3971c6fc3f1579cb921e411d9b9eb8
-      input_fingerprint: 3fb992a3f29b60c1c36bcf46e7e32a5fa6f47cc5c24e3869fd4f20c6acee3952
+      verification_commit: 017c3cffe265733c676a591716361d8dc309893a
+      input_fingerprint: cd81bfe138f0f8a7452879a27394344d24e2401febabe93a6ba1cc9afb667e47
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -114,23 +114,19 @@ items:
         - ./scripts/verify_all.sh
         - test -d artifacts && test -f artifacts/README.md
       evidence:
+        - tests/toolchain/test_status_tool.py
         - artifacts/README.md
-        - src/movie_muse/toolchain/boundaries.py
-        - tests/architecture/test_module_boundaries.py
-        - config/module-layout.yaml
         - config/verification-scopes.yaml
         - evidence/MM-001/COMMANDS.md
         - evidence/MM-001/quality-commands.txt
         - evidence/MM-001/frontend-tests.txt
         - evidence/secret-scan.txt
-      completed_at_utc: "2026-09-01T09:26:25Z"
+      completed_at_utc: "2026-09-01T10:19:23Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T09:26:25Z
-        independence_basis: Separate verifier agent/model; did not implement MM-001 and used committed criteria without private implementation context.
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T10:19:23Z
+        independence_basis: Separate verifier agent/model; did not implement MM-001 and independently reran committed verification instructions.
         environment: Linux 6.12.94+ x86_64; python 3.12.3; node 20.20.2; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
         commands:
-          - git fetch origin cursor/mm-001-toolchain-baseline-04ec
-          - test -d artifacts && test -f artifacts/README.md
           - python3 scripts/validate_handoff.py
           - PYTHONPATH=src python3 scripts/mm_status.py validate
           - python3 -m ruff check src tests scripts backend
@@ -142,14 +138,12 @@ items:
           - ./scripts/verify_all.sh
         result: PASS
         evidence:
+          - tests/toolchain/test_status_tool.py
           - artifacts/README.md
-          - src/movie_muse/toolchain/boundaries.py
-          - tests/architecture/test_module_boundaries.py
           - evidence/MM-001/COMMANDS.md
           - evidence/secret-scan.txt
         limitations:
-          - Docker was unavailable, so container images were not rebuilt.
-          - Full prototype verification intentionally remains blocked by later work-package gates.
+          - Verification covers MM-001 only; the complete prototype remains gated by later packages.
     blocker: null
   - id: MM-002
     title: Domain constitution and versioned schemas
