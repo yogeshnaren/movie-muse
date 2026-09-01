@@ -41,9 +41,14 @@ def _is_internal_import(imported: str, current_module: str) -> bool:
 
 
 def module_name_for_path(root: Path, path: Path) -> str:
-    rel = path.resolve().relative_to((root / "src").resolve())
+    resolved = path.resolve()
+    src_root = (root / "src").resolve()
+    try:
+        rel = resolved.relative_to(src_root)
+    except ValueError:
+        rel = resolved.relative_to(root.resolve())
     parts = list(rel.with_suffix("").parts)
-    if parts[-1] == "__init__":
+    if parts and parts[-1] == "__init__":
         parts = parts[:-1]
     return ".".join(parts)
 
@@ -99,10 +104,6 @@ def scan_boundaries(root: Path) -> list[BoundaryViolation]:
     violations: list[BoundaryViolation] = []
     for path in iter_python_files(root, scan_roots):
         if "tests" in path.parts:
-            continue
-        try:
-            path.resolve().relative_to((root / "src").resolve())
-        except ValueError:
             continue
         violations.extend(scan_file(root, path))
     return violations

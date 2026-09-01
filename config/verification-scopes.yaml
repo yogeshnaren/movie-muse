@@ -47,6 +47,7 @@ scopes:
       - backend/requirements.txt
       - backend/pytest.ini
       - backend/tests/**
+      - artifacts/**
     shared:
       - config/verification-scopes.yaml
       - dependency_dag.yaml

@@ -46,6 +46,24 @@ def test_same_module_internal_import_is_allowed(tmp_path: Path) -> None:
 
 
 @pytest.mark.architecture
+def test_application_host_internal_import_is_rejected(tmp_path: Path) -> None:
+    src = tmp_path / "backend" / "app" / "main.py"
+    src.parent.mkdir(parents=True)
+    src.write_text("from movie_muse.revisions.internal import tables\n", encoding="utf-8")
+    violations = scan_file(tmp_path, src)
+    assert len(violations) == 1
+    assert violations[0].reason == "cross-module internal import"
+
+
+@pytest.mark.architecture
+def test_scan_roots_include_backend_host() -> None:
+    from movie_muse.toolchain.boundaries import iter_python_files
+
+    files = iter_python_files(repo_root(), ["backend/app"])
+    assert any(path.name == "main.py" for path in files)
+
+
+@pytest.mark.architecture
 def test_repository_has_no_boundary_violations() -> None:
     from movie_muse.toolchain.boundaries import scan_boundaries
 
