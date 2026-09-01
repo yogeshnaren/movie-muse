@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 from movie_muse.artifacts.errors import (
     ArtifactDeliveryError,
@@ -276,7 +277,7 @@ class ArtifactService:
         prior = self._stored_version(artifact_version_id)
         return self.create_version(
             prior.version.artifact_id,
-            inputs=prior.inputs,
+            inputs=json.loads(prior.inputs_json),
             source_revision_id=source_revision_id or prior.version.source_revision_id,
             template_id=prior.version.template_id,
             template_version=prior.version.template_version,
@@ -328,7 +329,7 @@ class ArtifactService:
             artifact=artifact,
             template=template,
             renderer_version=stored.version.renderer_version,
-            inputs=dict(stored.inputs),
+            inputs=json.loads(stored.inputs_json),
             source_revision_id=stored.version.source_revision_id,
             source_payload=source_payload,
         )
@@ -702,7 +703,9 @@ class ArtifactService:
 
     @staticmethod
     def _canonical_inputs(inputs: Mapping[str, Any]) -> tuple[str, dict[str, Any]]:
-        copied = dict(inputs)
+        copied = _json_compatible(inputs)
+        if not isinstance(copied, dict):
+            raise ArtifactIntegrityError("artifact inputs must be an object")
         encoded, _digest = digest_payload(copied)
         decoded = json.loads(encoded.decode("utf-8"))
         if not isinstance(decoded, dict):
@@ -808,3 +811,15 @@ class ArtifactService:
         index["link_digests"][link.id] = put_json_blob(
             self.workspace, link.to_dict()
         )
+
+
+def _json_compatible(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {str(key): _json_compatible(item) for key, item in value.items()}
+    if isinstance(value, list | tuple):
+        return [_json_compatible(item) for item in value]
+    if value is None or isinstance(value, bool | int | float | str):
+        return value
+    raise ArtifactIntegrityError(
+        f"artifact inputs must contain JSON values, got {type(value).__name__}"
+    )
