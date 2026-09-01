@@ -1,0 +1,512 @@
+schema_version: "2.0"
+package_version: "2.1.0"
+project: movie-muse-working-prototype
+manifest_role: canonical_completion_ledger
+overall_status: NOT_STARTED
+baseline_commit: null
+dag_file: dependency_dag.yaml
+dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+last_updated_utc: null
+allowed_statuses:
+  - NOT_STARTED
+  - IN_PROGRESS
+  - PASS
+  - FAIL
+  - BLOCKED_EXTERNAL
+  - STALE
+status_rules:
+  NOT_STARTED: implementation or verification has not begun
+  IN_PROGRESS: active work; never counts as complete
+  PASS: all acceptance and independent verification passed at pass_record.verification_commit and input_fingerprint
+  FAIL: implementation or verification failed; root cause and next action required
+  BLOCKED_EXTERNAL: exact external prerequisite is absent; never counts as PASS
+  STALE: a relevant input or prerequisite changed after PASS; reverification required
+completion_policy:
+  pass_requires_all_dependencies_current_pass: true
+  pass_requires_independent_verifier: true
+  pass_requires_clean_commit: true
+  pass_requires_commands_and_evidence: true
+  relevant_change_invalidates_pass: true
+  dependent_closure_invalidation: true
+  automatic_pass_resurrection: false
+  mocks_satisfy_required_live_gates: false
+  final_gate_item: MM-047
+  success_sentinel: MOVIE_MUSE_PROTOTYPE_VERIFICATION=PASS
+input_fingerprint_policy:
+  algorithm: sha256
+  includes:
+    - verification_commit
+    - resolved_owned_and_shared_source_paths
+    - tests_and_fixtures
+    - schemas_and_migrations
+    - dependency_lockfiles
+    - build_runtime_and_model_policy_configuration
+    - prompts_templates_rights_and_evaluation_policy
+    - verifier_scripts
+    - direct_dependency_pass_fingerprints
+  path_mapping_file_required_at_implementation: config/verification-scopes.yaml
+external_gates:
+  - id: EXT-FDX-FINAL-DRAFT
+    owner_item: MM-013
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+  - id: EXT-REMOTE-MODEL
+    owner_item: MM-009
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+  - id: EXT-ZOOM-SANDBOX
+    owner_item: MM-029
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+  - id: EXT-GOOGLE-MEET-SANDBOX
+    owner_item: MM-029
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+  - id: EXT-IMAGE-PROVIDER
+    owner_item: MM-032
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+  - id: EXT-VIDEO-PROVIDER
+    owner_item: MM-034
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+  - id: EXT-DELIVERY-CHANNEL
+    owner_item: MM-036
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+  - id: EXT-INSURANCE-PARTNER
+    owner_item: MM-039
+    required_for_final: true
+    status: NOT_RUN
+    evidence: []
+items:
+  - id: MM-001
+    title: Repository, toolchain, and quality baseline
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: []
+    scope_keys: [global.toolchain, global.ci]
+    pass_record: null
+    blocker: null
+  - id: MM-002
+    title: Domain constitution and versioned schemas
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-001]
+    scope_keys: [domain.schemas]
+    pass_record: null
+    blocker: null
+  - id: MM-003
+    title: Professional screenplay document kernel
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-001, MM-002]
+    scope_keys: [module.document]
+    pass_record: null
+    blocker: null
+  - id: MM-004
+    title: Local-first persistence, migrations, and sync primitives
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-001, MM-002]
+    scope_keys: [module.persistence, module.sync]
+    pass_record: null
+    blocker: null
+  - id: MM-005
+    title: Immutable revisions, branches, checkpoints, ChangeSets, and merges
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-003, MM-004]
+    scope_keys: [module.revisions]
+    pass_record: null
+    blocker: null
+  - id: MM-006
+    title: ACL, tenancy, audit, and collaboration semantics
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-002, MM-004, MM-005]
+    scope_keys: [module.identity, module.authorization, module.audit]
+    pass_record: null
+    blocker: null
+  - id: MM-007
+    title: Generic artifact subsystem
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-002, MM-004, MM-005, MM-006]
+    scope_keys: [module.artifacts]
+    pass_record: null
+    blocker: null
+  - id: MM-008
+    title: Durable worker and transactional job infrastructure
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-001, MM-004, MM-006]
+    scope_keys: [module.jobs, runtime.worker]
+    pass_record: null
+    blocker: null
+  - id: MM-009
+    title: Model router, provider adapters, local models, and policy
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-008]
+    scope_keys: [module.model_router, policy.models]
+    pass_record: null
+    blocker: null
+  - id: MM-010
+    title: Rights registry, provenance, sources, and Evidence Bundles
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-002, MM-004, MM-006, MM-007]
+    scope_keys: [module.rights, module.provenance]
+    pass_record: null
+    blocker: null
+  - id: MM-011
+    title: Machine-enforceable dependency and invalidation engine
+    milestone: A
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-002, MM-004, MM-005, MM-008]
+    scope_keys: [module.dependencies]
+    pass_record: null
+    blocker: null
+  - id: MM-012
+    title: Golden fixtures and test harness
+    milestone: B
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-003, MM-005, MM-010, MM-011]
+    scope_keys: [test.fixtures, test.harness]
+    pass_record: null
+    blocker: null
+  - id: MM-013
+    title: FDX compatibility program
+    milestone: B
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-003, MM-005, MM-012]
+    scope_keys: [module.fdx, test.fdx]
+    pass_record: null
+    blocker: null
+  - id: MM-014
+    title: Deterministic layout, pagination, and production revisions
+    milestone: B
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-003, MM-005, MM-012, MM-013]
+    scope_keys: [module.layout, module.production_revisions, test.render]
+    pass_record: null
+    blocker: null
+  - id: MM-015
+    title: Professional editor and offline authoring UX
+    milestone: B
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-003, MM-004, MM-005, MM-006, MM-014]
+    scope_keys: [app.editor, ux.authoring]
+    pass_record: null
+    blocker: null
+  - id: MM-016
+    title: Competitive workflow regression suite
+    milestone: B
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-012, MM-013, MM-014, MM-015]
+    scope_keys: [test.competitive]
+    pass_record: null
+    blocker: null
+  - id: MM-017
+    title: Context builder and rights-controlled retrieval
+    milestone: C
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-009, MM-010, MM-011, MM-012, MM-015]
+    scope_keys: [module.context, module.retrieval]
+    pass_record: null
+    blocker: null
+  - id: MM-018
+    title: Screenplay compiler and FilmIR extraction
+    milestone: C
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-003, MM-009, MM-010, MM-011, MM-012, MM-017]
+    scope_keys: [module.compiler, module.film_ir]
+    pass_record: null
+    blocker: null
+  - id: MM-019
+    title: Character knowledge and deterministic state engine
+    milestone: C
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-018]
+    scope_keys: [module.state_engine]
+    pass_record: null
+    blocker: null
+  - id: MM-020
+    title: CreativeIntentIR and creator invariants
+    milestone: C
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-018, MM-019]
+    scope_keys: [module.creative_intent]
+    pass_record: null
+    blocker: null
+  - id: MM-021
+    title: Proposal/ChangeSet and impact review engine
+    milestone: C
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-005, MM-006, MM-010, MM-011, MM-017, MM-020]
+    scope_keys: [module.proposals]
+    pass_record: null
+    blocker: null
+  - id: MM-022
+    title: Creative Divergence / writer-unblock workflow
+    milestone: C
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-021]
+    scope_keys: [capability.writer_unblock]
+    pass_record: null
+    blocker: null
+  - id: MM-023
+    title: Reference Lens
+    milestone: C
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-010, MM-017, MM-018, MM-021]
+    scope_keys: [capability.reference_lens]
+    pass_record: null
+    blocker: null
+  - id: MM-024
+    title: Continuity and material production-impact analysis
+    milestone: C
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-018, MM-019, MM-021]
+    scope_keys: [capability.continuity, capability.impact]
+    pass_record: null
+    blocker: null
+  - id: MM-025
+    title: Project Memory and reviewed capture
+    milestone: D
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-007, MM-010, MM-018, MM-021]
+    scope_keys: [module.project_memory]
+    pass_record: null
+    blocker: null
+  - id: MM-026
+    title: Single/multi-writer Room Mode
+    milestone: D
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-006, MM-021, MM-025]
+    scope_keys: [capability.room_mode]
+    pass_record: null
+    blocker: null
+  - id: MM-027
+    title: Live collaboration and sync
+    milestone: D
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-004, MM-005, MM-006, MM-015]
+    scope_keys: [module.collaboration, module.sync]
+    pass_record: null
+    blocker: null
+  - id: MM-028
+    title: Meeting capture and transcript intelligence
+    milestone: D
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-007, MM-010, MM-025, MM-026]
+    scope_keys: [capability.meeting_capture]
+    pass_record: null
+    blocker: null
+  - id: MM-029
+    title: Zoom and Google Meet adapters
+    milestone: D
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-028]
+    scope_keys: [adapter.zoom, adapter.google_meet]
+    pass_record: null
+    blocker: null
+  - id: MM-030
+    title: Beat frameworks and completion tracking
+    milestone: D
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-018, MM-020, MM-021, MM-025]
+    scope_keys: [capability.beats]
+    pass_record: null
+    blocker: null
+  - id: MM-031
+    title: Director Mode, DirectorVisionGraph, and ShotIR
+    milestone: E
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-007, MM-018, MM-020, MM-021]
+    scope_keys: [module.director, module.shot_ir]
+    pass_record: null
+    blocker: null
+  - id: MM-032
+    title: Storyboard generation and annotation
+    milestone: E
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-009, MM-010, MM-031]
+    scope_keys: [capability.storyboard]
+    pass_record: null
+    blocker: null
+  - id: MM-033
+    title: Visual Language and Color Intelligence
+    milestone: E
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-010, MM-020, MM-031]
+    scope_keys: [capability.visual_language]
+    pass_record: null
+    blocker: null
+  - id: MM-034
+    title: Video previs provider workflow
+    milestone: E
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-009, MM-010, MM-031, MM-032, MM-033]
+    scope_keys: [capability.video_previs]
+    pass_record: null
+    blocker: null
+  - id: MM-035
+    title: Production breakdown
+    milestone: F
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-018, MM-024]
+    scope_keys: [module.breakdown]
+    pass_record: null
+    blocker: null
+  - id: MM-036
+    title: Department handoffs, ChangeSets, and production correspondence
+    milestone: F
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-007, MM-021, MM-035]
+    scope_keys: [module.department_handoff, capability.correspondence]
+    pass_record: null
+    blocker: null
+  - id: MM-037
+    title: Scheduling and constraint engine
+    milestone: F
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-035, MM-036]
+    scope_keys: [module.scheduling]
+    pass_record: null
+    blocker: null
+  - id: MM-038
+    title: Budget Evidence Ledger
+    milestone: F
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-010, MM-035, MM-037]
+    scope_keys: [module.budget]
+    pass_record: null
+    blocker: null
+  - id: MM-039
+    title: Insurance readiness package
+    milestone: F
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-007, MM-010, MM-035, MM-037, MM-038]
+    scope_keys: [capability.insurance_readiness]
+    pass_record: null
+    blocker: null
+  - id: MM-040
+    title: Audience Resonance Lab
+    milestone: G
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-009, MM-010, MM-018, MM-020, MM-025]
+    scope_keys: [module.audience_lab]
+    pass_record: null
+    blocker: null
+  - id: MM-041
+    title: Rubric and scene/script analysis
+    milestone: G
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-009, MM-010, MM-018, MM-020, MM-024]
+    scope_keys: [capability.rubric]
+    pass_record: null
+    blocker: null
+  - id: MM-042
+    title: Commercial scenario forecasting
+    milestone: G
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-010, MM-038, MM-040, MM-041]
+    scope_keys: [module.commercial_forecast]
+    pass_record: null
+    blocker: null
+  - id: MM-043
+    title: Investor deck and evidence-backed generated artifacts
+    milestone: G
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-007, MM-010, MM-038, MM-042]
+    scope_keys: [capability.investor_artifacts]
+    pass_record: null
+    blocker: null
+  - id: MM-044
+    title: Public API, webhooks, MCP, and interoperability
+    milestone: H
+    priority: high
+    status: NOT_STARTED
+    depends_on: [MM-006, MM-007, MM-021, MM-025, MM-035]
+    scope_keys: [module.api, module.mcp, module.webhooks]
+    pass_record: null
+    blocker: null
+  - id: MM-045
+    title: Web, macOS, Windows, iPhone, and Android applications
+    milestone: H
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-004, MM-006, MM-015, MM-025, MM-027, MM-044]
+    scope_keys: [app.web, app.macos, app.windows, app.ios, app.android]
+    pass_record: null
+    blocker: null
+  - id: MM-046
+    title: Security, privacy, observability, evaluation, and operations
+    milestone: H
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-008, MM-009, MM-010, MM-027, MM-029, MM-034, MM-039, MM-042, MM-044, MM-045]
+    scope_keys: [global.security, global.privacy, global.observability, global.evaluation, global.operations]
+    pass_record: null
+    blocker: null
+  - id: MM-047
+    title: Golden-path E2E, independent verification, and release gate
+    milestone: H
+    priority: critical
+    status: NOT_STARTED
+    depends_on: [MM-001, MM-002, MM-003, MM-004, MM-005, MM-006, MM-007, MM-008, MM-009, MM-010, MM-011, MM-012, MM-013, MM-014, MM-015, MM-016, MM-017, MM-018, MM-019, MM-020, MM-021, MM-022, MM-023, MM-024, MM-025, MM-026, MM-027, MM-028, MM-029, MM-030, MM-031, MM-032, MM-033, MM-034, MM-035, MM-036, MM-037, MM-038, MM-039, MM-040, MM-041, MM-042, MM-043, MM-044, MM-045, MM-046]
+    scope_keys: [test.golden_path, script.verify_all]
+    pass_record: null
+    blocker: null

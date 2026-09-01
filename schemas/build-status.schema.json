@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/build-status-v2.json",
+  "title": "Movie Muse V2 build status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "package_version",
+    "project",
+    "manifest_role",
+    "overall_status",
+    "baseline_commit",
+    "dag_file",
+    "dag_sha256",
+    "last_updated_utc",
+    "allowed_statuses",
+    "status_rules",
+    "completion_policy",
+    "input_fingerprint_policy",
+    "external_gates",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0"},
+    "package_version": {"type": "string", "pattern": "^2\\."},
+    "project": {"const": "movie-muse-working-prototype"},
+    "manifest_role": {"const": "canonical_completion_ledger"},
+    "overall_status": {"$ref": "#/$defs/status"},
+    "baseline_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{7,64}$"},
+    "dag_file": {"const": "dependency_dag.yaml"},
+    "dag_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "last_updated_utc": {"type": ["string", "null"], "format": "date-time"},
+    "allowed_statuses": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/status"}
+    },
+    "status_rules": {"type": "object"},
+    "completion_policy": {
+      "type": "object",
+      "required": ["final_gate_item", "success_sentinel"],
+      "properties": {
+        "final_gate_item": {"const": "MM-047"},
+        "success_sentinel": {"const": "MOVIE_MUSE_PROTOTYPE_VERIFICATION=PASS"}
+      }
+    },
+    "input_fingerprint_policy": {"type": "object"},
+    "external_gates": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/externalGate"}
+    },
+    "items": {
+      "type": "array",
+      "minItems": 47,
+      "maxItems": 47,
+      "items": {"$ref": "#/$defs/item"}
+    }
+  },
+  "$defs": {
+    "status": {
+      "enum": ["NOT_STARTED", "IN_PROGRESS", "PASS", "FAIL", "BLOCKED_EXTERNAL", "STALE"]
+    },
+    "externalGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "owner_item", "required_for_final", "status", "evidence"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^EXT-[A-Z0-9-]+$"},
+        "owner_item": {"type": "string", "pattern": "^MM-[0-9]{3}$"},
+        "required_for_final": {"type": "boolean"},
+        "status": {"enum": ["NOT_RUN", "PASS", "FAIL", "BLOCKED_EXTERNAL", "STALE"]},
+        "evidence": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "passRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verification_commit", "input_fingerprint", "commands", "evidence", "completed_at_utc", "independent_verifier"],
+      "properties": {
+        "verification_commit": {"type": "string", "pattern": "^[0-9a-f]{7,64}$"},
+        "input_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "commands": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "completed_at_utc": {"type": "string", "format": "date-time"},
+        "independent_verifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "independence_basis", "environment", "commands", "result", "evidence"],
+          "properties": {
+            "id": {"type": "string", "minLength": 1},
+            "independence_basis": {"type": "string", "minLength": 1},
+            "environment": {"type": "string", "minLength": 1},
+            "commands": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "result": {"const": "PASS"},
+            "evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "limitations": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["external_gate_ids", "safe_summary", "attempted_commands", "required_action", "recorded_at_utc"],
+      "properties": {
+        "external_gate_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "safe_summary": {"type": "string", "minLength": 1},
+        "attempted_commands": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "required_action": {"type": "string", "minLength": 1},
+        "recorded_at_utc": {"type": "string", "format": "date-time"}
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "milestone", "priority", "status", "depends_on", "scope_keys", "pass_record", "blocker"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^MM-[0-9]{3}$"},
+        "title": {"type": "string", "minLength": 1},
+        "milestone": {"enum": ["A", "B", "C", "D", "E", "F", "G", "H"]},
+        "priority": {"enum": ["critical", "high", "medium", "low"]},
+        "status": {"$ref": "#/$defs/status"},
+        "depends_on": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^MM-[0-9]{3}$"}},
+        "scope_keys": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "pass_record": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/passRecord"}]},
+        "blocker": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/blocker"}]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "PASS"}}, "required": ["status"]},
+          "then": {"properties": {"pass_record": {"$ref": "#/$defs/passRecord"}, "blocker": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"status": {"const": "BLOCKED_EXTERNAL"}}, "required": ["status"]},
+          "then": {"properties": {"blocker": {"$ref": "#/$defs/blocker"}}}
+        }
+      ]
+    }
+  }
+}
+

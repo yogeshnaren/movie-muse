@@ -1,0 +1,257 @@
+schema_version: "2.0"
+package_version: "2.1.0"
+graph_id: movie-muse-working-prototype-v2
+semantics:
+  edge_direction: "depends_on points from a node to its prerequisites"
+  scheduling: "a node is runnable only when every prerequisite is PASS and current"
+  invalidation: "a relevant input change marks the node STALE and recursively marks every transitive dependent STALE"
+  pass_binding: "PASS binds to verification_commit plus input_fingerprint"
+  resurrection: "STALE can become PASS only through successful reverification; reverting files does not restore PASS"
+  cycles: forbidden
+  unknown_dependencies: forbidden
+  self_dependencies: forbidden
+relevant_input_classes:
+  - product_source
+  - tests_and_fixtures
+  - domain_or_api_schema
+  - database_migration
+  - dependency_lockfile
+  - build_or_runtime_configuration
+  - prompt_template_or_model_policy
+  - rights_or_evaluation_policy
+  - verification_script
+nodes:
+  - id: MM-001
+    title: Repository, toolchain, and quality baseline
+    milestone: A
+    depends_on: []
+  - id: MM-002
+    title: Domain constitution and versioned schemas
+    milestone: A
+    depends_on: [MM-001]
+  - id: MM-003
+    title: Professional screenplay document kernel
+    milestone: A
+    depends_on: [MM-001, MM-002]
+  - id: MM-004
+    title: Local-first persistence, migrations, and sync primitives
+    milestone: A
+    depends_on: [MM-001, MM-002]
+  - id: MM-005
+    title: Immutable revisions, branches, checkpoints, ChangeSets, and merges
+    milestone: A
+    depends_on: [MM-003, MM-004]
+  - id: MM-006
+    title: ACL, tenancy, audit, and collaboration semantics
+    milestone: A
+    depends_on: [MM-002, MM-004, MM-005]
+  - id: MM-007
+    title: Generic artifact subsystem
+    milestone: A
+    depends_on: [MM-002, MM-004, MM-005, MM-006]
+  - id: MM-008
+    title: Durable worker and transactional job infrastructure
+    milestone: A
+    depends_on: [MM-001, MM-004, MM-006]
+  - id: MM-009
+    title: Model router, provider adapters, local models, and policy
+    milestone: A
+    depends_on: [MM-008]
+  - id: MM-010
+    title: Rights registry, provenance, sources, and Evidence Bundles
+    milestone: A
+    depends_on: [MM-002, MM-004, MM-006, MM-007]
+  - id: MM-011
+    title: Machine-enforceable dependency and invalidation engine
+    milestone: A
+    depends_on: [MM-002, MM-004, MM-005, MM-008]
+  - id: MM-012
+    title: Golden fixtures and test harness
+    milestone: B
+    depends_on: [MM-003, MM-005, MM-010, MM-011]
+  - id: MM-013
+    title: FDX compatibility program
+    milestone: B
+    depends_on: [MM-003, MM-005, MM-012]
+  - id: MM-014
+    title: Deterministic layout, pagination, and production revisions
+    milestone: B
+    depends_on: [MM-003, MM-005, MM-012, MM-013]
+  - id: MM-015
+    title: Professional editor and offline authoring UX
+    milestone: B
+    depends_on: [MM-003, MM-004, MM-005, MM-006, MM-014]
+  - id: MM-016
+    title: Competitive workflow regression suite
+    milestone: B
+    depends_on: [MM-012, MM-013, MM-014, MM-015]
+  - id: MM-017
+    title: Context builder and rights-controlled retrieval
+    milestone: C
+    depends_on: [MM-009, MM-010, MM-011, MM-012, MM-015]
+  - id: MM-018
+    title: Screenplay compiler and FilmIR extraction
+    milestone: C
+    depends_on: [MM-003, MM-009, MM-010, MM-011, MM-012, MM-017]
+  - id: MM-019
+    title: Character knowledge and deterministic state engine
+    milestone: C
+    depends_on: [MM-018]
+  - id: MM-020
+    title: CreativeIntentIR and creator invariants
+    milestone: C
+    depends_on: [MM-018, MM-019]
+  - id: MM-021
+    title: Proposal/ChangeSet and impact review engine
+    milestone: C
+    depends_on: [MM-005, MM-006, MM-010, MM-011, MM-017, MM-020]
+  - id: MM-022
+    title: Creative Divergence / writer-unblock workflow
+    milestone: C
+    depends_on: [MM-021]
+  - id: MM-023
+    title: Reference Lens
+    milestone: C
+    depends_on: [MM-010, MM-017, MM-018, MM-021]
+  - id: MM-024
+    title: Continuity and material production-impact analysis
+    milestone: C
+    depends_on: [MM-018, MM-019, MM-021]
+  - id: MM-025
+    title: Project Memory and reviewed capture
+    milestone: D
+    depends_on: [MM-007, MM-010, MM-018, MM-021]
+  - id: MM-026
+    title: Single/multi-writer Room Mode
+    milestone: D
+    depends_on: [MM-006, MM-021, MM-025]
+  - id: MM-027
+    title: Live collaboration and sync
+    milestone: D
+    depends_on: [MM-004, MM-005, MM-006, MM-015]
+  - id: MM-028
+    title: Meeting capture and transcript intelligence
+    milestone: D
+    depends_on: [MM-007, MM-010, MM-025, MM-026]
+  - id: MM-029
+    title: Zoom and Google Meet adapters
+    milestone: D
+    depends_on: [MM-028]
+  - id: MM-030
+    title: Beat frameworks and completion tracking
+    milestone: D
+    depends_on: [MM-018, MM-020, MM-021, MM-025]
+  - id: MM-031
+    title: Director Mode, DirectorVisionGraph, and ShotIR
+    milestone: E
+    depends_on: [MM-007, MM-018, MM-020, MM-021]
+  - id: MM-032
+    title: Storyboard generation and annotation
+    milestone: E
+    depends_on: [MM-009, MM-010, MM-031]
+  - id: MM-033
+    title: Visual Language and Color Intelligence
+    milestone: E
+    depends_on: [MM-010, MM-020, MM-031]
+  - id: MM-034
+    title: Video previs provider workflow
+    milestone: E
+    depends_on: [MM-009, MM-010, MM-031, MM-032, MM-033]
+  - id: MM-035
+    title: Production breakdown
+    milestone: F
+    depends_on: [MM-018, MM-024]
+  - id: MM-036
+    title: Department handoffs, ChangeSets, and production correspondence
+    milestone: F
+    depends_on: [MM-007, MM-021, MM-035]
+  - id: MM-037
+    title: Scheduling and constraint engine
+    milestone: F
+    depends_on: [MM-035, MM-036]
+  - id: MM-038
+    title: Budget Evidence Ledger
+    milestone: F
+    depends_on: [MM-010, MM-035, MM-037]
+  - id: MM-039
+    title: Insurance readiness package
+    milestone: F
+    depends_on: [MM-007, MM-010, MM-035, MM-037, MM-038]
+  - id: MM-040
+    title: Audience Resonance Lab
+    milestone: G
+    depends_on: [MM-009, MM-010, MM-018, MM-020, MM-025]
+  - id: MM-041
+    title: Rubric and scene/script analysis
+    milestone: G
+    depends_on: [MM-009, MM-010, MM-018, MM-020, MM-024]
+  - id: MM-042
+    title: Commercial scenario forecasting
+    milestone: G
+    depends_on: [MM-010, MM-038, MM-040, MM-041]
+  - id: MM-043
+    title: Investor deck and evidence-backed generated artifacts
+    milestone: G
+    depends_on: [MM-007, MM-010, MM-038, MM-042]
+  - id: MM-044
+    title: Public API, webhooks, MCP, and interoperability
+    milestone: H
+    depends_on: [MM-006, MM-007, MM-021, MM-025, MM-035]
+  - id: MM-045
+    title: Web, macOS, Windows, iPhone, and Android applications
+    milestone: H
+    depends_on: [MM-004, MM-006, MM-015, MM-025, MM-027, MM-044]
+  - id: MM-046
+    title: Security, privacy, observability, evaluation, and operations
+    milestone: H
+    depends_on: [MM-008, MM-009, MM-010, MM-027, MM-029, MM-034, MM-039, MM-042, MM-044, MM-045]
+  - id: MM-047
+    title: Golden-path E2E, independent verification, and release gate
+    milestone: H
+    depends_on:
+      - MM-001
+      - MM-002
+      - MM-003
+      - MM-004
+      - MM-005
+      - MM-006
+      - MM-007
+      - MM-008
+      - MM-009
+      - MM-010
+      - MM-011
+      - MM-012
+      - MM-013
+      - MM-014
+      - MM-015
+      - MM-016
+      - MM-017
+      - MM-018
+      - MM-019
+      - MM-020
+      - MM-021
+      - MM-022
+      - MM-023
+      - MM-024
+      - MM-025
+      - MM-026
+      - MM-027
+      - MM-028
+      - MM-029
+      - MM-030
+      - MM-031
+      - MM-032
+      - MM-033
+      - MM-034
+      - MM-035
+      - MM-036
+      - MM-037
+      - MM-038
+      - MM-039
+      - MM-040
+      - MM-041
+      - MM-042
+      - MM-043
+      - MM-044
+      - MM-045
+      - MM-046
