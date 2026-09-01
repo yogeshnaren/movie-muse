@@ -11,9 +11,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, tuple_of
+from movie_muse.schemas.serialization import (
+    dataclass_from_dict,
+    dataclass_to_dict,
+    sealed,
+    tuple_of,
+)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class SubjectPosition:
     subject_id: str
@@ -29,6 +35,7 @@ class SubjectPosition:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class SceneSpace:
     SCHEMA_NAME: ClassVar[str] = "scene_space"

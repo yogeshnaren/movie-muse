@@ -79,9 +79,11 @@ def test_tampered_integrity_hash_is_rejected() -> None:
 
 
 def test_event_payload_is_recursively_immutable() -> None:
-    event = _make_event(payload={"value": "before"})
+    event = _make_event(payload={"value": "before", "nested": {"flag": True}})
     with pytest.raises(TypeError):
         event.payload["value"] = "after"  # type: ignore[index]
+    with pytest.raises(TypeError):
+        event.payload["nested"]["flag"] = False  # type: ignore[index]
 
 
 def test_tampered_payload_after_hash_computation_is_rejected() -> None:

@@ -117,6 +117,19 @@ def test_authored_fact_rejects_mismatched_kind() -> None:
             author_actor_id="act_01ARZ3NDEKTSV4RRFFQ69G5FAV",
             kind=EpistemicLevel.STRUCTURAL,
         )
+
+
+def test_authored_fact_nested_value_is_immutable() -> None:
+    fact = AuthoredFact(
+        id="fca_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        subject_id="char-ada",
+        attribute="props",
+        value={"item": "lock"},
+        source_revision_id="rev_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        author_actor_id="act_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+    )
+    with pytest.raises(TypeError):
+        fact.value["item"] = "key"  # type: ignore[index]
     with pytest.raises(ValueError):
         InferredClaim(
             id="cli_01ARZ3NDEKTSV4RRFFQ69G5FAV",

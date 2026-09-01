@@ -11,9 +11,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict
+from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, sealed
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class CameraSpec:
     position_x: float
@@ -32,6 +33,7 @@ class CameraSpec:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ShotIR:
     SCHEMA_NAME: ClassVar[str] = "shot_ir"

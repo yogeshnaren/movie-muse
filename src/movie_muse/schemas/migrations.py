@@ -15,11 +15,14 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
+from movie_muse.schemas.serialization import sealed
+
 
 class MigrationPathError(LookupError):
     """Raised when no registered migration chain connects two versions."""
 
 
+@sealed
 @dataclass(frozen=True)
 class SchemaMigration:
     schema_name: str

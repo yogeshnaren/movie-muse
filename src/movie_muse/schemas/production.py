@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict
+from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, sealed
 
 
 class ProjectionKind(str, Enum):
@@ -41,6 +41,7 @@ class BudgetMaturity(str, Enum):
     PRODUCTION_FORECAST_TO_COMPLETE = "production_forecast_to_complete"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ProductionProjection:
     SCHEMA_NAME: ClassVar[str] = "production_projection"

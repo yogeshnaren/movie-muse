@@ -12,7 +12,12 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, tuple_of
+from movie_muse.schemas.serialization import (
+    dataclass_from_dict,
+    dataclass_to_dict,
+    sealed,
+    tuple_of,
+)
 
 
 class HumanValidationState(str, Enum):
@@ -22,6 +27,7 @@ class HumanValidationState(str, Enum):
     NEEDS_REVISION = "needs_revision"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class CitedSource:
     source_id: str
@@ -36,6 +42,7 @@ class CitedSource:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class EvidenceBundle:
     SCHEMA_NAME: ClassVar[str] = "evidence_bundle"

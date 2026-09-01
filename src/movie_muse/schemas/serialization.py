@@ -16,6 +16,45 @@ from typing import Any, TypeVar
 T = TypeVar("T")
 
 
+def freeze_instance_fields(obj: Any) -> None:
+    """Freeze JSON-like field values on a frozen dataclass instance."""
+
+    for field in dataclasses.fields(obj):
+        value = getattr(obj, field.name)
+        if dataclasses.is_dataclass(value) and not isinstance(value, type):
+            continue
+        if isinstance(value, tuple):
+            frozen_items = tuple(
+                item
+                if dataclasses.is_dataclass(item) and not isinstance(item, type)
+                else freeze_json(item)
+                for item in value
+            )
+            object.__setattr__(obj, field.name, frozen_items)
+            continue
+        frozen = freeze_json(value)
+        if frozen is not value:
+            object.__setattr__(obj, field.name, frozen)
+
+
+def sealed(cls: type[T]) -> type[T]:
+    """Wrap a frozen dataclass so nested mappings/lists cannot mutate after construction.
+
+    ``@dataclass`` only emits a ``__post_init__`` call when the class already
+    defined one. Wrapping ``__init__`` instead keeps freeze-on-construct
+    behavior for every sealed type, including those with no ``__post_init__``.
+    """
+
+    existing_init = cls.__init__
+
+    def __init__(self: Any, *args: Any, **kwargs: Any) -> None:
+        existing_init(self, *args, **kwargs)
+        freeze_instance_fields(self)
+
+    cls.__init__ = __init__  # type: ignore[method-assign]
+    return cls
+
+
 def freeze_json(value: Any) -> Any:
     """Recursively freeze JSON-like mappings and lists so nested payloads cannot mutate."""
 

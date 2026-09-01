@@ -18,6 +18,7 @@ from movie_muse.schemas.serialization import (
     dataclass_from_dict,
     dataclass_to_dict,
     freeze_json,
+    sealed,
     to_json_dict,
 )
 
@@ -76,6 +77,7 @@ def compute_integrity_hash(
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ProjectEvent:
     SCHEMA_NAME: ClassVar[str] = "project_event"

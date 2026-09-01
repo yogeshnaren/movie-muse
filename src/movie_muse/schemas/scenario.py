@@ -10,9 +10,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, tuple_of
+from movie_muse.schemas.serialization import (
+    dataclass_from_dict,
+    dataclass_to_dict,
+    sealed,
+    tuple_of,
+)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ScenarioOutcome:
     percentile: str
@@ -31,6 +37,7 @@ class ScenarioOutcome:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ScenarioModel:
     SCHEMA_NAME: ClassVar[str] = "scenario_model"

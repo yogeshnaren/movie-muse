@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict
+from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, sealed
 
 
 class CollaborationRecordKind(str, Enum):
@@ -33,6 +33,7 @@ class PromotionState(str, Enum):
     DISCARDED = "discarded"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class CollaborationEvent:
     SCHEMA_NAME: ClassVar[str] = "collaboration_event"

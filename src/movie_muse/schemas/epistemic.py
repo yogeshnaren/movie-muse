@@ -26,7 +26,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_to_dict
+from movie_muse.schemas.serialization import dataclass_to_dict, sealed
 
 
 def _require_declared_kind(instance: Any) -> None:
@@ -46,6 +46,7 @@ class EpistemicLevel(str, Enum):
     SCENARIO = "scenario"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class AuthoredFact:
     """A creator-authored, canon-backed fact (e.g. a line in the screenplay)."""
@@ -69,6 +70,7 @@ class AuthoredFact:
         return dataclass_to_dict(self)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class StructuralFact:
     """A deterministically derived fact (e.g. FilmIR scene/entity extraction)."""
@@ -92,6 +94,7 @@ class StructuralFact:
         return dataclass_to_dict(self)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class InferredClaim:
     """A probabilistic semantic claim with confidence and provenance."""
@@ -118,6 +121,7 @@ class InferredClaim:
         return dataclass_to_dict(self)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class OperationalAssumption:
     """An operational-projection assumption (breakdown/schedule/budget input)."""
@@ -141,6 +145,7 @@ class OperationalAssumption:
         return dataclass_to_dict(self)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ScenarioOutput:
     """A commercial/audience scenario output; never a guarantee or forecast fact."""

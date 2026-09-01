@@ -163,3 +163,14 @@ def test_revision_mark_and_production_tag_and_attachment_reference_stable_ids() 
 def test_inline_span_offsets_must_be_ordered() -> None:
     with pytest.raises(ValueError):
         InlineSpan(id=ids.new_id("inline_span"), start_offset=5, end_offset=1, span_kind="note")
+
+
+def test_block_unknown_extensions_are_recursively_immutable() -> None:
+    block = Block(
+        id=ids.new_id("block"),
+        kind=BlockKind.ACTION,
+        text="Ada studies the lock.",
+        unknown_extensions={"vendor": {"flag": "before"}},
+    )
+    with pytest.raises(TypeError):
+        block.unknown_extensions["vendor"]["flag"] = "after"  # type: ignore[index]

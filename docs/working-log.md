@@ -54,3 +54,12 @@ This file records orchestrator actions that the schema cannot store.
   fail closed (as required), but at this pre-existing MM-001 test-suite/baseline-assumption gap
   rather than at a missing-gate check. This needs a follow-up MM-001-scoped fix (or an accepted
   reinterpretation of "baseline") independent of MM-002.
+
+## 2026-09-01T10:44:42Z
+
+- MM-002 nested-immutability follow-up: `@sealed` now wraps generated `__init__`
+  so frozen domain dataclasses without `__post_init__` still recursively freeze
+  JSON-like fields (`Block.unknown_extensions`, `AuthoredFact.value`,
+  `ProductionProjection.data`, changeset/event payloads).
+- Full pytest: 205 passed. Status left `IN_PROGRESS`; independent verification
+  required before PASS.

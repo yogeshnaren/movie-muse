@@ -14,6 +14,7 @@ from movie_muse.schemas.serialization import (
     dataclass_from_dict,
     dataclass_to_dict,
     freeze_json,
+    sealed,
     tuple_of,
 )
 
@@ -27,6 +28,7 @@ class OperationType(str, Enum):
     UPDATE_METADATA = "update_metadata"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ChangeSetOperation:
     id: str
@@ -47,6 +49,7 @@ class ChangeSetOperation:
         return dataclass_from_dict(cls, data, converters={"op_type": OperationType})
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ChangeSet:
     SCHEMA_NAME: ClassVar[str] = "change_set"

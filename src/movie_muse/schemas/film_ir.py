@@ -13,7 +13,12 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, tuple_of
+from movie_muse.schemas.serialization import (
+    dataclass_from_dict,
+    dataclass_to_dict,
+    sealed,
+    tuple_of,
+)
 
 
 class FilmIrEntityKind(str, Enum):
@@ -24,6 +29,7 @@ class FilmIrEntityKind(str, Enum):
     EVENT = "event"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class FilmIrEntity:
     id: str
@@ -48,6 +54,7 @@ class FilmIrEntity:
         )
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class FilmIR:
     SCHEMA_NAME: ClassVar[str] = "film_ir"

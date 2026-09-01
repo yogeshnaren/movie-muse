@@ -13,7 +13,7 @@ from enum import Enum
 from typing import Any, ClassVar
 
 from movie_muse.schemas.change_set import ChangeSet
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict
+from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, sealed
 
 
 class ProposalStatus(str, Enum):
@@ -24,6 +24,7 @@ class ProposalStatus(str, Enum):
     STALE = "stale"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ImpactSummary:
     semantic: tuple[str, ...] = ()
@@ -42,6 +43,7 @@ class ImpactSummary:
         )
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class RevalidationRecord:
     checked_at: str
@@ -57,6 +59,7 @@ class RevalidationRecord:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class Proposal:
     SCHEMA_NAME: ClassVar[str] = "proposal"

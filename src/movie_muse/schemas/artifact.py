@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict
+from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, sealed
 
 
 class ArtifactStatus(str, Enum):
@@ -23,6 +23,7 @@ class ArtifactStatus(str, Enum):
     ARCHIVED = "archived"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class Artifact:
     SCHEMA_NAME: ClassVar[str] = "artifact"
@@ -42,6 +43,7 @@ class Artifact:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ArtifactVersion:
     SCHEMA_NAME: ClassVar[str] = "artifact_version"

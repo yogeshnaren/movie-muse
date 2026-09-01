@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict
+from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, sealed
 
 
 class ProjectMemoryKind(str, Enum):
@@ -20,6 +20,7 @@ class ProjectMemoryKind(str, Enum):
     RESEARCH_NOTE = "research_note"
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ProjectMemory:
     SCHEMA_NAME: ClassVar[str] = "project_memory"

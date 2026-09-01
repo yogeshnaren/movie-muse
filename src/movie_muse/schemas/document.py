@@ -14,7 +14,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, ClassVar
 
-from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, tuple_of
+from movie_muse.schemas.serialization import (
+    dataclass_from_dict,
+    dataclass_to_dict,
+    sealed,
+    tuple_of,
+)
 
 
 class BlockKind(str, Enum):
@@ -35,6 +40,7 @@ class BlockKind(str, Enum):
 _TEXTLESS_KINDS = frozenset({BlockKind.PAGE_BREAK})
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class InlineSpan:
     """An annotation over a text range within a block (note/emphasis/etc.)."""
@@ -58,6 +64,7 @@ class InlineSpan:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class Block:
     """One node of the screenplay's typed block tree.
@@ -121,6 +128,7 @@ class Block:
         )
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class Note:
     id: str
@@ -139,6 +147,7 @@ class Note:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class RevisionMark:
     id: str
@@ -156,6 +165,7 @@ class RevisionMark:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ProductionTag:
     id: str
@@ -173,6 +183,7 @@ class ProductionTag:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class Attachment:
     id: str
@@ -190,6 +201,7 @@ class Attachment:
         return dataclass_from_dict(cls, data)
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class Sequence:
     id: str
@@ -206,6 +218,7 @@ class Sequence:
         return dataclass_from_dict(cls, data, converters={"scene_ids": tuple})
 
 
+@sealed
 @dataclass(frozen=True, slots=True)
 class ScreenplayDocument:
     """The canonical, typed screenplay tree. Editor state is an adapter over
