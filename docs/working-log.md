@@ -205,6 +205,31 @@ This file records orchestrator actions that the schema cannot store.
 - Next runnable: MM-006 (depends on MM-002, MM-004, MM-005)
 - MM-006 moved to IN_PROGRESS; independent verification required before PASS
 
+## 2026-09-01T13:54:08Z
+
+- Independent verifier FAIL for MM-006 at `680d726fdca82a88f62bdd59403338d76592c596`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T13:54:08Z`
+- Most required probes PASSed (deny-by-default, tenant/confused-deputy,
+  revoke+quarantine, craft-decision AI deny, modes same canon, sequential
+  audit, worker re-check, protected branch, sensitive data, airplane, public API).
+- Two FAILs:
+  - Writer `role_denied` for `MANAGE_ACL` still invited an administrator and
+    revoked a viewer through `IdentityService`.
+  - Two concurrent `AuditLog.append` calls both returned sequence 1; replay
+    retained one record (last-writer-wins index).
+- Status remains IN_PROGRESS; do not self-PASS.
+
+## 2026-09-01T14:04:50Z
+
+- MM-006 follow-up at `850141620402e860ec1039f4560089583282161e`
+- Fingerprint at that commit: `f943129513e46006fad672d59e28722ddb213e2b37b0f7da141be03355262e5f`
+- `IdentityService.invite` / `revoke_invitation` / `revoke_membership` require
+  owner or administrator membership (`AclDeniedError`).
+- `AuditLog.append` serializes index updates with `workspace.store.transaction()`.
+- Direct public-API and two-connection concurrent regressions added.
+- Focused pytest 40 passed; affected 85; full pytest 318 passed, 1 warning.
+- Status remains IN_PROGRESS; independent re-verification required before PASS.
+
 
 
 
