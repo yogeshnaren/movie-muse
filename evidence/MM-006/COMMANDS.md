@@ -48,6 +48,8 @@ source, `tests/__init__.py`, or the status ledger.
    - owner: both financial and rights; generic read is not sufficient for either.
    Craft confirmation: human `department_contributor` matching `resource.department`
    is allowed; AI/integration principals are denied even with a department role.
+   Craft confirmation uses the catalogued operation department, not the
+   caller-supplied department; mismatches deny `department_mismatch`.
    Protected-branch merge/accept requires owner/manage-ACL **and** explicit
    `allow_protected`. Versioned `permission_snapshot_id` invalidates on
    membership/epoch change; worker re-check with a stale epoch or snapshot denies.
@@ -131,25 +133,34 @@ regressions
 `test_integration_actor_cannot_be_reclassified_as_human_for_craft` and
 `test_register_actor_is_idempotent_and_rejects_kind_overwrite`.
 
+## Independent FAIL at `2f76dc6` and follow-up
+
+Verifier `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:47:21Z`
+FAILED `2f76dc6f794f7238a2c9e2a1855f184816cce0e3`. Prior FAILs re-probed PASS.
+A costume department contributor could confirm an art-owned operation by
+passing `department=costume`. Fix: craft ownership uses the catalogued
+operation department; claimed mismatches deny `department_mismatch`;
+regression `test_craft_confirmation_uses_catalogued_operation_department`.
+
 ## Commands
 
 See `quality-commands.txt`. Headline (implementation commit
-`6b2460032d81a2356130dbffb076ab24caeb2b43`):
+`294c3500b00779eb20a8647ec39b686ad31dad0c`):
 
 | Command | Result |
 |---|---|
 | `python3 scripts/validate_handoff.py` | `HANDOFF_VALIDATION=PASS` |
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy src` | Success: no issues found in 91 source files |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 45 passed |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 90 passed |
-| `PYTHONPATH=src python3 -m pytest` | 323 passed, 1 warning |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 46 passed |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 91 passed |
+| `PYTHONPATH=src python3 -m pytest` | 324 passed, 1 warning |
 | `PYTHONPATH=src python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py check-scopes` | `SCOPE_COVERAGE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py runnable` | `MM-006` only |
 | `PYTHONPATH=src python3 scripts/mm_status.py boundaries` | 0 violations |
 | `PYTHONPATH=src python3 scripts/mm_status.py secrets` | 0 hits |
-| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `886781ca4d93707bb135c97fc32ef2892f2c40bf41bba9718eed7a8ee8caf96f` |
+| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `dc97d4f44a66a4a6a46214a692dd83a9dcbbd46188fb971684d0e4c3a92098fc` |
 | `./scripts/verify_all.sh` | fail-closed `NOT_READY` missing `migrations_backup_and_recovery` |
 
 The named `scripts/gates/migrations_backup_and_recovery.sh` is not added
@@ -157,9 +168,9 @@ because introducing it requires changing MM-001-owned `tests/release/` (the
 fail-closed test currently asserts that missing gate name). That would STALE
 MM-001. Expected for this package.
 
-Implementation commit (code + tests): `6b2460032d81a2356130dbffb076ab24caeb2b43`
-Input fingerprint at that commit: `886781ca4d93707bb135c97fc32ef2892f2c40bf41bba9718eed7a8ee8caf96f`
-UTC: `2026-09-01T14:40:26Z`
+Implementation commit (code + tests): `294c3500b00779eb20a8647ec39b686ad31dad0c`
+Input fingerprint at that commit: `dc97d4f44a66a4a6a46214a692dd83a9dcbbd46188fb971684d0e4c3a92098fc`
+UTC: `2026-09-01T14:50:53Z`
 
 An evidence-only follow-up commit changes HEAD, so `fingerprint MM-006` at
 the evidence commit will differ because `verification_commit` is hashed.
@@ -182,10 +193,10 @@ None for MM-006. Live/sandbox gates belong to later packages.
 ## Verifier instructions
 
 1. Fresh detached checkout of implementation commit
-   `6b2460032d81a2356130dbffb076ab24caeb2b43` or this evidence commit.
+   `294c3500b00779eb20a8647ec39b686ad31dad0c` or this evidence commit.
    Recompute `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006`
-   at that HEAD. At `6b24600` it must be
-   `886781ca4d93707bb135c97fc32ef2892f2c40bf41bba9718eed7a8ee8caf96f`.
+   at that HEAD. At `294c350` it must be
+   `dc97d4f44a66a4a6a46214a692dd83a9dcbbd46188fb971684d0e4c3a92098fc`.
    Do not edit the canonical ledger or `/workspace`.
 2. Confirm MM-001 through MM-005 are current PASS and MM-006 is IN_PROGRESS.
 3. Run ruff, mypy src, focused pytest (`tests/identity tests/authorization tests/audit`),
@@ -214,6 +225,8 @@ None for MM-006. Live/sandbox gates belong to later packages.
      department is allowed; integration principal is denied. Re-registering
      the same actor id as `human` raises `ActorImmutableError`; epoch and
      snapshot stay unchanged; `confirm_craft_decision` remains denied.
+     Confirming an operation catalogued for another department with a matching
+     caller-supplied department denies `department_mismatch`.
    - **Modes same canon:** writer and director (and composed modes) `project_view`
      head revision ids equal `RevisionService.canon_head_id()`; no forked project copy.
    - **Audit hash:** append-only; `update`/`delete` fail; replay recomputes

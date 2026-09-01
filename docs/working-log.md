@@ -282,11 +282,18 @@ This file records orchestrator actions that the schema cannot store.
 - Focused pytest 45 passed; affected 90; full pytest 323 passed, 1 warning.
 - Status remains IN_PROGRESS; independent re-verification required before PASS.
 
+## 2026-09-01T14:47:21Z
 
+- Independent verifier FAIL for MM-006 at `2f76dc6f794f7238a2c9e2a1855f184816cce0e3`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:47:21Z`
+- Prior FAILs re-probed PASS. Costume contributor confirmed an art-owned
+  operation by supplying `department=costume`.
+- Status remains IN_PROGRESS; do not self-PASS.
 
+## 2026-09-01T14:50:53Z
 
-
-
-
-
-
+- MM-006 follow-up at `294c3500b00779eb20a8647ec39b686ad31dad0c`
+- Fingerprint at that commit: `dc97d4f44a66a4a6a46214a692dd83a9dcbbd46188fb971684d0e4c3a92098fc`
+- Craft confirmation uses the catalogued operation department.
+- Focused pytest 46 passed; affected 91; full pytest 324 passed, 1 warning.
+- Status remains IN_PROGRESS; independent re-verification required before PASS.
