@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 
 from movie_muse.persistence.api import LocalWorkspace
@@ -446,6 +447,31 @@ def test_history_and_diff_projection_are_stable_for_live_history(
         for operation in diff.change_set.operations
     )
     assert "update_block" in diff.operations_text
+
+
+def test_diff_projection_is_deterministic_across_delayed_calls(
+    bound_service: tuple[RevisionService, Project, ScreenplayDocument, str],
+) -> None:
+    service, project, document, _branch = bound_service
+    before = service.canon_head_id()
+    ack = service.apply_change_set(
+        update_block_change_set(
+            base_revision_id=before,
+            actor_id=project.owner_actor_id,
+            block_id=document.blocks[1].id,
+            text="Ada holds still.",
+        ),
+        actor_id=project.owner_actor_id,
+    )
+    first = service.diff_projection(before, ack.revision_id, actor_id=project.owner_actor_id)
+    time.sleep(1.1)
+    second = service.diff_projection(before, ack.revision_id, actor_id=project.owner_actor_id)
+    assert first.to_dict() == second.to_dict()
+    assert first.operations_text == second.operations_text
+    assert first.change_set.id == second.change_set.id
+    assert first.change_set.created_at == second.change_set.created_at
+    target = next(record for record in service.parent_chain(ack.revision_id) if record.id == ack.revision_id)
+    assert first.change_set.created_at == target.created_at
 
 
 def test_public_api_exports_revision_service() -> None:

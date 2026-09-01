@@ -45,6 +45,7 @@ from movie_muse.revisions.projection import (
     render_diff_text,
     render_history_html,
     render_history_text,
+    stabilize_diff_change_set,
 )
 from movie_muse.revisions.types import (
     Branch,
@@ -994,12 +995,19 @@ class RevisionService:
     ) -> DiffProjection:
         source = self.load_revision(from_revision_id)
         target = self.load_revision(to_revision_id)
-        change_set = structural_diff(
+        created_at = self._revision_record(to_revision_id).created_at
+        volatile = structural_diff(
             snapshot_for_diff(source),
             snapshot_for_diff(target),
             author_actor_id=actor_id,
-            created_at=utc_now(),
+            created_at=created_at,
             base_revision_id=from_revision_id,
+        )
+        change_set = stabilize_diff_change_set(
+            volatile,
+            from_revision_id=from_revision_id,
+            to_revision_id=to_revision_id,
+            created_at=created_at,
         )
         return DiffProjection(
             from_revision_id=from_revision_id,

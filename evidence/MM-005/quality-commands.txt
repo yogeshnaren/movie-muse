@@ -44,3 +44,20 @@ $ PYTHONPATH=src python3 scripts/mm_status.py secrets
 $ ./scripts/verify_all.sh
 MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
 (exit 1; expected — do not add migrations_backup_and_recovery; that would STALE MM-001)
+
+# Follow-up 2026-09-01T13:10:21Z — deterministic diff projection
+# Independent FAIL: diff_projection minted a new ChangeSet ULID and utc_now() per call.
+# After stabilize_diff_change_set:
+
+$ python3 -m ruff check src tests scripts backend
+All checks passed!
+
+$ python3 -m mypy src
+Success: no issues found in 70 source files
+
+$ PYTHONPATH=src python3 -m pytest tests/revisions tests/document tests/persistence tests/sync -q
+66 passed
+
+$ PYTHONPATH=src python3 -m pytest
+278 passed, 1 warning
+

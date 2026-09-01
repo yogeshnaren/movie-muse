@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import html
+from dataclasses import replace
 
 from movie_muse.revisions.types import HistoryProjection, HistoryRecord
 from movie_muse.schemas.api import ChangeSet
@@ -62,6 +64,26 @@ def render_diff_text(change_set: ChangeSet) -> str:
     for operation in change_set.operations:
         lines.append(f"{operation.order:04d} {operation.op_type.value} {operation.target_id}")
     return "\n".join(lines) + "\n"
+
+
+def stabilize_diff_change_set(
+    change_set: ChangeSet,
+    *,
+    from_revision_id: str,
+    to_revision_id: str,
+    created_at: str,
+) -> ChangeSet:
+    """Replace wall-clock ChangeSet identity with one derived from the revision pair.
+
+    ``structural_diff`` mints a new ULID and callers used to pass ``utc_now()``.
+    A projection of two immutable revisions must not change when called later.
+    """
+
+    material = "\0".join(
+        (from_revision_id, to_revision_id, change_set.author_actor_id, created_at)
+    )
+    digest = hashlib.sha256(material.encode("utf-8")).hexdigest()
+    return replace(change_set, id=f"cst_{digest[:26]}", created_at=created_at)
 
 
 def _record_line(index: int, record: HistoryRecord) -> str:

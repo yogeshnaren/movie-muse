@@ -184,6 +184,19 @@ This file records orchestrator actions that the schema cannot store.
 - Next runnable: MM-005 (depends on MM-003 and MM-004)
 - MM-005 moved to IN_PROGRESS; independent verification required before PASS
 
+## 2026-09-01T13:10:21Z
+
+- Independent verifier FAIL for MM-005 at `f09c87677c4e5a88ef2ff556b769881322b3eeb3`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T13:10:21Z`
+- Checkpoint, stale proposal, merge, event replay, restore, protected branch,
+  airplane, and public-API probes PASSed. History/diff projection FAILed:
+  `diff_projection` minted a new ChangeSet ULID and `utc_now()` timestamp on
+  each call, so projections 1.1s apart were unequal.
+- Fix: derive ChangeSet id and created_at from the from/to revision pair
+  (target revision timestamp). Delayed repeated-call regression test added.
+  Status remains IN_PROGRESS; do not self-PASS.
+
+
 
 
 

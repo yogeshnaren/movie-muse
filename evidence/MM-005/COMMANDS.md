@@ -56,8 +56,8 @@ See `quality-commands.txt`. Headline:
 |---|---|
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy src` | Success: no issues found in 70 source files |
-| `PYTHONPATH=src python3 -m pytest tests/revisions tests/document tests/persistence tests/sync -q` | 65 passed |
-| `PYTHONPATH=src python3 -m pytest` | 277 passed, 1 warning |
+| `PYTHONPATH=src python3 -m pytest tests/revisions tests/document tests/persistence tests/sync -q` | 66 passed |
+| `PYTHONPATH=src python3 -m pytest` | 278 passed, 1 warning |
 | `PYTHONPATH=src python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py boundaries` | 0 violations |
 | `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-005` | `6687f03743146eb3a35ff5a81eea8df4681b8deabb469bde2bcc5712e7f55544` |
@@ -99,6 +99,10 @@ UTC: `2026-09-01T13:01:53Z`
      matches; `replay_head()` equals stored branch head.
    - **Restore-via-new-revision:** restore a checkpoint; new revision id;
      document equals snapshot; abandoned head remains in parent chain.
+   - **Deterministic diff projection:** call `diff_projection(before, after)`
+     twice at least 1.1s apart. `to_dict()`, `operations_text`, ChangeSet id
+     and `created_at` must be identical. Identity/time must come from the
+     revision pair, not wall clock.
 7. Airplane/outage: with connectivity/auth/subscription/sync/AI flags set,
    branch/checkpoint/diff/export still succeed locally.
 8. Do not treat this implementer record as PASS.
