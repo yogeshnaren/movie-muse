@@ -21,6 +21,8 @@ REQUIRED_FIELDS = (
     "acl_epoch",
 )
 
+ENVELOPE_SCHEMA_VERSION = "1.0"
+
 
 @dataclass(frozen=True, slots=True)
 class SyncEnvelope:
@@ -73,3 +75,39 @@ class SyncEnvelope:
             acl_epoch=int(data["acl_epoch"]),
             document=dict(document),
         )
+
+
+def cross_field_integrity_errors(
+    envelope: SyncEnvelope,
+    *,
+    expected_project_id: str,
+    expected_branch_id: str,
+    expected_acl_epoch: int,
+) -> tuple[str, ...]:
+    """Fail-closed bindings required by architecture §4.
+
+    Sync must verify that the envelope's project, branch, resulting revision,
+    schema version, and ACL epoch match both the carried document and the
+    local workspace. Hash agreement alone is not enough: a peer must not
+    advance head to a revision id the document does not claim.
+    """
+
+    errors: list[str] = []
+    document = envelope.document
+    if envelope.resulting_revision_id != document.get("base_revision_id"):
+        errors.append("resulting_revision_id")
+    if envelope.base_revision_id == envelope.resulting_revision_id:
+        errors.append("base_revision_id")
+    if envelope.project_id != document.get("project_id"):
+        errors.append("document.project_id")
+    if envelope.project_id != expected_project_id:
+        errors.append("project_id")
+    if envelope.branch_id != expected_branch_id:
+        errors.append("branch_id")
+    if envelope.schema_version != ENVELOPE_SCHEMA_VERSION:
+        errors.append("schema_version")
+    if document.get("schema_version") != envelope.schema_version:
+        errors.append("document.schema_version")
+    if envelope.acl_epoch != expected_acl_epoch:
+        errors.append("acl_epoch")
+    return tuple(errors)

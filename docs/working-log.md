@@ -150,5 +150,19 @@ This file records orchestrator actions that the schema cannot store.
 - Prior sequence-membership FAIL at `222b2f6` was independently re-probed and passed
 - MM-004 remains IN_PROGRESS pending independent re-verification of the migration-resume fix
 
+## 2026-09-01T12:08:15Z
+
+- Independent verifier FAIL for MM-004 at `7b5a0c0ecd9cbe6dcadae4529c18a1b536cf44a9`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T12:08:15Z`
+- Interrupted v2 migration probe PASSed. Envelope integrity FAILed: altering
+  only `resulting_revision_id` on a valid envelope was applied on a peer whose
+  head equalled the envelope base, advancing head to a forged revision while
+  the loaded document kept the original `base_revision_id`.
+- Fix: fail-closed cross-field envelope validation (resulting revision, project,
+  branch, schema version, ACL epoch) before apply/buffer. Negative regression
+  tests cover forged revision and sibling field mismatches. Status remains
+  IN_PROGRESS; do not self-PASS.
+
+
 
 

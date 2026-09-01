@@ -12,7 +12,7 @@ from movie_muse.persistence.api import (
     utc_now,
 )
 from movie_muse.schemas.api import ScreenplayDocument
-from movie_muse.sync.envelopes import SyncEnvelope
+from movie_muse.sync.envelopes import SyncEnvelope, cross_field_integrity_errors
 from movie_muse.sync.errors import SyncUploadBlockedError
 
 
@@ -46,7 +46,10 @@ class SyncProtocol:
         """Accept a remote or replayed envelope.
 
         Duplicate operation IDs are ignored. Unknown bases are buffered.
-        Ancestry that does not match the current head becomes an explicit conflict.
+        Ancestry that does not match the current head becomes an explicit
+        conflict. Cross-field integrity failures (resulting revision, project,
+        branch, schema version, ACL epoch) are conflicted and must not advance
+        head.
         """
 
         envelope = SyncEnvelope.from_dict(payload)
@@ -89,34 +92,49 @@ class SyncProtocol:
                 last = outcome
         return last
 
+    def _mark_inbox(self, operation_id: str, status: str) -> None:
+        self.workspace.store.execute(
+            "UPDATE inbox SET status=? WHERE operation_id=?",
+            (status, operation_id),
+        )
+
+    def _integrity_conflict(self, envelope: SyncEnvelope) -> bool:
+        document = ScreenplayDocument.from_dict(envelope.document)
+        row = self.workspace.store.fetchone(
+            "SELECT project_id, branch_id FROM documents WHERE id=?",
+            (document.id,),
+        )
+        if row is None:
+            return True
+        expected_acl_epoch = int(self.workspace.store.get_meta("acl_epoch") or "0")
+        return bool(
+            cross_field_integrity_errors(
+                envelope,
+                expected_project_id=str(row["project_id"]),
+                expected_branch_id=str(row["branch_id"]),
+                expected_acl_epoch=expected_acl_epoch,
+            )
+        )
+
     def _apply_one(self, payload: dict[str, Any]) -> str:
         envelope = SyncEnvelope.from_dict(payload)
+        if self._integrity_conflict(envelope):
+            self._mark_inbox(envelope.operation_id, LocalSaveState.CONFLICTED.value)
+            return "conflicted"
         if self.workspace.has_revision(envelope.resulting_revision_id):
-            self.workspace.store.execute(
-                "UPDATE inbox SET status=? WHERE operation_id=?",
-                ("applied", envelope.operation_id),
-            )
+            self._mark_inbox(envelope.operation_id, "applied")
             return "duplicate"
         if not self.workspace.has_revision(envelope.base_revision_id):
-            self.workspace.store.execute(
-                "UPDATE inbox SET status=? WHERE operation_id=?",
-                ("buffered", envelope.operation_id),
-            )
+            self._mark_inbox(envelope.operation_id, "buffered")
             return "buffered"
-        head = self.workspace.head_revision_id(envelope.document["id"])
-        if head is not None and head != envelope.base_revision_id:
-            self.workspace.store.execute(
-                "UPDATE inbox SET status=? WHERE operation_id=?",
-                (LocalSaveState.CONFLICTED.value, envelope.operation_id),
-            )
-            return "conflicted"
         document = ScreenplayDocument.from_dict(envelope.document)
+        head = self.workspace.head_revision_id(document.id)
+        if head is not None and head != envelope.base_revision_id:
+            self._mark_inbox(envelope.operation_id, LocalSaveState.CONFLICTED.value)
+            return "conflicted"
         encoded, digest = digest_payload(document.to_dict())
         if digest != envelope.resulting_hash:
-            self.workspace.store.execute(
-                "UPDATE inbox SET status=? WHERE operation_id=?",
-                (LocalSaveState.CONFLICTED.value, envelope.operation_id),
-            )
+            self._mark_inbox(envelope.operation_id, LocalSaveState.CONFLICTED.value)
             return "conflicted"
         self.workspace.store.put_blob(encoded, expected_digest=digest)
         now = utc_now()

@@ -28,7 +28,10 @@ verifier may do that.
 6. Idempotent sync envelopes (project, branch, base/resulting revision, hash,
    actor, device, operation ID, schema version, ACL epoch). Duplicates ignored;
    unknown bases buffered then applied; non-head ancestry is an explicit
-   conflict (no last-writer-wins). Revoked unsynced work is quarantined
+   conflict (no last-writer-wins). Apply is fail-closed: `resulting_revision_id`
+   must equal `document.base_revision_id`, and project/branch/schema/ACL-epoch
+   must match the local document row. A forged resulting revision is conflicted
+   and must not advance the peer head. Revoked unsynced work is quarantined
    recovery-only, never uploaded or destroyed.
 7. Unambiguous workspace status: saved locally, queued for sync, synced,
    backed up, conflicted, recovery-only.
@@ -43,8 +46,8 @@ See `quality-commands.txt`. Headline:
 |---|---|
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy src` | Success: no issues found in 61 source files |
-| `python3 -m pytest tests/persistence tests/sync -q` | 19 passed |
-| `python3 -m pytest` | 248 passed, 1 warning |
+| `python3 -m pytest tests/persistence tests/sync -q` | 22 passed |
+| `python3 -m pytest` | 255 passed, 1 warning |
 | `python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `python3 scripts/mm_status.py boundaries` | 0 violations |
 | `python3 scripts/mm_status.py secrets` | 0 hits |
@@ -71,5 +74,10 @@ after independent verification of this package.
 5b. Probe interrupted migration: apply v2 ADD COLUMN without inserting the
    schema_migrations row, then reopen. Must succeed and record v2. Re-open
    again must stay idempotent.
+5c. Probe envelope integrity: take a valid saved envelope, alter only
+   `resulting_revision_id`, ingest into a peer whose head equals the envelope
+   base. Outcome must be `conflicted` (or rejected). Peer head must not change
+   to the forged revision. Repeat for project_id, branch_id, schema_version,
+   and acl_epoch mismatches.
 6. Confirm other modules import `movie_muse.persistence.api` and
    `movie_muse.sync.api` only.

@@ -3,4 +3,9 @@ All checks passed!
 === mypy ===
 Success: no issues found in 61 source files
 === pytest persistence/sync ===
-...................                                                      [100%]
+......................                                                   [100%]
+22 passed
+=== pytest full ===
+255 passed, 1 warning
+=== forged resulting_revision_id probe ===
+outcome conflicted; peer head unchanged

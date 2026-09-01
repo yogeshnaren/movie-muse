@@ -90,3 +90,89 @@ def test_quarantine_keeps_unsynced_work(
     assert row["status"] == LocalSaveState.RECOVERY_ONLY.value
     assert workspace.reopen().base_revision_id == ack.revision_id
     workspace.close()
+
+
+def _peer_ingest(
+    tmp_path: Path,
+    project: Project,
+    document: ScreenplayDocument,
+    branch_id: str,
+    envelope: dict[str, object],
+    *,
+    label: str,
+) -> tuple[str, str | None, ScreenplayDocument]:
+    peer = LocalWorkspace(tmp_path / label)
+    peer.open_project(project, document, branch_id=branch_id)
+    head_before = peer.head_revision_id(document.id)
+    outcome = SyncProtocol(peer).ingest(envelope)
+    loaded = peer.reopen()
+    head_after = peer.head_revision_id(document.id)
+    peer.close()
+    assert head_before == document.base_revision_id
+    return outcome, head_after, loaded
+
+
+def test_forged_resulting_revision_id_is_conflicted_and_does_not_advance_head(
+    tmp_path: Path, project_bundle: tuple[Project, ScreenplayDocument, str]
+) -> None:
+    """Architecture §4: ancestry/integrity must bind resulting revision to the document."""
+
+    project, document, branch_id = project_bundle
+    source = LocalWorkspace(tmp_path / "source")
+    source.open_project(project, document, branch_id=branch_id)
+    ack = source.save(source.reopen(), actor_id=project.owner_actor_id, device_id="dev_a")
+    envelope = dict(_envelopes(source)[ack.operation_id])
+    forged = new_id("revision")
+    envelope["resulting_revision_id"] = forged
+    source.close()
+
+    outcome, head_after, loaded = _peer_ingest(
+        tmp_path, project, document, branch_id, envelope, label="peer-forged-rev"
+    )
+    assert outcome == "conflicted"
+    assert head_after == document.base_revision_id
+    assert loaded.base_revision_id == document.base_revision_id
+    assert loaded.base_revision_id != forged
+
+
+def test_cross_field_envelope_mismatches_are_conflicted(
+    tmp_path: Path, project_bundle: tuple[Project, ScreenplayDocument, str]
+) -> None:
+    project, document, branch_id = project_bundle
+    source = LocalWorkspace(tmp_path / "source")
+    source.open_project(project, document, branch_id=branch_id)
+    ack = source.save(source.reopen(), actor_id=project.owner_actor_id, device_id="dev_a")
+    valid = _envelopes(source)[ack.operation_id]
+    source.close()
+
+    cases: dict[str, dict[str, object]] = {
+        "project": {**valid, "project_id": new_id("project")},
+        "branch": {**valid, "branch_id": new_id("branch")},
+        "schema": {**valid, "schema_version": "9.9"},
+        "acl_epoch": {**valid, "acl_epoch": 7},
+    }
+    for label, envelope in cases.items():
+        outcome, head_after, loaded = _peer_ingest(
+            tmp_path, project, document, branch_id, envelope, label=f"peer-{label}"
+        )
+        assert outcome == "conflicted", label
+        assert head_after == document.base_revision_id, label
+        assert loaded.base_revision_id == document.base_revision_id, label
+
+
+def test_valid_envelope_still_applies_to_peer(
+    tmp_path: Path, project_bundle: tuple[Project, ScreenplayDocument, str]
+) -> None:
+    project, document, branch_id = project_bundle
+    source = LocalWorkspace(tmp_path / "source")
+    source.open_project(project, document, branch_id=branch_id)
+    ack = source.save(source.reopen(), actor_id=project.owner_actor_id, device_id="dev_a")
+    envelope = _envelopes(source)[ack.operation_id]
+    source.close()
+
+    outcome, head_after, loaded = _peer_ingest(
+        tmp_path, project, document, branch_id, envelope, label="peer-valid"
+    )
+    assert outcome == "applied"
+    assert head_after == ack.revision_id
+    assert loaded.base_revision_id == ack.revision_id
