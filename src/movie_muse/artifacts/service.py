@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar
 
 from movie_muse.artifacts.errors import (
     ArtifactDeliveryError,
@@ -50,6 +50,7 @@ from movie_muse.revisions.api import RevisionService
 from movie_muse.schemas.api import Artifact, ArtifactStatus, ArtifactVersion, new_id, new_ulid
 
 SUPPORTED_ARTIFACT_TYPES = frozenset(item.value for item in ArtifactType)
+T = TypeVar("T")
 REVIEW_TRANSITIONS: dict[ArtifactStatus, frozenset[ArtifactStatus]] = {
     ArtifactStatus.DRAFT: frozenset({ArtifactStatus.IN_REVIEW}),
     ArtifactStatus.IN_REVIEW: frozenset({ArtifactStatus.APPROVED, ArtifactStatus.ARCHIVED}),
@@ -96,14 +97,16 @@ class ArtifactService:
             title=title,
             created_at=utc_now(),
         )
-        index = clone_index(load_index(self.workspace))
-        digest = put_json_blob(self.workspace, artifact.to_dict())
-        index["artifact_ids"] = [*index["artifact_ids"], artifact.id]
-        index["artifact_digests"][artifact.id] = digest
-        index["artifact_versions"][artifact.id] = []
-        commit_index(self.workspace, index)
-        self.authorization.declare_artifact(project_id=project_id, artifact_id=artifact.id)
-        return artifact
+
+        def mutate(index: dict[str, Any]) -> Artifact:
+            digest = put_json_blob(self.workspace, artifact.to_dict())
+            index["artifact_ids"] = [*index["artifact_ids"], artifact.id]
+            index["artifact_digests"][artifact.id] = digest
+            index["artifact_versions"][artifact.id] = []
+            self.authorization.declare_artifact(project_id=project_id, artifact_id=artifact.id)
+            return artifact
+
+        return self._write_index(mutate)
 
     def get_artifact(
         self, artifact_id: str, *, principal: Principal, acl_epoch: int
@@ -155,14 +158,16 @@ class ArtifactService:
             created_at=utc_now(),
         )
         key = self._template_key(template.id, template.version)
-        index = clone_index(load_index(self.workspace))
-        if key in index["template_digests"]:
-            raise ArtifactImmutableError(f"template version already exists: {key}")
-        digest = put_json_blob(self.workspace, template.to_dict())
-        index["template_keys"] = [*index["template_keys"], key]
-        index["template_digests"][key] = digest
-        commit_index(self.workspace, index)
-        return template
+
+        def mutate(index: dict[str, Any]) -> ArtifactTemplate:
+            if key in index["template_digests"]:
+                raise ArtifactImmutableError(f"template version already exists: {key}")
+            digest = put_json_blob(self.workspace, template.to_dict())
+            index["template_keys"] = [*index["template_keys"], key]
+            index["template_digests"][key] = digest
+            return template
+
+        return self._write_index(mutate)
 
     def get_template(
         self,
@@ -260,10 +265,11 @@ class ArtifactService:
             relation="generated_from",
             actor_id=principal.actor_id,
         )
-        index = clone_index(load_index(self.workspace))
-        self._persist_version(index, stored, render, link)
-        commit_index(self.workspace, index)
-        return ArtifactVersionView(record=stored, status=ArtifactStatus.DRAFT)
+        def mutate(index: dict[str, Any]) -> ArtifactVersionView:
+            self._persist_version(index, stored, render, link)
+            return ArtifactVersionView(record=stored, status=ArtifactStatus.DRAFT)
+
+        return self._write_index(mutate)
 
     def regenerate(
         self,
@@ -346,10 +352,12 @@ class ArtifactService:
             actor_id=principal.actor_id,
             created_at=utc_now(),
         )
-        index = clone_index(load_index(self.workspace))
-        self._persist_render(index, render)
-        commit_index(self.workspace, index)
-        return RenderResult(render=render, content=content)
+
+        def mutate(index: dict[str, Any]) -> RenderResult:
+            self._persist_render(index, render)
+            return RenderResult(render=render, content=content)
+
+        return self._write_index(mutate)
 
     def preview(
         self, artifact_version_id: str, *, principal: Principal, acl_epoch: int
@@ -426,15 +434,17 @@ class ArtifactService:
             actor_id=principal.actor_id,
             created_at=utc_now(),
         )
-        index = clone_index(load_index(self.workspace))
-        digest = put_json_blob(self.workspace, review.to_dict())
-        index["review_ids"] = [*index["review_ids"], review.id]
-        index["review_digests"][review.id] = digest
-        index["version_reviews"][artifact_version_id] = [
-            *index["version_reviews"].get(artifact_version_id, []),
-            review.id,
-        ]
-        commit_index(self.workspace, index)
+        def mutate(index: dict[str, Any]) -> ArtifactVersionView:
+            digest = put_json_blob(self.workspace, review.to_dict())
+            index["review_ids"] = [*index["review_ids"], review.id]
+            index["review_digests"][review.id] = digest
+            index["version_reviews"][artifact_version_id] = [
+                *index["version_reviews"].get(artifact_version_id, []),
+                review.id,
+            ]
+            return ArtifactVersionView(record=stored, status=target, latest_review=review)
+
+        view = self._write_index(mutate)
         self.audit.append(
             actor_id=principal.actor_id,
             effective_principal_id=principal.actor_id,
@@ -447,7 +457,7 @@ class ArtifactService:
             before_revision_id=stored.version.source_revision_id,
             after_revision_id=stored.version.source_revision_id,
         )
-        return ArtifactVersionView(record=stored, status=target, latest_review=review)
+        return view
 
     def link_to_revision(
         self,
@@ -469,10 +479,12 @@ class ArtifactService:
             relation=relation,
             actor_id=principal.actor_id,
         )
-        index = clone_index(load_index(self.workspace))
-        self._persist_link(index, link)
-        commit_index(self.workspace, index)
-        return link
+
+        def mutate(index: dict[str, Any]) -> ArtifactLink:
+            self._persist_link(index, link)
+            return link
+
+        return self._write_index(mutate)
 
     def list_links(
         self, artifact_id: str, *, principal: Principal, acl_epoch: int
@@ -499,6 +511,7 @@ class ArtifactService:
         stored = self._stored_version(artifact_version_id)
         artifact = self._artifact(stored.version.artifact_id)
         self._require_artifact(principal, Action.EXPORT, artifact, acl_epoch)
+        self._require_approved(stored, operation="export")
         result = self.render_version(
             artifact_version_id,
             principal=principal,
@@ -524,6 +537,7 @@ class ArtifactService:
         stored = self._stored_version(artifact_version_id)
         artifact = self._artifact(stored.version.artifact_id)
         self._require_artifact(principal, Action.EXPORT, artifact, acl_epoch)
+        self._require_approved(stored, operation="delivery")
         if not confirm:
             raise ArtifactDeliveryError("delivery requires explicit confirm=True")
         preview = self._render(preview_render_id)
@@ -545,11 +559,13 @@ class ArtifactService:
             created_at=utc_now(),
             network_sent=False,
         )
-        index = clone_index(load_index(self.workspace))
-        digest = put_json_blob(self.workspace, delivery.to_dict())
-        index["delivery_ids"] = [*index["delivery_ids"], delivery.id]
-        index["delivery_digests"][delivery.id] = digest
-        commit_index(self.workspace, index)
+        def mutate(index: dict[str, Any]) -> DeliveryRecord:
+            digest = put_json_blob(self.workspace, delivery.to_dict())
+            index["delivery_ids"] = [*index["delivery_ids"], delivery.id]
+            index["delivery_digests"][delivery.id] = digest
+            return delivery
+
+        record = self._write_index(mutate)
         self.audit.append(
             actor_id=principal.actor_id,
             effective_principal_id=principal.actor_id,
@@ -562,7 +578,7 @@ class ArtifactService:
             before_revision_id=stored.version.source_revision_id,
             after_revision_id=stored.version.source_revision_id,
         )
-        return delivery
+        return record
 
     def list_deliveries(
         self, artifact_id: str, *, principal: Principal, acl_epoch: int
@@ -688,6 +704,22 @@ class ArtifactService:
         return ArtifactVersionView(
             record=stored, status=review.to_status, latest_review=review
         )
+
+    def _write_index(self, mutate: Callable[[dict[str, Any]], T]) -> T:
+        """Serialize index updates across LocalWorkspace connections."""
+
+        with self.workspace.store.transaction():
+            index = clone_index(load_index(self.workspace))
+            result = mutate(index)
+            commit_index(self.workspace, index)
+            return result
+
+    def _require_approved(self, stored: StoredArtifactVersion, *, operation: str) -> None:
+        view = self._version_view(stored)
+        if view.status is not ArtifactStatus.APPROVED:
+            raise ArtifactDeliveryError(
+                f"{operation} requires an approved artifact version, got {view.status.value}"
+            )
 
     def _require_artifact(
         self,

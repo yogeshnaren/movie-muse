@@ -3,10 +3,16 @@
 from __future__ import annotations
 
 import ast
+import threading
 from dataclasses import replace
 from pathlib import Path
 
-from movie_muse.artifacts.api import ArtifactClassification, ArtifactType
+from movie_muse.artifacts.api import ArtifactClassification, ArtifactService, ArtifactType
+from movie_muse.audit.api import AuditLog
+from movie_muse.authorization.api import AuthorizationService
+from movie_muse.identity.api import Actor, IdentityService, Organization, PrincipalKind
+from movie_muse.persistence.api import LocalWorkspace
+from movie_muse.revisions.api import RevisionService
 from movie_muse.schemas.api import ArtifactStatus
 
 
@@ -117,3 +123,76 @@ def test_artifacts_use_workspace_meta_and_blobs_without_new_tables(artifact_stac
     digest = artifact_stack.workspace.store.get_meta("artifacts.index_digest")
     assert digest is not None
     assert artifact_stack.workspace.store.blobs.exists(digest)
+
+
+def test_concurrent_creates_keep_both_artifacts(tmp_path, project_bundle) -> None:
+    project, document, branch_id = project_bundle
+    root = tmp_path / "ws"
+    bootstrap = LocalWorkspace(root)
+    bootstrap.open_project(project, document, branch_id=branch_id)
+    identity = IdentityService(bootstrap)
+    owner = Actor(
+        id=project.owner_actor_id,
+        display_name="Owner",
+        principal_kind=PrincipalKind.HUMAN,
+        organization_id=project.organization_id,
+        created_at="2026-09-01T00:00:00Z",
+    )
+    identity.bootstrap(
+        organization=Organization(
+            id=project.organization_id,
+            name="Studio",
+            created_at="2026-09-01T00:00:00Z",
+        ),
+        project=project,
+        owner=owner,
+    )
+    bootstrap.close()
+    barrier = threading.Barrier(2)
+    created: list[str | None] = [None, None]
+    errors: list[BaseException | None] = [None, None]
+
+    def worker(index: int) -> None:
+        workspace = None
+        try:
+            workspace = LocalWorkspace(root)
+            identity_conn = IdentityService(workspace)
+            authorization = AuthorizationService(workspace, identity_conn)
+            revisions = RevisionService(workspace)
+            artifacts = ArtifactService(workspace, authorization, revisions, AuditLog(workspace))
+            principal = identity_conn.principal(owner.id)
+            barrier.wait(timeout=5)
+            artifact = artifacts.create_artifact(
+                project_id=project.id,
+                artifact_type=ArtifactType.DOCUMENT,
+                title=f"Concurrent {index}",
+                principal=principal,
+                acl_epoch=identity_conn.acl_epoch(),
+            )
+            created[index] = artifact.id
+        except Exception as exc:
+            errors[index] = exc
+        finally:
+            if workspace is not None:
+                workspace.close()
+
+    threads = [threading.Thread(target=worker, args=(0,)), threading.Thread(target=worker, args=(1,))]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=10)
+    assert errors == [None, None]
+    assert created[0] and created[1] and created[0] != created[1]
+    workspace = LocalWorkspace(root)
+    identity_conn = IdentityService(workspace)
+    artifacts = ArtifactService(
+        workspace,
+        AuthorizationService(workspace, identity_conn),
+        RevisionService(workspace),
+    )
+    listed = artifacts.list_artifacts(
+        project.id,
+        principal=identity_conn.principal(owner.id),
+        acl_epoch=identity_conn.acl_epoch(),
+    )
+    assert {item.id for item in listed} == set(created)

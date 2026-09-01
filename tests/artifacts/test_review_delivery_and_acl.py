@@ -159,6 +159,36 @@ def test_export_and_delivery_require_export_acl_preview_and_confirmation(
             preview_checksum=preview.render.checksum,
             channel="email",
             recipient="investor@example.invalid",
+            confirm=True,
+            principal=artifact_stack.principal,
+            acl_epoch=artifact_stack.epoch,
+        )
+    with pytest.raises(ArtifactDeliveryError):
+        artifact_stack.artifacts.export_version(
+            version.version.id,
+            tmp_path / "draft.json",
+            principal=artifact_stack.principal,
+            acl_epoch=artifact_stack.epoch,
+        )
+    artifact_stack.artifacts.transition_review(
+        version.version.id,
+        ArtifactStatus.IN_REVIEW,
+        principal=artifact_stack.principal,
+        acl_epoch=artifact_stack.epoch,
+    )
+    artifact_stack.artifacts.transition_review(
+        version.version.id,
+        ArtifactStatus.APPROVED,
+        principal=artifact_stack.principal,
+        acl_epoch=artifact_stack.epoch,
+    )
+    with pytest.raises(ArtifactDeliveryError):
+        artifact_stack.artifacts.deliver(
+            version.version.id,
+            preview_render_id=preview.render.id,
+            preview_checksum=preview.render.checksum,
+            channel="email",
+            recipient="investor@example.invalid",
             confirm=False,
             principal=artifact_stack.principal,
             acl_epoch=artifact_stack.epoch,
