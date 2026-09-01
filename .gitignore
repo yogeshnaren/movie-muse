@@ -153,3 +153,7 @@ frontend/dist/
 # IDEs
 .vscode/
 .idea/
+
+# Evidence transcripts (do not ignore)
+!evidence/**/*.txt
+!evidence/**/*.md

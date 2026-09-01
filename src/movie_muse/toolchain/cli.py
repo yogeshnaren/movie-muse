@@ -6,8 +6,9 @@ import argparse
 import json
 import subprocess
 import sys
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 from movie_muse.toolchain.boundaries import scan_boundaries
 from movie_muse.toolchain.engine import (

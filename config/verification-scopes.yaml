@@ -44,6 +44,9 @@ scopes:
       - tests/toolchain/**
       - tests/security/**
       - .env.example
+      - backend/requirements.txt
+      - backend/pytest.ini
+      - backend/tests/**
     shared:
       - config/verification-scopes.yaml
       - dependency_dag.yaml
@@ -61,6 +64,7 @@ scopes:
       - docker-compose.yml
       - backend/Dockerfile
       - frontend/Dockerfile
+      - tests/release/**
     shared:
       - config/verification-scopes.yaml
       - config/runtimes.yaml

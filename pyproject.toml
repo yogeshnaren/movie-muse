@@ -37,6 +37,7 @@ packages = ["movie_muse"]
 strict = true
 warn_unused_ignores = true
 show_error_codes = true
+implicit_reexport = true
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "backend", "."]

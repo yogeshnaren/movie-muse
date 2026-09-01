@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import subprocess
 from collections import defaultdict, deque
-from datetime import datetime, timezone
+from collections.abc import Iterable
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from movie_muse.toolchain.fingerprint import compute_item_fingerprint
 from movie_muse.toolchain.scopes import (
@@ -24,7 +25,7 @@ EMPTY_OWNED_CHECKED_STATUSES = {"IN_PROGRESS", "PASS", "STALE", "FAIL"}
 
 
 def utc_now() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def git_head(root: Path) -> str:

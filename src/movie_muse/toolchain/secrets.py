@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 from movie_muse.toolchain.scopes import SKIP_DIR_NAMES, matches_any
 from movie_muse.toolchain.yamlio import load_mapping

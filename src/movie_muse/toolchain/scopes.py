@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
 from fnmatch import fnmatch
 from pathlib import Path, PurePosixPath
-from typing import Any, Iterable
 
 from movie_muse.toolchain.yamlio import load_mapping
 
@@ -88,9 +88,17 @@ def matches_any(path: str, globs: Iterable[str]) -> bool:
 def expand_globs(root: Path, patterns: Iterable[str], exclude_globs: Iterable[str]) -> list[str]:
     found: set[str] = set()
     for pattern in patterns:
-        for match in root.glob(pattern):
-            if not match.is_file():
-                continue
+        candidates: list[Path] = []
+        if pattern.endswith("/**"):
+            base = root / pattern[:-3]
+            if base.is_dir():
+                candidates.extend(path for path in base.rglob("*") if path.is_file())
+        else:
+            candidates.extend(path for path in root.glob(pattern) if path.is_file())
+            as_file = root / pattern
+            if as_file.is_file():
+                candidates.append(as_file)
+        for match in candidates:
             if any(part in SKIP_DIR_NAMES for part in match.relative_to(root).parts):
                 continue
             rel = posix_relpath(root, match)
