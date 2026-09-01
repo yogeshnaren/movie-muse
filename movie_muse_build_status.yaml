@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T11:22:57Z"
+last_updated_utc: "2026-09-01T11:33:30Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -151,12 +151,12 @@ items:
     title: Domain constitution and versioned schemas
     milestone: A
     priority: critical
-    status: STALE
+    status: PASS
     depends_on: [MM-001]
     scope_keys: [domain.schemas]
     pass_record:
-      verification_commit: 93a3c1ce21e61402a9a2f34efcef4f759c4eb040
-      input_fingerprint: ae63fa98b5946a4f6cfaa97168ace560a5059ae21fc4ba3681adbdbc9a1d9650
+      verification_commit: 168f85631e2ecb9ec2a9419a13fad8e43e722653
+      input_fingerprint: 6b3874c4972b8429e258473d3ec618cfb97e39a32261f6d0d08f989224771080
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -169,36 +169,44 @@ items:
         - python3 -m mypy
         - python3 -m pytest tests/schemas -q
         - python3 -m pytest
+        - ./scripts/verify_all.sh
       evidence:
-        - tests/schemas/test_fixtures.py
-        - tests/schemas/test_compatibility.py
-        - tests/schemas/test_document.py
         - evidence/MM-002/COMMANDS.md
         - evidence/MM-002/quality-commands.txt
-      completed_at_utc: "2026-09-01T11:04:01Z"
+        - schemas/domain/
+        - src/movie_muse/schemas/
+        - tests/schemas/
+        - config/verification-scopes.yaml
+        - dependency_dag.yaml
+      completed_at_utc: "2026-09-01T11:32:51Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T11:02:52Z
-        independence_basis: Separate verifier agent/model; did not implement MM-002 and independently reran committed verification instructions from a fresh detached worktree.
-        environment: Linux 6.12.94+ x86_64; python 3.12.3; node 20.20.2; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T11:32:51Z
+        independence_basis: Independent verifier agent; did not implement MM-002. Reproduced acceptance from a fresh detached worktree without modifying product code or the canonical ledger.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; detached worktree /tmp/mm002-independent-verify-168f856; isolated /tmp dependency target with pip cache disabled
         commands:
           - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
           - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-002
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
           - python3 -m ruff check src tests scripts backend
           - python3 -m mypy
           - python3 -m pytest tests/schemas -q
           - python3 -m pytest
-          - PYTHONPATH=src python3 scripts/mm_status.py validate
-          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
-          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
-          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - ./scripts/verify_all.sh
         result: PASS
         evidence:
           - evidence/MM-002/COMMANDS.md
           - evidence/MM-002/quality-commands.txt
+          - schemas/domain/
+          - src/movie_muse/schemas/
           - tests/schemas/
         limitations:
-          - Verification covers MM-002 only; the complete prototype remains gated by later packages.
-          - One unrelated HTTPX deprecation warning. UI/provider/offline flows are outside MM-002 scope.
+          - VM lacked ensurepip/python3-venv; dependencies were installed into a fresh isolated /tmp target with pip caching disabled.
+          - Full tests emitted one unrelated HTTPX deprecation warning.
+          - Verification covers MM-002 only; later prototype gates remain incomplete as expected.
     blocker: null
   - id: MM-003
     title: Professional screenplay document kernel

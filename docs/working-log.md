@@ -108,5 +108,13 @@ This file records orchestrator actions that the schema cannot store.
 - MM-002 remains STALE by dependent closure and is now DAG-runnable
 - Next action: independently re-verify MM-002 at the post-PASS fingerprint
 
+## 2026-09-01T11:32:51Z
+
+- Independent verifier PASS for MM-002 at `168f85631e2ecb9ec2a9419a13fad8e43e722653`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T11:32:51Z`
+- Orchestrator recorded canonical PASS; fingerprint `6b3874c4972b8429e258473d3ec618cfb97e39a32261f6d0d08f989224771080`
+- Nested immutability, enum-narrowing BREAKING classification, fixtures, migrations, IDs, and API boundaries reproduced
+- Wave 2 is DAG-runnable: MM-003 (implemented, pending independent verify) and MM-004 (persistence/sync not yet implemented)
+
 
 
