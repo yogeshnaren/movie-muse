@@ -5,7 +5,8 @@ from __future__ import annotations
 from movie_muse.audit.api import AuditLog, PolicyDecision
 from movie_muse.authorization.errors import AuthorizationError
 from movie_muse.authorization.policy import ROLE_ACTIONS, craft_decision_allowed, role_allows
-from movie_muse.authorization.projections import compose_modes, project_view as build_project_view
+from movie_muse.authorization.projections import compose_modes
+from movie_muse.authorization.projections import project_view as build_project_view
 from movie_muse.authorization.types import (
     Action,
     AuthContext,

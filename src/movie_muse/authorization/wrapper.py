@@ -9,8 +9,8 @@ from movie_muse.authorization.service import AuthorizationService
 from movie_muse.authorization.types import Action, AuthContext, Resource, ResourceKind
 from movie_muse.identity.api import IdentityService, Principal, UnknownPrincipalError
 from movie_muse.persistence.api import SaveAck
-from movie_muse.revisions.api import DEFAULT_DEVICE_ID, Branch, Merge, Proposal, RevisionService
-from movie_muse.schemas.api import ChangeSet, ScreenplayDocument
+from movie_muse.revisions.api import DEFAULT_DEVICE_ID, Branch, Merge, RevisionService
+from movie_muse.schemas.api import ChangeSet, Proposal, ScreenplayDocument
 
 
 class AuthorizedRevisionService:
