@@ -359,3 +359,19 @@ This file records orchestrator actions that the schema cannot store.
 - Focused pytest 35 passed; affected 81; full pytest 393 passed, 1 warning.
 - Status remains IN_PROGRESS; independent verification required before PASS.
 - EXT-REMOTE-MODEL remains NOT_RUN (remote env unset; smoke fail-closed).
+
+## 2026-09-01T16:20:11Z
+
+- MM-010 moved to IN_PROGRESS after confirming MM-002, MM-004, MM-006, and
+  MM-007 are current PASS. MM-010 is DAG-runnable and does not wait on MM-009.
+- Implementing the rights registry, provenance, sources, and Evidence Bundles.
+- Status remains IN_PROGRESS; do not self-PASS. Independent verification is
+  required before PASS. MM-009 status is unchanged.
+
+## 2026-09-01T16:28:00Z
+
+- Independent verifier PASS for MM-009 at `4c2ffd9a44c86e6f9cfe51df3b62603385d91212`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-01T16:26:30Z`
+- Orchestrator recorded canonical PASS; fingerprint `baf2e69d463ccbd9613ddfe1048ddbaa77f77952b4ed80c850f78e95558ff793`
+- EXT-REMOTE-MODEL remains NOT_RUN
+- MM-010 remains IN_PROGRESS; MM-011 is DAG-runnable

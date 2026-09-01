@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T16:10:00Z"
+last_updated_utc: "2026-09-01T16:28:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -582,16 +582,71 @@ items:
     title: Model router, provider adapters, local models, and policy
     milestone: A
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-008]
     scope_keys: [module.model_router, policy.models]
-    pass_record: null
+    pass_record:
+      verification_commit: 4c2ffd9a44c86e6f9cfe51df3b62603385d91212
+      input_fingerprint: baf2e69d463ccbd9613ddfe1048ddbaa77f77952b4ed80c850f78e95558ff793
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-009
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/model_router tests/policy/models -q
+        - python3 -m pytest tests/model_router tests/policy/models tests/jobs tests/worker tests/authorization -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-009/COMMANDS.md
+        - evidence/MM-009/quality-commands.txt
+        - src/movie_muse/model_router/
+        - policy/models/
+        - tests/model_router/
+        - tests/policy/models/
+      completed_at_utc: "2026-09-01T16:26:30Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T16:26:30Z
+        independence_basis: Did not implement MM-009; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-009. Wrote independent probes under /tmp/mm009-independent-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-009-verify-4c2ffd9
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-009
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/model_router tests/policy/models -q
+          - python3 -m pytest tests/model_router tests/policy/models tests/jobs tests/worker tests/authorization -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-009/COMMANDS.md
+          - evidence/MM-009/quality-commands.txt
+          - src/movie_muse/model_router/
+          - policy/models/
+          - tests/model_router/
+          - tests/policy/models/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 393 tests with one unrelated HTTPX deprecation warning.
+          - EXT-REMOTE-MODEL remains NOT_RUN; unset remote env fail-closed is not a live provider PASS.
+          - No required MM-009 check was skipped.
     blocker: null
   - id: MM-010
     title: Rights registry, provenance, sources, and Evidence Bundles
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-002, MM-004, MM-006, MM-007]
     scope_keys: [module.rights, module.provenance]
     pass_record: null
