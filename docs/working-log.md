@@ -89,4 +89,16 @@ This file records orchestrator actions that the schema cannot store.
 - Orchestrator recorded canonical PASS; fingerprint `ae63fa98b5946a4f6cfaa97168ace560a5059ae21fc4ba3681adbdbc9a1d9650`
 - Wave 2 started: MM-003 and MM-004 moved to IN_PROGRESS (DAG-runnable after MM-002 PASS)
 
+## 2026-09-01T11:15:48Z
+
+- Toolchain test `test_mm001_change_does_not_stale_unstarted_dependents` made
+  status-invariant (forces MM-002 to NOT_STARTED in-memory). This is
+  `global.toolchain`, so MM-001 is STALE; MM-002 is STALE by dependent closure.
+  Historical pass_records retained. Re-verify MM-001 then MM-002 before Wave 2 PASS.
+- MM-003 document kernel implemented under `src/movie_muse/document/` (typed
+  operations, normalize, semantic validate, structural diff, selection anchors,
+  editor projection adapter). Status remains IN_PROGRESS; not independently
+  verified. MM-003 cannot PASS until MM-001 and MM-002 are current PASS again.
+
+
 

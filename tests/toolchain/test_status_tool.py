@@ -111,10 +111,12 @@ def test_mm001_change_does_not_stale_unstarted_dependents() -> None:
     catalog = load_scope_catalog(root)
     items = items_by_id(manifest)
     items["MM-001"]["status"] = "PASS"
+    items["MM-002"]["status"] = "NOT_STARTED"
+    items["MM-002"]["pass_record"] = None
     report = invalidate_from_files(manifest, catalog, ["src/movie_muse/toolchain/engine.py"])
     assert "MM-001" in report["directly_affected"]
     assert items["MM-001"]["status"] == "STALE"
-    assert items["MM-002"]["status"] != "STALE"
+    assert items["MM-002"]["status"] == "NOT_STARTED"
 
 
 @pytest.mark.toolchain

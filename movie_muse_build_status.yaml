@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T11:04:01Z"
+last_updated_utc: "2026-09-01T11:15:48Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -91,7 +91,7 @@ items:
     title: Repository, toolchain, and quality baseline
     milestone: A
     priority: critical
-    status: PASS
+    status: STALE
     depends_on: []
     scope_keys: [global.toolchain, global.ci]
     pass_record:
@@ -149,7 +149,7 @@ items:
     title: Domain constitution and versioned schemas
     milestone: A
     priority: critical
-    status: PASS
+    status: STALE
     depends_on: [MM-001]
     scope_keys: [domain.schemas]
     pass_record:
