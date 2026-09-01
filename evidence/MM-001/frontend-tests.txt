@@ -1,0 +1,3 @@
+frontend typecheck: pass (tsc --noEmit)
+frontend tests: 1 passed (src/__tests__/App.test.tsx)
+command: cd frontend && npm ci && npm run typecheck && npm run test -- --run

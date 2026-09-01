@@ -1,0 +1,10 @@
+{
+  "captured_at": "2026-09-01T12:00:00Z",
+  "id": "cev_01M1E62D79D7SJBN660Q6ZBKJM",
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "promotion_state": "promoted",
+  "record_kind": "decision",
+  "schema_version": "1.1",
+  "source": "zoom-adapter",
+  "summary": "director confirmed blocking"
+}

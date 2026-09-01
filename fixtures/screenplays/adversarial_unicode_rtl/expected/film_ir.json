@@ -1,0 +1,9 @@
+{
+  "awaiting": "MM-018",
+  "kind": "film_ir",
+  "note": "No honest film_ir producer exists yet. Awaiting MM-018. This record is not compared as if a compiler ran.",
+  "payload": null,
+  "producer": null,
+  "schema_version": "1.0",
+  "status": "deferred"
+}

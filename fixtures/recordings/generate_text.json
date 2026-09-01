@@ -1,0 +1,26 @@
+{
+  "actual_cost": 0.0,
+  "assumptions": [
+    "fixture",
+    "no_network",
+    "not_a_human_sample"
+  ],
+  "capability": "generate_text",
+  "input_tokens": 8,
+  "live": false,
+  "method": "deterministic_fixture",
+  "model_version": "double-text-v1",
+  "network": false,
+  "output": {
+    "assumptions": [
+      "fixture",
+      "no_network",
+      "not_a_human_sample"
+    ],
+    "method": "deterministic_fixture",
+    "text": "INT. HARBOR OFFICE - NIGHT\nRain needles the glass.",
+    "uncertainty": "deterministic_fixture"
+  },
+  "output_tokens": 16,
+  "uncertainty": "deterministic_fixture"
+}

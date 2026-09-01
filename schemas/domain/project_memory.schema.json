@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/project-memory-v1.json",
+  "title": "ProjectMemory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "project_id", "kind", "summary", "reviewed_by_actor_id", "reviewed_at", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/projectMemoryId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "kind": {"enum": ["decision", "fact", "assignment", "research_note"]},
+    "summary": {"type": "string", "minLength": 1},
+    "reviewed_by_actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "reviewed_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "source_collaboration_event_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/collaborationEventId"}]},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

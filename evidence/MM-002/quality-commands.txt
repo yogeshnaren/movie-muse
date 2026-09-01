@@ -1,0 +1,36 @@
+MM-002 Domain constitution and versioned schemas — quality command evidence
+Captured: 2026-09-01T10:55:30Z
+Environment: Linux 6.12.94+ x86_64; python 3.12.3; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
+
+Commands run (in order):
+  export PYTHONPATH=src
+  python3 -m ruff check src tests scripts backend
+  python3 -m mypy
+  python3 -m pytest tests/schemas -q
+  python3 -m pytest
+  python3 scripts/validate_handoff.py
+  python3 scripts/mm_status.py validate
+  python3 scripts/mm_status.py check-scopes
+  python3 scripts/mm_status.py runnable
+  python3 scripts/mm_status.py boundaries
+  python3 scripts/mm_status.py secrets
+
+Summary of results:
+  ruff check src tests scripts backend      -> All checks passed!
+  mypy (package-wide, pyproject config)     -> Success: no issues found in 35 source files
+  pytest tests/schemas                       -> 188 passed (schema-focused suite)
+  pytest (full suite)                        -> 212 passed, 1 warning
+  mm_status.py validate                      -> HANDOFF_VALIDATION=PASS packages=47, STATUS_VALIDATE=PASS
+  mm_status.py check-scopes                  -> SCOPE_COVERAGE=PASS
+  mm_status.py runnable                      -> {"count": 1, "runnable": ["MM-002"]}
+  mm_status.py boundaries                    -> {"count": 0, "violations": []}
+  mm_status.py secrets                       -> {"count": 0, "hits": []}
+
+Notes:
+  Nested JSON-like fields on frozen domain dataclasses are recursively frozen
+  via movie_muse.schemas.serialization.sealed wrapping __init__ after dataclass
+  construction. Regression tests cover Block.unknown_extensions, AuthoredFact.value,
+  ProductionProjection.data, ChangeSetOperation.payload, and ProjectEvent.payload.
+  Compatibility policy classifies enum/const/$ref/pattern/bounds/nested-schema
+  changes on existing properties as breaking; only new optional properties and
+  annotation-only edits are additive.

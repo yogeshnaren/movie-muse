@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/proposal-v1.json",
+  "title": "Proposal",
+  "$defs": {
+    "impactSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "semantic": {"type": "array", "items": {"type": "string"}},
+        "continuity": {"type": "array", "items": {"type": "string"}},
+        "production": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "revalidationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checked_at", "base_revision_id", "is_current"],
+      "properties": {
+        "checked_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+        "base_revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+        "is_current": {"type": "boolean"},
+        "notes": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "project_id", "change_set", "base_revision_id", "intent",
+    "rationale_summary", "provenance", "created_at", "status", "schema_version"
+  ],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/proposalId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "change_set": {"$ref": "change-set-v1.json#"},
+    "base_revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+    "intent": {"type": "string", "minLength": 1},
+    "rationale_summary": {"type": "string", "minLength": 1},
+    "provenance": {"type": "string", "minLength": 1},
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "status": {"enum": ["pending", "accepted", "rejected", "superseded", "stale"]},
+    "impact": {"$ref": "#/$defs/impactSummary"},
+    "revalidation": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/revalidationRecord"}]},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

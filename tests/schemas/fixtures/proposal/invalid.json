@@ -1,0 +1,19 @@
+{
+  "base_revision_id": "rev_01M1E62D76RATSCXCXASR9GKGC",
+  "change_set": {
+    "author_actor_id": "act_01M1E62D76BMKXW2Q4NM6BD84F",
+    "base_revision_id": "rev_01M1E62D76RATSCXCXASR9GKGC",
+    "created_at": "2026-09-01T12:00:00Z",
+    "id": "cst_01M1E62D7739T079N34SQ1W246",
+    "operations": [],
+    "schema_version": "1.0"
+  },
+  "created_at": "2026-09-01T12:00:00Z",
+  "id": "prp_01M1E62D7732GMK07DHZEVYZWV",
+  "intent": "unblock scene 4",
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "provenance": "human",
+  "rationale_summary": "resolves contradiction",
+  "schema_version": "1.0",
+  "status": "not_a_real_status"
+}

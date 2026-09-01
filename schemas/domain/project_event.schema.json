@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/project-event-v1.json",
+  "title": "ProjectEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "project_id", "branch_id", "result_revision_id", "actor_id",
+    "effective_principal_id", "command_id", "operation_id", "event_type",
+    "created_at", "correlation_id", "integrity_hash", "schema_version"
+  ],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/eventId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "branch_id": {"$ref": "common-v1.json#/$defs/branchId"},
+    "base_revision_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/revisionId"}]},
+    "result_revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+    "actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "effective_principal_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "command_id": {"type": "string", "minLength": 1},
+    "operation_id": {"type": "string", "minLength": 1},
+    "event_type": {
+      "enum": [
+        "ScreenplayPatchAccepted", "CharacterIntentLocked", "SceneMoved",
+        "ProductionRequirementConfirmed", "DepartmentDecisionConfirmed", "AssumptionChanged"
+      ]
+    },
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "causal_id": {"type": ["string", "null"]},
+    "correlation_id": {"type": "string", "minLength": 1},
+    "payload": {"type": ["object", "null"]},
+    "integrity_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

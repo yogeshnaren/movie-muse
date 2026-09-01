@@ -1,0 +1,14 @@
+id: small_kitchen
+class: small
+title: The Lock
+edges:
+- title_page
+- scene_heading
+- action
+- character
+- dialogue
+- parenthetical
+- transition
+- notes
+license_file: LICENSE.md
+rights_file: rights.yaml

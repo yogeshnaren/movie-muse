@@ -1,0 +1,10 @@
+{
+  "attribute": "opening_weekend_revenue",
+  "id": "osc_01M1E62D7BW6FAFHJD9TWM4FET",
+  "kind": "scenario",
+  "percentile": "P50",
+  "scenario_model_id": "scm_01M1E62D7ACB7KX6XATN6EJCT9",
+  "schema_version": "1.0",
+  "subject_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "value": 4000000
+}

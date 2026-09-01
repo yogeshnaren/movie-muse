@@ -1,0 +1,77 @@
+=== validate_handoff ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+=== ruff ===
+All checks passed!
+=== mypy ===
+Success: no issues found in 140 source files
+=== focused pytest ===
+.........................                                                [100%]
+=== affected pytest ===
+........................................................................ [ 78%]
+....................                                                     [100%]
+=== full pytest ===
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+........................................................................ [ 48%]
+........................................................................ [ 64%]
+........................................................................ [ 80%]
+........................................................................ [ 96%]
+................                                                         [100%]
+=============================== warnings summary ===============================
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+448 passed, 1 warning in 41.36s
+=== mm_status ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+SCOPE_COVERAGE=PASS
+{
+  "count": 1,
+  "runnable": [
+    "MM-011"
+  ]
+}
+{
+  "count": 0,
+  "violations": []
+}
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+=== verify_all ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+SCOPE_COVERAGE=PASS
+{
+  "count": 1,
+  "runnable": [
+    "MM-011"
+  ]
+}
+All checks passed!
+Success: no issues found in 140 source files
+.......................                                                  [100%]
+=============================== warnings summary ===============================
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+23 passed, 1 warning in 8.76s
+{
+  "count": 0,
+  "violations": []
+}
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery

@@ -1,0 +1,10 @@
+=== ruff ===
+All checks passed!
+=== mypy ===
+Success: no issues found in 61 source files
+=== pytest persistence/sync ===
+24 passed
+=== pytest full ===
+257 passed, 1 warning
+=== forged actor_id probe ===
+outcome conflicted; peer head unchanged

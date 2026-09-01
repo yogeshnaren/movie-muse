@@ -2,11 +2,11 @@ schema_version: "2.0"
 package_version: "2.1.0"
 project: movie-muse-working-prototype
 manifest_role: canonical_completion_ledger
-overall_status: NOT_STARTED
-baseline_commit: null
+overall_status: IN_PROGRESS
+baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: null
+last_updated_utc: "2026-09-01T18:32:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -91,118 +91,808 @@ items:
     title: Repository, toolchain, and quality baseline
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: []
     scope_keys: [global.toolchain, global.ci]
-    pass_record: null
+    pass_record:
+      verification_commit: 14644008c60e9eb7bb4e3fef7e77b05c9289fbd2
+      input_fingerprint: 24fd1172bafd04b485910c63b1b220759093c52fb065595f3b4632be2e4cd7f8
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-001
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy
+        - python3 -m pytest
+        - cd frontend && npm run typecheck && npm run test -- --run
+        - ./scripts/gates/manifest_and_staleness.sh
+        - ./scripts/gates/static_quality_and_boundaries.sh
+        - ./scripts/verify_all.sh
+        - test -d artifacts && test -f artifacts/README.md
+      evidence:
+        - tests/toolchain/test_status_tool.py
+        - artifacts/README.md
+        - config/verification-scopes.yaml
+        - evidence/MM-001/COMMANDS.md
+        - evidence/MM-001/quality-commands.txt
+        - evidence/MM-001/frontend-tests.txt
+        - evidence/secret-scan.txt
+      completed_at_utc: "2026-09-01T11:22:57Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T11:21:51Z
+        independence_basis: Separate verifier agent/model; did not implement MM-001 and independently reproduced committed verification instructions from a fresh detached worktree.
+        environment: Linux 6.12.94+ x86_64; python 3.12.3; node 20.20.2; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy
+          - python3 -m pytest
+          - cd frontend && npm run typecheck && npm run test -- --run
+          - ./scripts/gates/manifest_and_staleness.sh
+          - ./scripts/gates/static_quality_and_boundaries.sh
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - tests/toolchain/test_status_tool.py
+          - artifacts/README.md
+          - evidence/MM-001/COMMANDS.md
+          - evidence/secret-scan.txt
+        limitations:
+          - Verification covers MM-001 only; the complete prototype remains gated by later packages.
+          - VM lacked ensurepip/python3-venv; system-Python bootstrap succeeded with pip caching disabled.
+          - npm reported dependency vulnerabilities; dependency auditing is not an MM-001 acceptance gate.
     blocker: null
   - id: MM-002
     title: Domain constitution and versioned schemas
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-001]
     scope_keys: [domain.schemas]
-    pass_record: null
+    pass_record:
+      verification_commit: 168f85631e2ecb9ec2a9419a13fad8e43e722653
+      input_fingerprint: 6b3874c4972b8429e258473d3ec618cfb97e39a32261f6d0d08f989224771080
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-002
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy
+        - python3 -m pytest tests/schemas -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-002/COMMANDS.md
+        - evidence/MM-002/quality-commands.txt
+        - schemas/domain/
+        - src/movie_muse/schemas/
+        - tests/schemas/
+        - config/verification-scopes.yaml
+        - dependency_dag.yaml
+      completed_at_utc: "2026-09-01T11:32:51Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T11:32:51Z
+        independence_basis: Independent verifier agent; did not implement MM-002. Reproduced acceptance from a fresh detached worktree without modifying product code or the canonical ledger.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; detached worktree /tmp/mm002-independent-verify-168f856; isolated /tmp dependency target with pip cache disabled
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-002
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy
+          - python3 -m pytest tests/schemas -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-002/COMMANDS.md
+          - evidence/MM-002/quality-commands.txt
+          - schemas/domain/
+          - src/movie_muse/schemas/
+          - tests/schemas/
+        limitations:
+          - VM lacked ensurepip/python3-venv; dependencies were installed into a fresh isolated /tmp target with pip caching disabled.
+          - Full tests emitted one unrelated HTTPX deprecation warning.
+          - Verification covers MM-002 only; later prototype gates remain incomplete as expected.
     blocker: null
   - id: MM-003
     title: Professional screenplay document kernel
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-001, MM-002]
     scope_keys: [module.document]
-    pass_record: null
+    pass_record:
+      verification_commit: 71f93c2c51e795a300dc6c35278d588e541e80d0
+      input_fingerprint: 0794d7a86e40c8055877cc8c5833b3fa47c66bda94fed9d4f498e6b37940fc9c
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-003
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/document -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-003/COMMANDS.md
+        - evidence/MM-003/quality-commands.txt
+        - src/movie_muse/document/
+        - tests/document/
+      completed_at_utc: "2026-09-01T12:04:07Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T12:04:07Z
+        independence_basis: Independent verifier agent; did not implement MM-003. Reproduced acceptance from a remotely fetched, fresh detached worktree without changing product code or the completion ledger. Re-probed the prior 222b2f6 sequence-membership failure independently.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm003-independent-verify-remote-71f93c2
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-003
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/document -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-003/COMMANDS.md
+          - evidence/MM-003/quality-commands.txt
+          - src/movie_muse/document/
+          - tests/document/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 251 tests with one unrelated HTTPX deprecation warning.
+          - GUI authoring, outage, persistence, crash and provider behavior belong to later packages; no required MM-003 check was skipped.
     blocker: null
   - id: MM-004
     title: Local-first persistence, migrations, and sync primitives
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-001, MM-002]
     scope_keys: [module.persistence, module.sync]
-    pass_record: null
+    pass_record:
+      verification_commit: 0c63261ab84243d079a53dc9b7c90b8dce5575b6
+      input_fingerprint: f28434b6d7c1c640435f1ef1365dc6e2f0b02cc8d93109b94c75d8ce8fc8b188
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-004
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/persistence tests/sync -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-004/COMMANDS.md
+        - evidence/MM-004/quality-commands.txt
+        - src/movie_muse/persistence/
+        - src/movie_muse/sync/
+        - tests/persistence/
+        - tests/sync/
+      completed_at_utc: "2026-09-01T12:37:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T12:37:00Z
+        independence_basis: Separate verifier agent; did not implement MM-004. Used a fresh detached worktree and independently reran all commands and probes without relying on MM-004 evidence or summaries. Re-probed prior failures at 1c8c6e9 (interrupted v2 migration), 7b5a0c0 (forged resulting_revision_id), and 6766409 (forged actor_id).
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm004-independent-verify-0c63261
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-004
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/persistence tests/sync -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-004/COMMANDS.md
+          - evidence/MM-004/quality-commands.txt
+          - src/movie_muse/persistence/
+          - src/movie_muse/sync/
+          - tests/persistence/
+          - tests/sync/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 257 tests with one unrelated HTTPX deprecation warning.
+          - Changing device_id or operation_id while retaining the authorized owner actor applied; no unauthorized actor mutation was possible.
+          - GUI authoring belongs to later packages; no required MM-004 check was skipped.
     blocker: null
   - id: MM-005
     title: Immutable revisions, branches, checkpoints, ChangeSets, and merges
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-003, MM-004]
     scope_keys: [module.revisions]
-    pass_record: null
+    pass_record:
+      verification_commit: 16c3334ce69591f8711187bd5e468b62d4cc2557
+      input_fingerprint: c3b9b41c7837ee935f8e76de624d0d0de48dc2fa56383906f10cab33b405e7b1
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-005
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/revisions tests/document tests/persistence tests/sync -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-005/COMMANDS.md
+        - evidence/MM-005/quality-commands.txt
+        - src/movie_muse/revisions/
+        - tests/revisions/
+      completed_at_utc: "2026-09-01T13:19:06Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T13:19:06Z
+        independence_basis: Did not implement MM-005; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-005. Re-probed the prior f09c876 delayed diff_projection failure.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm005-independent-verify-16c3334
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-005
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/revisions tests/document tests/persistence tests/sync -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-005/COMMANDS.md
+          - evidence/MM-005/quality-commands.txt
+          - src/movie_muse/revisions/
+          - tests/revisions/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 278 tests with one unrelated HTTPX deprecation warning.
+          - History/diff UI is a deterministic projection plus text/HTML; the professional editor belongs to MM-015.
+          - No required MM-005 check was skipped.
     blocker: null
   - id: MM-006
     title: ACL, tenancy, audit, and collaboration semantics
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-002, MM-004, MM-005]
     scope_keys: [module.identity, module.authorization, module.audit]
-    pass_record: null
+    pass_record:
+      verification_commit: f1f1ba0cac06ed27c3caba72862666c7b29f960a
+      input_fingerprint: 7a8c6c43f6b35f6fc79a2fa660298278483f56f82c429b491d7444f418766cfe
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/identity tests/authorization tests/audit -q
+        - python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-006/COMMANDS.md
+        - evidence/MM-006/quality-commands.txt
+        - src/movie_muse/identity/
+        - src/movie_muse/authorization/
+        - src/movie_muse/audit/
+        - tests/identity/
+        - tests/authorization/
+        - tests/audit/
+      completed_at_utc: "2026-09-01T15:01:42Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T15:01:42Z
+        independence_basis: Did not implement MM-006; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-006. Re-probed prior failures at 680d726 (writer ACL mutation, concurrent audit), c2b3850 (unknown scoped resources), dd9b0b5 (selective quarantine), 4a90ca9 (principal-kind overwrite), and 2f76dc6 (craft department spoof).
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm006-verify-f1f1ba0
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/identity tests/authorization tests/audit -q
+          - python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-006/COMMANDS.md
+          - evidence/MM-006/quality-commands.txt
+          - src/movie_muse/identity/
+          - src/movie_muse/authorization/
+          - src/movie_muse/authorization/catalog.py
+          - src/movie_muse/audit/
+          - tests/identity/
+          - tests/authorization/
+          - tests/audit/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 324 tests with one unrelated HTTPX deprecation warning.
+          - Artifacts have no MM-007 store yet; declare_artifact is the fail-closed existence authority until that package binds real objects.
+          - No required MM-006 check was skipped.
     blocker: null
   - id: MM-007
     title: Generic artifact subsystem
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-002, MM-004, MM-005, MM-006]
     scope_keys: [module.artifacts]
-    pass_record: null
+    pass_record:
+      verification_commit: e64a549da495c251cecec27c2c22b7b4e85fb59c
+      input_fingerprint: a53bc2333b8b37bda47b59d8897cc36109be546d61d118809f08850180bd0dd8
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/artifacts -q
+        - python3 -m pytest tests/artifacts tests/authorization tests/revisions tests/persistence -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-007/COMMANDS.md
+        - evidence/MM-007/quality-commands.txt
+        - src/movie_muse/artifacts/
+        - tests/artifacts/
+      completed_at_utc: "2026-09-01T15:28:26Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T15:28:26Z
+        independence_basis: Did not implement MM-007; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-007. Wrote independent probes under /tmp.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm007-independent-verify-e64a549
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/artifacts -q
+          - python3 -m pytest tests/artifacts tests/authorization tests/revisions tests/persistence -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-007/COMMANDS.md
+          - evidence/MM-007/quality-commands.txt
+          - src/movie_muse/artifacts/
+          - tests/artifacts/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 339 tests with one unrelated HTTPX deprecation warning.
+          - The generic renderer emits a deterministic JSON envelope; specialized PDF/media renderers belong to later packages.
+          - No required MM-007 check was skipped.
     blocker: null
   - id: MM-008
     title: Durable worker and transactional job infrastructure
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-001, MM-004, MM-006]
     scope_keys: [module.jobs, runtime.worker]
-    pass_record: null
+    pass_record:
+      verification_commit: 6dfb6be6476987cfef3fcf11d7f55bf48ce927a8
+      input_fingerprint: 2cea51a5d51bcc4f6f6ba2c62c92008c6d3d72a9299cfaa8868fc1f4670a5242
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-008
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/jobs tests/worker -q
+        - python3 -m pytest tests/jobs tests/worker tests/authorization tests/persistence tests/audit -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-008/COMMANDS.md
+        - evidence/MM-008/quality-commands.txt
+        - src/movie_muse/jobs/
+        - src/movie_muse/worker/
+        - tests/jobs/
+        - tests/worker/
+      completed_at_utc: "2026-09-01T15:43:56Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T15:43:56Z
+        independence_basis: Did not implement MM-008; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-008. Wrote independent probes under /tmp/mm008-independent-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-008-verify-6dfb6be
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-008
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/jobs tests/worker -q
+          - python3 -m pytest tests/jobs tests/worker tests/authorization tests/persistence tests/audit -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-008/COMMANDS.md
+          - evidence/MM-008/quality-commands.txt
+          - src/movie_muse/jobs/
+          - src/movie_muse/worker/
+          - tests/jobs/
+          - tests/worker/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 358 tests with one unrelated HTTPX deprecation warning.
+          - Job payloads/results are JSON objects; model routing belongs to MM-009.
+          - No required MM-008 check was skipped.
     blocker: null
   - id: MM-009
     title: Model router, provider adapters, local models, and policy
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-008]
     scope_keys: [module.model_router, policy.models]
-    pass_record: null
+    pass_record:
+      verification_commit: 4c2ffd9a44c86e6f9cfe51df3b62603385d91212
+      input_fingerprint: baf2e69d463ccbd9613ddfe1048ddbaa77f77952b4ed80c850f78e95558ff793
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-009
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/model_router tests/policy/models -q
+        - python3 -m pytest tests/model_router tests/policy/models tests/jobs tests/worker tests/authorization -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-009/COMMANDS.md
+        - evidence/MM-009/quality-commands.txt
+        - src/movie_muse/model_router/
+        - policy/models/
+        - tests/model_router/
+        - tests/policy/models/
+      completed_at_utc: "2026-09-01T16:26:30Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T16:26:30Z
+        independence_basis: Did not implement MM-009; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-009. Wrote independent probes under /tmp/mm009-independent-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-009-verify-4c2ffd9
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-009
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/model_router tests/policy/models -q
+          - python3 -m pytest tests/model_router tests/policy/models tests/jobs tests/worker tests/authorization -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-009/COMMANDS.md
+          - evidence/MM-009/quality-commands.txt
+          - src/movie_muse/model_router/
+          - policy/models/
+          - tests/model_router/
+          - tests/policy/models/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 393 tests with one unrelated HTTPX deprecation warning.
+          - EXT-REMOTE-MODEL remains NOT_RUN; unset remote env fail-closed is not a live provider PASS.
+          - No required MM-009 check was skipped.
     blocker: null
   - id: MM-010
     title: Rights registry, provenance, sources, and Evidence Bundles
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-002, MM-004, MM-006, MM-007]
     scope_keys: [module.rights, module.provenance]
-    pass_record: null
+    pass_record:
+      verification_commit: 59ad9d60108f9be70c91803fa4225bdd9b243665
+      input_fingerprint: 97d6c140a1224c0cb4f25cd7d4cd6dcff999906bd77e7c6b7cbe97ea15a78997
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-010
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/rights tests/provenance -q
+        - python3 -m pytest tests/rights tests/provenance tests/authorization tests/artifacts tests/audit -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-010/COMMANDS.md
+        - evidence/MM-010/quality-commands.txt
+        - src/movie_muse/rights/
+        - src/movie_muse/provenance/
+        - tests/rights/
+        - tests/provenance/
+      completed_at_utc: "2026-09-01T16:46:12Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T16:46:12Z
+        independence_basis: Did not implement MM-010; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-010. Wrote independent probes under /tmp/mm010-independent-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-010-verify-59ad9d6
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-010
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/rights tests/provenance -q
+          - python3 -m pytest tests/rights tests/provenance tests/authorization tests/artifacts tests/audit -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-010/COMMANDS.md
+          - evidence/MM-010/quality-commands.txt
+          - src/movie_muse/rights/
+          - src/movie_muse/provenance/
+          - tests/rights/
+          - tests/provenance/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 423 tests with one unrelated HTTPX deprecation warning.
+          - No required MM-010 check was skipped.
     blocker: null
   - id: MM-011
     title: Machine-enforceable dependency and invalidation engine
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-002, MM-004, MM-005, MM-008]
     scope_keys: [module.dependencies]
-    pass_record: null
+    pass_record:
+      verification_commit: e361b1f80584feeee826986f3058528dfb4a3797
+      input_fingerprint: 2c6c8a7da82d57b6adb884859246ed6c1448983ee3913779e759f0a660e2d6fb
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-011
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/dependencies -q
+        - python3 -m pytest tests/dependencies tests/jobs tests/worker tests/revisions tests/authorization -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-011/COMMANDS.md
+        - evidence/MM-011/quality-commands.txt
+        - src/movie_muse/dependencies/
+        - tests/dependencies/
+      completed_at_utc: "2026-09-01T17:23:13Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T17:23:13Z
+        independence_basis: Did not implement MM-011; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-011. Wrote independent probes under /tmp/mm011-independent-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-011-verify-e361b1f
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-011
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/dependencies -q
+          - python3 -m pytest tests/dependencies tests/jobs tests/worker tests/revisions tests/authorization -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-011/COMMANDS.md
+          - evidence/MM-011/quality-commands.txt
+          - src/movie_muse/dependencies/
+          - tests/dependencies/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 448 tests with one unrelated HTTPX deprecation warning.
+          - No required MM-011 check was skipped.
     blocker: null
   - id: MM-012
     title: Golden fixtures and test harness
     milestone: B
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-003, MM-005, MM-010, MM-011]
     scope_keys: [test.fixtures, test.harness]
-    pass_record: null
+    pass_record:
+      verification_commit: cc018b4e3b510d8450d6a0c4f4661a3b3df17527
+      input_fingerprint: 43e357a84b2bd20264a4737f60303f5b8efb5028166c2f550b729e58ab7f97a9
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-012
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/fixtures tests/harness -q
+        - python3 -m pytest tests/fixtures tests/harness tests/document tests/revisions tests/rights tests/dependencies --tb=no
+        - python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-012/COMMANDS.md
+        - evidence/MM-012/quality-commands.txt
+        - fixtures/
+        - src/movie_muse/testkit/
+        - tests/fixtures/
+        - tests/harness/
+      completed_at_utc: "2026-09-01T18:22:56Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T18:22:56Z
+        independence_basis: Did not implement MM-012; independently re-verified a fresh detached worktree after fixtures/fdx invalidated the prior PASS. Did not rely on screenshots, implementer summaries, or evidence/MM-012. Wrote independent probes under /tmp/mm012-reverify-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-012-reverify-cc018b4
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-012
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/fixtures tests/harness -q
+          - python3 -m pytest tests/fixtures tests/harness tests/document tests/revisions tests/rights tests/dependencies --tb=no
+          - python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-012/COMMANDS.md
+          - evidence/MM-012/quality-commands.txt
+          - fixtures/
+          - src/movie_muse/testkit/
+          - tests/fixtures/
+          - tests/harness/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 491 tests with one unrelated HTTPX deprecation warning.
+          - Layout/FilmIR goldens remain deferred awaiting MM-014/MM-018; fail-closed, not skipped.
+          - movie_muse.testkit is absent from MM-001-owned module-layout.yaml; public surface is movie_muse.testkit.api and boundaries were clean.
+          - fixtures/fdx is fingerprint-relevant extra content under test.fixtures; FixtureCatalog remains four screenplay classes.
+          - No required MM-012 check was skipped.
     blocker: null
   - id: MM-013
     title: FDX compatibility program
     milestone: B
     priority: critical
-    status: NOT_STARTED
+    status: PASS
     depends_on: [MM-003, MM-005, MM-012]
     scope_keys: [module.fdx, test.fdx]
-    pass_record: null
+    pass_record:
+      verification_commit: be5a10c3e7aa43117a62ff8b5d0f2d04b3e63023
+      input_fingerprint: abe9e8f66f27492dd729d08a3e7857d64ca0060218284362c84c41293b2385dd
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-013
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/fdx -q
+        - python3 -m pytest tests/fdx tests/document tests/fixtures tests/harness --tb=no
+        - python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-013/COMMANDS.md
+        - evidence/MM-013/quality-commands.txt
+        - src/movie_muse/fdx/
+        - tests/fdx/
+        - fixtures/fdx/
+      completed_at_utc: "2026-09-01T18:29:40Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T18:29:40Z
+        independence_basis: Did not implement MM-013; independently verified a fresh detached worktree after MM-012 reverification restored DAG currency. Did not rely on screenshots, implementer summaries, or evidence/MM-013. Wrote independent probes under /tmp/mm013-verify-be5a10c-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-013-verify-be5a10c
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-013
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/fdx -q
+          - python3 -m pytest tests/fdx tests/document tests/fixtures tests/harness --tb=no
+          - python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-013/COMMANDS.md
+          - evidence/MM-013/quality-commands.txt
+          - src/movie_muse/fdx/
+          - tests/fdx/
+          - fixtures/fdx/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 491 tests with one unrelated HTTPX deprecation warning.
+          - Pagination/layout hashes belong to MM-014 and were not faked.
+          - EXT-FDX-FINAL-DRAFT remains NOT_RUN; unset MOVIE_MUSE_FINAL_DRAFT_BIN raises FinalDraftUnavailableError and is not skipped.
+          - movie_muse.fdx is absent from MM-001-owned module-layout.yaml; public surface is movie_muse.fdx.api and boundaries were clean.
+          - No required MM-013 check was skipped.
     blocker: null
   - id: MM-014
     title: Deterministic layout, pagination, and production revisions
