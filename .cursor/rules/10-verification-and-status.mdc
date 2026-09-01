@@ -1,0 +1,16 @@
+---
+description: Commit-bound verification, staleness and final release rules
+alwaysApply: true
+---
+
+- `movie_muse_build_status.yaml` is the only completion ledger; `dependency_dag.yaml` is the only work-package graph.
+- A package is runnable only when every dependency is current PASS.
+- PASS requires committed code, exact commands, evidence, fingerprint, UTC time and independent verifier PASS.
+- Map every relevant change to scope keys; mark affected PASS items STALE and recursively stale every dependent.
+- Reverting a change never restores PASS; rerun verification.
+- A mock can satisfy deterministic contract tests but never a required live/sandbox gate.
+- A skipped/quarantined/missing required check fails verification.
+- The independent verifier must not be the implementer and must reproduce on a clean environment.
+- `./scripts/verify_all.sh` is fail-closed and may print the exact PASS sentinel only after total success.
+- Do not edit status to hide a failure or blocker. Record root cause, evidence and next action.
+

@@ -1,0 +1,20 @@
+---
+description: Movie Muse V2 creator-control and architecture invariants
+alwaysApply: true
+---
+
+- Read and obey the V2 architecture, build plan, DAG, manifest and AGENTS.md before changes.
+- Preserve all 47 work packages. Do not collapse a required vertical slice into a placeholder.
+- Keep a modular monolith with durable workers; require an evidence-backed ADR for service extraction.
+- Persist a typed ScreenplayDocument; editor state is an adapter, never canonical.
+- Keep authored, structural, inferred, operational and scenario states epistemically distinct.
+- Make revisions, checkpoints, proposals, merges, ProjectEvents and artifact versions immutable and auditable.
+- Treat AI/meeting/integration output as proposed or candidate state until authorized human acceptance.
+- Preserve offline editing/export through auth/subscription/provider outages, deterministic layout/pagination, professional production revisions and strong FDX round-trip behavior.
+- Enforce branch/document/artifact/operation ACL and craft ownership at application and worker boundaries.
+- Route all model operations through ModelRouter; attach rights, provenance, evidence and uncertainty.
+- Preserve project/capability AI-off; expose role contracts and preflight cost for paid generation.
+- Restrict CRDT writes to authored document/comments/cursors/presence; use domain commands/events for FilmIR and operational state.
+- Reuse the generic artifact subsystem for specialized artifacts.
+- Respect dependency order: router before extraction; fixtures early; breakdown before schedule; schedule before budget; budget before insurance.
+- Never present synthetic audiences as human samples, forecasts as guarantees, or insurance readiness as coverage.
