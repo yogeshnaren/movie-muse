@@ -461,3 +461,11 @@ This file records orchestrator actions that the schema cannot store.
 - Status remains IN_PROGRESS; `pass_record` is null. Independent verification
   is required before PASS. Did not implement MM-014 or later. Did not mark
   EXT-FDX-FINAL-DRAFT.
+
+## 2026-09-01T18:10:19Z
+
+- MM-013 implementation commit `65e4947ccf2ee4be0ee753ecdae571b77a83baf4`
+  (FDX module plus unique `tests/fdx/test_fdx_boundaries.py` basename).
+- Fingerprint at that commit: `8706e57d3591c583de0121cc715917748ca9ce0551f88ceec3f2eba07beae348`
+- Focused pytest 26 passed; affected 64; full pytest 491 passed, 1 warning.
+- Status remains IN_PROGRESS; independent verification required before PASS.
