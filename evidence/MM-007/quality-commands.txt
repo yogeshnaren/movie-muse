@@ -1,0 +1,81 @@
+MM-007 IMPLEMENTER QUALITY EVIDENCE
+Implementation HEAD: 1c0f96fa8d0f73bb4e711e141b96f32abf52801d
+Role: implementer; status remains IN_PROGRESS; this is not independent verification.
+
+=== python3 scripts/validate_handoff.py ===
+exit=0
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+
+=== python3 -m ruff check src tests scripts backend ===
+exit=0
+All checks passed!
+
+=== python3 -m mypy src ===
+exit=0
+Success: no issues found in 97 source files
+
+=== PYTHONPATH=src python3 -m pytest tests/artifacts -q ===
+exit=0
+..............                                                           [100%]
+14 passed (14 dots; repository addopts already includes -q)
+
+=== PYTHONPATH=src python3 -m pytest tests/artifacts tests/authorization tests/revisions tests/persistence -q ===
+exit=0
+........................................................................ [ 96%]
+...                                                                      [100%]
+75 passed (75 dots; repository addopts already includes -q)
+
+=== PYTHONPATH=src python3 -m pytest ===
+exit=0
+338 passed, 1 warning in 34.71s
+warning: backend/tests/test_health.py emits the pre-existing HTTPX `app` shortcut
+DeprecationWarning.
+
+=== PYTHONPATH=src python3 scripts/mm_status.py validate ===
+exit=0
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+
+=== PYTHONPATH=src python3 scripts/mm_status.py check-scopes ===
+exit=0
+SCOPE_COVERAGE=PASS
+
+=== PYTHONPATH=src python3 scripts/mm_status.py runnable ===
+exit=0
+{
+  "count": 2,
+  "runnable": [
+    "MM-007",
+    "MM-008"
+  ]
+}
+
+=== PYTHONPATH=src python3 scripts/mm_status.py boundaries ===
+exit=0
+{
+  "count": 0,
+  "violations": []
+}
+
+=== PYTHONPATH=src python3 scripts/mm_status.py secrets ===
+exit=0
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+
+=== PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007 ===
+exit=0
+{
+  "input_fingerprint": "51c34e36f68e7ab91a1b264f9dc381bbe1f03392f630c4e4b5667286388fae50",
+  "item_id": "MM-007",
+  "verification_commit": "1c0f96fa8d0f73bb4e711e141b96f32abf52801d"
+}
+Resolved paths: `src/movie_muse/artifacts/**`, `tests/artifacts/**`, and shared
+`src/movie_muse/authorization/**` plus `src/movie_muse/revisions/**`.
+
+=== ./scripts/verify_all.sh ===
+exit=1 (expected fail-closed limitation; not waived)
+23 gate-owned tests passed, 1 pre-existing HTTPX warning.
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
