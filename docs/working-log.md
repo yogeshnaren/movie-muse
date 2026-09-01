@@ -469,3 +469,16 @@ This file records orchestrator actions that the schema cannot store.
 - Fingerprint at that commit: `8706e57d3591c583de0121cc715917748ca9ce0551f88ceec3f2eba07beae348`
 - Focused pytest 26 passed; affected 64; full pytest 491 passed, 1 warning.
 - Status remains IN_PROGRESS; independent verification required before PASS.
+
+## 2026-09-01T18:22:00Z
+
+- Independent verifier FAIL for MM-013 at `9ad30c9`: MM-012 owns
+  `fixtures/**` (`test.fixtures`). Adding `fixtures/fdx/**` changed the
+  MM-012 fingerprint, so MM-012 is not a current PASS and MM-013 is not
+  DAG-runnable.
+- Recorded MM-012 fingerprint `7cb2643b077923dac716164928a41cfb67a461b1c19804abc48c99b941a47bbb`;
+  recomputed `95bb6f9b47faa2f71980160fc88632dccea815a8d1932c699d8fc392c08c941d`.
+- Applied invalidation: MM-012 status STALE (prior pass_record retained as
+  history). MM-001–MM-011 remain PASS. MM-013 remains IN_PROGRESS.
+- Next runnable: MM-012 reverification, then MM-013. Did not self-PASS.
+  Did not mark EXT-FDX-FINAL-DRAFT.
