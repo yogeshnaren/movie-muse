@@ -29,6 +29,15 @@ from typing import Any, ClassVar
 from movie_muse.schemas.serialization import dataclass_to_dict
 
 
+def _require_declared_kind(instance: Any) -> None:
+    declared = type(instance).KIND
+    actual = instance.kind
+    if actual != declared:
+        raise ValueError(
+            f"{type(instance).__name__} kind must be {declared.value!r}, not {getattr(actual, 'value', actual)!r}"
+        )
+
+
 class EpistemicLevel(str, Enum):
     AUTHORED = "authored"
     STRUCTURAL = "structural"
@@ -53,6 +62,9 @@ class AuthoredFact:
     kind: EpistemicLevel = EpistemicLevel.AUTHORED
     schema_version: str = "1.0"
 
+    def __post_init__(self) -> None:
+        _require_declared_kind(self)
+
     def to_dict(self) -> dict[str, Any]:
         return dataclass_to_dict(self)
 
@@ -72,6 +84,9 @@ class StructuralFact:
     extractor_version: str
     kind: EpistemicLevel = EpistemicLevel.STRUCTURAL
     schema_version: str = "1.0"
+
+    def __post_init__(self) -> None:
+        _require_declared_kind(self)
 
     def to_dict(self) -> dict[str, Any]:
         return dataclass_to_dict(self)
@@ -95,6 +110,7 @@ class InferredClaim:
     schema_version: str = "1.0"
 
     def __post_init__(self) -> None:
+        _require_declared_kind(self)
         if not (0.0 <= self.confidence <= 1.0):
             raise ValueError("confidence must be within [0.0, 1.0]")
 
@@ -118,6 +134,9 @@ class OperationalAssumption:
     kind: EpistemicLevel = EpistemicLevel.OPERATIONAL
     schema_version: str = "1.0"
 
+    def __post_init__(self) -> None:
+        _require_declared_kind(self)
+
     def to_dict(self) -> dict[str, Any]:
         return dataclass_to_dict(self)
 
@@ -137,6 +156,9 @@ class ScenarioOutput:
     percentile: str | None = None
     kind: EpistemicLevel = EpistemicLevel.SCENARIO
     schema_version: str = "1.0"
+
+    def __post_init__(self) -> None:
+        _require_declared_kind(self)
 
     def to_dict(self) -> dict[str, Any]:
         return dataclass_to_dict(self)

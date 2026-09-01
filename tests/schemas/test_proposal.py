@@ -23,32 +23,78 @@ def test_change_set_operations_must_be_ordered_and_unique() -> None:
     base = ids.new_id("revision")
     op0 = ChangeSetOperation(id="op-0", order=0, op_type=OperationType.INSERT_BLOCK, target_id="blk_x")
     op1 = ChangeSetOperation(id="op-1", order=1, op_type=OperationType.UPDATE_BLOCK, target_id="blk_x")
-    _change_set(base, ops=(op0, op1)).validate()
+    _change_set(base, ops=(op0, op1))
 
-    duplicate_order = _change_set(base, ops=(op0, ChangeSetOperation(id="op-2", order=0, op_type=OperationType.DELETE_BLOCK, target_id="blk_y")))
     with pytest.raises(ValueError, match="unique order"):
-        duplicate_order.validate()
+        _change_set(
+            base,
+            ops=(op0, ChangeSetOperation(id="op-2", order=0, op_type=OperationType.DELETE_BLOCK, target_id="blk_y")),
+        )
 
-    out_of_order = _change_set(base, ops=(op1, op0))
     with pytest.raises(ValueError, match="ascending order"):
-        out_of_order.validate()
+        _change_set(base, ops=(op1, op0))
 
 
 def test_proposal_base_revision_must_match_its_change_set() -> None:
     base = ids.new_id("revision")
     other_base = ids.new_id("revision")
+    with pytest.raises(ValueError, match="base_revision_id"):
+        Proposal(
+            id=ids.new_id("proposal"),
+            project_id=ids.new_id("project"),
+            change_set=_change_set(base),
+            base_revision_id=other_base,
+            intent="test",
+            rationale_summary="because",
+            provenance="human",
+            created_at="2026-09-01T00:00:00Z",
+        )
+
+
+def test_proposal_payload_is_recursively_immutable() -> None:
+    base = ids.new_id("revision")
+    proposal = Proposal(
+        id=ids.new_id("proposal"),
+        project_id=ids.new_id("project"),
+        change_set=_change_set(
+            base,
+            ops=(
+                ChangeSetOperation(
+                    id="op-0",
+                    order=0,
+                    op_type=OperationType.UPDATE_BLOCK,
+                    target_id="blk_x",
+                    payload={"text": "before"},
+                ),
+            ),
+        ),
+        base_revision_id=base,
+        intent="lock",
+        rationale_summary="immutable",
+        provenance="human",
+        created_at="2026-09-01T00:00:00Z",
+    )
+    with pytest.raises(TypeError):
+        proposal.change_set.operations[0].payload["text"] = "after"  # type: ignore[index]
+
+
+def test_proposal_schema_rejects_mismatched_nested_base_revision() -> None:
+    base = ids.new_id("revision")
+    other = ids.new_id("revision")
     proposal = Proposal(
         id=ids.new_id("proposal"),
         project_id=ids.new_id("project"),
         change_set=_change_set(base),
-        base_revision_id=other_base,
-        intent="test",
-        rationale_summary="because",
+        base_revision_id=base,
+        intent="ok",
+        rationale_summary="ok",
         provenance="human",
         created_at="2026-09-01T00:00:00Z",
     )
-    with pytest.raises(ValueError, match="base_revision_id"):
-        proposal.validate()
+    payload = proposal.to_dict()
+    payload["base_revision_id"] = other
+    with pytest.raises(validators.ValidationError, match="base_revision_id"):
+        validators.validate_payload("proposal", payload)
 
 
 def test_valid_proposal_passes_schema_validation_and_round_trips() -> None:

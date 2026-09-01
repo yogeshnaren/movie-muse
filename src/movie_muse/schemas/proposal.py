@@ -74,6 +74,9 @@ class Proposal:
     revalidation: RevalidationRecord | None = None
     schema_version: str = "1.0"
 
+    def __post_init__(self) -> None:
+        self.validate()
+
     def validate(self) -> None:
         if self.change_set.base_revision_id != self.base_revision_id:
             raise ValueError(

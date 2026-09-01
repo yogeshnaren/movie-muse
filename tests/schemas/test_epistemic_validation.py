@@ -104,7 +104,19 @@ def test_cross_kind_payload_validation_fails(source_level: str, target_level: st
         validators.validate_payload(target_schema_name, payload)
 
 
-def test_inferred_claim_rejects_out_of_range_confidence() -> None:
+def test_authored_fact_rejects_mismatched_kind() -> None:
+    from movie_muse.schemas.epistemic import EpistemicLevel
+
+    with pytest.raises(ValueError, match="kind must be"):
+        AuthoredFact(
+            id="fca_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+            subject_id="char-ada",
+            attribute="occupation",
+            value="locksmith",
+            source_revision_id="rev_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+            author_actor_id="act_01ARZ3NDEKTSV4RRFFQ69G5FAV",
+            kind=EpistemicLevel.STRUCTURAL,
+        )
     with pytest.raises(ValueError):
         InferredClaim(
             id="cli_01ARZ3NDEKTSV4RRFFQ69G5FAV",

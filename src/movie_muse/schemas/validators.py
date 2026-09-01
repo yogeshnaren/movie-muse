@@ -88,6 +88,12 @@ def validate_payload(schema_name: str, payload: dict[str, Any], *, root: Path | 
     """Validate ``payload`` against ``schema_name``; raises ``ValidationError`` on failure."""
 
     get_validator(schema_name, root=root).validate(payload)
+    if schema_name == "proposal":
+        change_set = payload.get("change_set") or {}
+        if payload.get("base_revision_id") != change_set.get("base_revision_id"):
+            raise ValidationError(
+                "proposal base_revision_id must match change_set.base_revision_id"
+            )
 
 
 def clear_schema_cache() -> None:

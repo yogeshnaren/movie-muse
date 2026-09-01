@@ -8,9 +8,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from types import MappingProxyType
 from typing import Any, ClassVar
 
 from movie_muse.schemas.serialization import dataclass_from_dict, dataclass_to_dict, tuple_of
+
+
+def freeze_json(value: Any) -> Any:
+    """Recursively freeze JSON-like mappings and lists so nested payloads cannot mutate."""
+
+    if isinstance(value, MappingProxyType):
+        return MappingProxyType({str(key): freeze_json(item) for key, item in value.items()})
+    if isinstance(value, dict):
+        return MappingProxyType({str(key): freeze_json(item) for key, item in value.items()})
+    if isinstance(value, list | tuple):
+        return tuple(freeze_json(item) for item in value)
+    return value
 
 
 class OperationType(str, Enum):
@@ -31,6 +44,9 @@ class ChangeSetOperation:
     payload: dict[str, Any] = field(default_factory=dict)
     schema_version: str = "1.0"
 
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "payload", freeze_json(self.payload))
+
     def to_dict(self) -> dict[str, Any]:
         return dataclass_to_dict(self)
 
@@ -49,6 +65,9 @@ class ChangeSet:
     created_at: str
     operations: tuple[ChangeSetOperation, ...] = ()
     schema_version: str = "1.0"
+
+    def __post_init__(self) -> None:
+        self.validate()
 
     def validate(self) -> None:
         orders = [op.order for op in self.operations]
