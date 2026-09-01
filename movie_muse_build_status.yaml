@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T15:01:42Z"
+last_updated_utc: "2026-09-01T15:10:52Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -458,7 +458,7 @@ items:
     title: Generic artifact subsystem
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-002, MM-004, MM-005, MM-006]
     scope_keys: [module.artifacts]
     pass_record: null
