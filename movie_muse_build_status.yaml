@@ -2,11 +2,11 @@ schema_version: "2.0"
 package_version: "2.1.0"
 project: movie-muse-working-prototype
 manifest_role: canonical_completion_ledger
-overall_status: STALE
+overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T18:22:00Z"
+last_updated_utc: "2026-09-01T18:25:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -768,12 +768,12 @@ items:
     title: Golden fixtures and test harness
     milestone: B
     priority: critical
-    status: STALE
+    status: PASS
     depends_on: [MM-003, MM-005, MM-010, MM-011]
     scope_keys: [test.fixtures, test.harness]
     pass_record:
-      verification_commit: 45406ee66ae120beae6836147a0b63d9752b3c6b
-      input_fingerprint: 7cb2643b077923dac716164928a41cfb67a461b1c19804abc48c99b941a47bbb
+      verification_commit: cc018b4e3b510d8450d6a0c4f4661a3b3df17527
+      input_fingerprint: 43e357a84b2bd20264a4737f60303f5b8efb5028166c2f550b729e58ab7f97a9
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -785,8 +785,8 @@ items:
         - python3 -m ruff check src tests scripts backend
         - python3 -m mypy src
         - python3 -m pytest tests/fixtures tests/harness -q
-        - python3 -m pytest tests/fixtures tests/harness tests/document tests/revisions tests/rights tests/dependencies -q
-        - python3 -m pytest
+        - python3 -m pytest tests/fixtures tests/harness tests/document tests/revisions tests/rights tests/dependencies --tb=no
+        - python3 -m pytest --tb=no
         - ./scripts/verify_all.sh
       evidence:
         - evidence/MM-012/COMMANDS.md
@@ -795,11 +795,11 @@ items:
         - src/movie_muse/testkit/
         - tests/fixtures/
         - tests/harness/
-      completed_at_utc: "2026-09-01T17:45:57Z"
+      completed_at_utc: "2026-09-01T18:22:56Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T17:45:57Z
-        independence_basis: Did not implement MM-012; independently verified a fresh detached worktree without relying on screenshots, implementer summaries, or evidence/MM-012. Wrote independent probes under /tmp/mm012-independent-probes.
-        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-012-verify-45406ee
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T18:22:56Z
+        independence_basis: Did not implement MM-012; independently re-verified a fresh detached worktree after fixtures/fdx invalidated the prior PASS. Did not rely on screenshots, implementer summaries, or evidence/MM-012. Wrote independent probes under /tmp/mm012-reverify-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-012-reverify-cc018b4
         commands:
           - python3 scripts/validate_handoff.py
           - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -811,8 +811,8 @@ items:
           - python3 -m ruff check src tests scripts backend
           - python3 -m mypy src
           - python3 -m pytest tests/fixtures tests/harness -q
-          - python3 -m pytest tests/fixtures tests/harness tests/document tests/revisions tests/rights tests/dependencies -q
-          - python3 -m pytest
+          - python3 -m pytest tests/fixtures tests/harness tests/document tests/revisions tests/rights tests/dependencies --tb=no
+          - python3 -m pytest --tb=no
           - ./scripts/verify_all.sh
         result: PASS
         evidence:
@@ -824,9 +824,10 @@ items:
           - tests/harness/
         limitations:
           - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
-          - Full pytest passed 465 tests with one unrelated HTTPX deprecation warning.
+          - Full pytest passed 491 tests with one unrelated HTTPX deprecation warning.
           - Layout/FilmIR goldens remain deferred awaiting MM-014/MM-018; fail-closed, not skipped.
           - movie_muse.testkit is absent from MM-001-owned module-layout.yaml; public surface is movie_muse.testkit.api and boundaries were clean.
+          - fixtures/fdx is fingerprint-relevant extra content under test.fixtures; FixtureCatalog remains four screenplay classes.
           - No required MM-012 check was skipped.
     blocker: null
   - id: MM-013

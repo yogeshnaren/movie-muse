@@ -482,3 +482,12 @@ This file records orchestrator actions that the schema cannot store.
   history). MM-001–MM-011 remain PASS. MM-013 remains IN_PROGRESS.
 - Next runnable: MM-012 reverification, then MM-013. Did not self-PASS.
   Did not mark EXT-FDX-FINAL-DRAFT.
+
+## 2026-09-01T18:25:00Z
+
+- Independent verifier PASS for MM-012 reverification at
+  `cc018b4e3b510d8450d6a0c4f4661a3b3df17527`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-01T18:22:56Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `43e357a84b2bd20264a4737f60303f5b8efb5028166c2f550b729e58ab7f97a9`
+- Historical `45406ee` / `7cb2643b…` is not current. Next runnable: MM-013
