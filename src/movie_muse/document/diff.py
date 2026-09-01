@@ -58,6 +58,18 @@ def structural_diff(
         )
         order += 1
 
+    if source.sequences != target.sequences:
+        operations.append(
+            ChangeSetOperation(
+                id=f"op-seq-{order}",
+                order=order,
+                op_type=OperationType.UPDATE_METADATA,
+                target_id=source.id,
+                payload={"sequences": [sequence.to_dict() for sequence in target.sequences]},
+            )
+        )
+        order += 1
+
     source_ids = [block.id for block in source.blocks]
     target_ids = [block.id for block in target.blocks]
     source_by_id = {block.id: block for block in source.blocks}

@@ -135,29 +135,59 @@ def _move_block(document: ScreenplayDocument, operation: ChangeSetOperation) -> 
 
 def _insert_scene(document: ScreenplayDocument, operation: ChangeSetOperation) -> ScreenplayDocument:
     payload = _payload(operation)
+    sequence_id = str(payload.get("sequence_id") or operation.target_id)
+    sequences = list(document.sequences)
+    index = next((i for i, sequence in enumerate(sequences) if sequence.id == sequence_id), None)
+    if index is None:
+        raw_sequence = payload.get("sequence")
+        if not isinstance(raw_sequence, Mapping):
+            raise InvalidOperationError(f"unknown sequence id: {sequence_id}")
+        created = Sequence.from_dict(dict(raw_sequence))
+        if created.id != sequence_id:
+            raise InvalidOperationError("insert_scene sequence.id must match sequence_id")
+        sequences.append(created)
+        index = len(sequences) - 1
+
+    sequence = sequences[index]
+    if "scene_ids" in payload:
+        scene_ids = tuple(str(scene_id) for scene_id in payload["scene_ids"])
+        sequences[index] = replace(sequence, scene_ids=scene_ids)
+        return replace(document, sequences=tuple(sequences))
+
     scene_id = str(payload.get("scene_id") or operation.target_id)
-    sequence_id = payload.get("sequence_id")
-    if not sequence_id:
-        raise InvalidOperationError("insert_scene requires payload.sequence_id")
-    sequences: list[Sequence] = []
-    found = False
-    for sequence in document.sequences:
-        if sequence.id == sequence_id:
-            if scene_id in sequence.scene_ids:
-                raise InvalidOperationError(f"scene already present: {scene_id}")
-            sequences.append(replace(sequence, scene_ids=sequence.scene_ids + (scene_id,)))
-            found = True
-        else:
-            sequences.append(sequence)
-    if not found:
-        raise InvalidOperationError(f"unknown sequence id: {sequence_id}")
+    current_ids = list(sequence.scene_ids)
+    if scene_id in current_ids:
+        raise InvalidOperationError(f"scene already present: {scene_id}")
+    insert_at = int(payload["index"]) if "index" in payload else len(current_ids)
+    if insert_at < 0 or insert_at > len(current_ids):
+        raise InvalidOperationError("insert_scene index out of range")
+    current_ids.insert(insert_at, scene_id)
+    sequences[index] = replace(sequence, scene_ids=tuple(current_ids))
     return replace(document, sequences=tuple(sequences))
+
+
+def _coerce_sequences(raw: Any) -> tuple[Sequence, ...]:
+    sequences: list[Sequence] = []
+    for item in raw:
+        if isinstance(item, Sequence):
+            sequences.append(item)
+            continue
+        if not isinstance(item, Mapping):
+            raise InvalidOperationError("update_metadata sequences entries must be objects")
+        sequences.append(Sequence.from_dict(dict(item)))
+    return tuple(sequences)
 
 
 def _update_metadata(document: ScreenplayDocument, operation: ChangeSetOperation) -> ScreenplayDocument:
     payload = dict(_payload(operation))
-    allowed = {"title", "paper_size", "style", "base_revision_id"}
+    allowed = {"title", "paper_size", "style", "base_revision_id", "sequences"}
     unknown = set(payload) - allowed
     if unknown:
         raise InvalidOperationError(f"update_metadata unknown fields: {sorted(unknown)}")
-    return replace(document, **payload)
+    updates: dict[str, Any] = {}
+    for key, value in payload.items():
+        if key == "sequences":
+            updates[key] = _coerce_sequences(value)
+        else:
+            updates[key] = value
+    return replace(document, **updates)

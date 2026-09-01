@@ -125,5 +125,13 @@ This file records orchestrator actions that the schema cannot store.
   required. Named `migrations_backup_and_recovery` shell gate deferred so
   MM-001-owned fail-closed tests are not STALEd before MM-003 verification.
 
+## 2026-09-01T11:52:00Z
+
+- Independent verifier FAIL for MM-003 at `222b2f6`: `structural_diff()` ignored
+  sequence/scene membership, so replay dropped added scene IDs.
+- Fix: sequence membership is part of structural diff (`update_metadata.sequences`);
+  `insert_scene` supports index and exact `scene_ids` replacement. Replay-equals-target
+  tests cover add/reorder/remove. Status remains IN_PROGRESS pending re-verification.
+
 
 

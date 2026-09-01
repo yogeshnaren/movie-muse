@@ -17,16 +17,25 @@ Typed kernel over canonical `ScreenplayDocument`:
 - editor projection adapter (`movie-muse.editor.projection.v1`) that is never canonical
 - replay/serialization determinism tests; dual dialogue, boneyard, Unicode, production metadata round-trip
 
+Follow-up after independent verifier FAIL at `222b2f6`: `structural_diff` now emits
+sequence membership as `update_metadata.sequences`. `insert_scene` accepts `index`
+and exact `scene_ids` replacement. Replay of the diff reproduces added, reordered,
+and removed sequence scene IDs.
+
 Public surface: `movie_muse.document.api` only.
 
 ## Commands
 
-See quality-commands.txt. Headline: document tests pass; full pytest passes after status-invariant toolchain test fix.
-
-## Limitation
-
-MM-001/MM-002 were marked STALE after the toolchain test change. Independent verification of MM-003 must wait until those dependencies are current PASS again.
+See quality-commands.txt. Headline after the sequence-diff fix: document tests pass
+(21); full pytest passes.
 
 ## Verifier instructions
 
-Do not verify MM-003 until MM-001 and MM-002 are current PASS. Then checkout the MM-003 commit, recompute fingerprint, run ruff/mypy/pytest including `tests/document`, and probe that mutating editor JSON does not change canonical `ScreenplayDocument`.
+1. Fresh detached checkout of this commit. MM-001 and MM-002 must be current PASS.
+2. Recompute `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-003`.
+3. Run ruff, mypy, `pytest tests/document`, and full pytest.
+4. Probe: target sequence with two scene IDs; `replay(structural_diff(source, target))`
+   must retain both IDs and equal `normalize(target)` on sequences.
+5. Probe reorder and removal of sequence membership the same way.
+6. Probe that mutating editor JSON does not change canonical `ScreenplayDocument`.
+7. Do not edit the canonical ledger.

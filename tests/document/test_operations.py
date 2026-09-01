@@ -100,3 +100,31 @@ def test_insert_scene_appends_to_sequence(sample_document: ScreenplayDocument) -
         ),
     )
     assert scene_id in result.sequences[0].scene_ids
+
+
+def test_insert_scene_can_set_index_and_replace_membership(sample_document: ScreenplayDocument) -> None:
+    sequence = sample_document.sequences[0]
+    original = sequence.scene_ids[0]
+    extra = new_id("scene")
+    inserted = apply_operation(
+        sample_document,
+        ChangeSetOperation(
+            id="op-0",
+            order=0,
+            op_type=OperationType.INSERT_SCENE,
+            target_id=extra,
+            payload={"scene_id": extra, "sequence_id": sequence.id, "index": 0},
+        ),
+    )
+    assert inserted.sequences[0].scene_ids == (extra, original)
+    replaced = apply_operation(
+        inserted,
+        ChangeSetOperation(
+            id="op-1",
+            order=1,
+            op_type=OperationType.INSERT_SCENE,
+            target_id=sequence.id,
+            payload={"sequence_id": sequence.id, "scene_ids": (original,)},
+        ),
+    )
+    assert replaced.sequences[0].scene_ids == (original,)

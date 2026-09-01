@@ -1,7 +1,17 @@
-MM-003 document kernel — quality command evidence
-Captured: 2026-09-01T11:15:48Z
+=== ruff ===
+All checks passed!
+=== mypy ===
+Success: no issues found in 61 source files
+=== pytest document ===
+.....................                                                    [100%]
+=== pytest full ===
+........................................................................ [ 28%]
+........................................................................ [ 57%]
+........................................................................ [ 86%]
+...................................                                      [100%]
+=============================== warnings summary ===============================
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
 
-python3 -m ruff check src tests scripts backend  -> All checks passed
-python3 -m mypy -> Success: no issues found in 45 source files
-python3 -m pytest tests/document -q -> 18 passed
-python3 -m pytest -> passed (1 httpx deprecation warning)
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
