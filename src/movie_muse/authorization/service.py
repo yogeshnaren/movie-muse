@@ -265,6 +265,23 @@ class AuthorizationService:
 
         if parsed_action is Action.CONFIRM_CRAFT_DECISION:
             department = resource.department or context.department
+            if resource.kind is ResourceKind.OPERATION:
+                record = load_catalog(self.workspace)["operations"].get(resource.id)
+                if record is None:
+                    return deny("unknown_resource", role=membership.role.value)
+                catalog_department = record.get("department")
+                catalog_department = (
+                    str(catalog_department) if catalog_department else None
+                )
+                claimed = department
+                if (
+                    catalog_department is not None
+                    and claimed is not None
+                    and claimed != catalog_department
+                ):
+                    return deny("department_mismatch", role=membership.role.value)
+                if catalog_department is not None:
+                    department = catalog_department
             if not craft_decision_allowed(
                 principal=principal,
                 role=membership.role,
@@ -344,6 +361,13 @@ class AuthorizationService:
                 return "confused_deputy"
             if str(record["organization_id"]) != organization_id:
                 return "confused_deputy"
+            catalog_department = record.get("department")
+            if (
+                catalog_department
+                and resource.department
+                and str(catalog_department) != resource.department
+            ):
+                return "department_mismatch"
             return None
         return "unknown_resource"
 

@@ -165,6 +165,41 @@ def test_integration_actor_cannot_be_reclassified_as_human_for_craft(
         pass
 
 
+def test_craft_confirmation_uses_catalogued_operation_department(acl_stack) -> None:
+    costume = make_human_actor(
+        organization_id=acl_stack.project.organization_id, display_name="Costume"
+    )
+    acl_stack.identity.register_actor(costume)
+    principal = _invite(acl_stack, costume, Role.DEPARTMENT_CONTRIBUTOR, department="costume")
+    acl_stack.authorization.declare_operation(
+        project_id=acl_stack.project.id,
+        operation_id="op_art_owned",
+        department="art",
+    )
+    resource = acl_stack.authorization.resource_for_project(
+        acl_stack.project.id,
+        kind=ResourceKind.OPERATION,
+        resource_id="op_art_owned",
+        department="costume",
+    )
+    decision = acl_stack.authorization.authorize(
+        principal,
+        Action.CONFIRM_CRAFT_DECISION,
+        resource,
+        acl_epoch=acl_stack.identity.acl_epoch(),
+        context=AuthContext(department="costume"),
+    )
+    assert decision.denied
+    assert decision.reason == "department_mismatch"
+    try:
+        acl_stack.commands.confirm_craft_decision(
+            actor_id=costume.id, department="costume", operation_id="op_art_owned"
+        )
+        raise AssertionError("costume must not confirm an art-owned operation")
+    except AuthorizationError:
+        pass
+
+
 def test_modes_do_not_fork_canonical_head(acl_stack) -> None:
     owner = acl_stack.identity.principal(acl_stack.owner.id)
     head = acl_stack.revisions.canon_head_id()
