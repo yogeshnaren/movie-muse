@@ -135,6 +135,13 @@ def test_export_and_delivery_require_export_acl_preview_and_confirmation(
             acl_epoch=artifact_stack.epoch,
         )
     with pytest.raises(AuthorizationError):
+        artifact_stack.artifacts.update_version(
+            version.version.id,
+            checksum="forged",
+            principal=viewer,
+            acl_epoch=artifact_stack.epoch,
+        )
+    with pytest.raises(AuthorizationError):
         artifact_stack.artifacts.deliver(
             version.version.id,
             preview_render_id=preview.render.id,

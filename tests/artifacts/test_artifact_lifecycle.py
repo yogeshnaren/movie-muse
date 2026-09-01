@@ -99,9 +99,18 @@ def test_version_inputs_and_content_are_immutable(artifact_stack) -> None:
     with pytest.raises(TypeError):
         stored.record.inputs["new"] = "forbidden"
     with pytest.raises(ArtifactImmutableError):
-        artifact_stack.artifacts.update_version(view.version.id, checksum="forged")
+        artifact_stack.artifacts.update_version(
+            view.version.id,
+            checksum="forged",
+            principal=artifact_stack.principal,
+            acl_epoch=artifact_stack.epoch,
+        )
     with pytest.raises(ArtifactImmutableError):
-        artifact_stack.artifacts.delete_version(view.version.id)
+        artifact_stack.artifacts.delete_version(
+            view.version.id,
+            principal=artifact_stack.principal,
+            acl_epoch=artifact_stack.epoch,
+        )
     with pytest.raises(AttributeError):
         replace(view.version, checksum="forged").checksum = "other"
 

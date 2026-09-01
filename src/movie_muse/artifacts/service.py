@@ -193,7 +193,6 @@ class ArtifactService:
         classification: ArtifactClassification | str,
         principal: Principal,
         acl_epoch: int,
-        editor_actor_id: str | None = None,
         evidence_bundle_ids: tuple[str, ...] = (),
         rights_record_ids: tuple[str, ...] = (),
         purpose: RenderPurpose = RenderPurpose.GENERATION,
@@ -251,7 +250,7 @@ class ArtifactService:
                 if isinstance(classification, ArtifactClassification)
                 else ArtifactClassification(str(classification))
             ),
-            editor_actor_id=editor_actor_id or principal.actor_id,
+            editor_actor_id=principal.actor_id,
             render_id=render.id,
         )
         link = self._new_link(
@@ -285,7 +284,6 @@ class ArtifactService:
             classification=prior.classification,
             principal=principal,
             acl_epoch=acl_epoch,
-            editor_actor_id=principal.actor_id,
             evidence_bundle_ids=prior.version.evidence_bundle_ids,
             rights_record_ids=prior.version.rights_record_ids,
             purpose=RenderPurpose.REGENERATION,
@@ -608,12 +606,29 @@ class ArtifactService:
             )
         return tuple(approved)
 
-    def update_version(self, artifact_version_id: str, **_changes: object) -> None:
-        self._stored_version(artifact_version_id)
+    def update_version(
+        self,
+        artifact_version_id: str,
+        *,
+        principal: Principal,
+        acl_epoch: int,
+        **_changes: object,
+    ) -> None:
+        stored = self._stored_version(artifact_version_id)
+        artifact = self._artifact(stored.version.artifact_id)
+        self._require_artifact(principal, Action.PROPOSE, artifact, acl_epoch)
         raise ArtifactImmutableError(f"artifact versions cannot be updated: {artifact_version_id}")
 
-    def delete_version(self, artifact_version_id: str) -> None:
-        self._stored_version(artifact_version_id)
+    def delete_version(
+        self,
+        artifact_version_id: str,
+        *,
+        principal: Principal,
+        acl_epoch: int,
+    ) -> None:
+        stored = self._stored_version(artifact_version_id)
+        artifact = self._artifact(stored.version.artifact_id)
+        self._require_artifact(principal, Action.PROPOSE, artifact, acl_epoch)
         raise ArtifactImmutableError(f"artifact versions cannot be deleted: {artifact_version_id}")
 
     def _artifact(self, artifact_id: str) -> Artifact:
