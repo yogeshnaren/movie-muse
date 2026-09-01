@@ -328,3 +328,10 @@ This file records orchestrator actions that the schema cannot store.
 - MM-008 moved to IN_PROGRESS. Durable jobs/worker implementation continues
   after the previous implementer stopped mid-execution.
 - Independent verification is required before PASS.
+
+## 2026-09-01T15:36:00Z
+
+- MM-008 implementation commit `2c815f5e8d797bb89e92a4fcaeda1bc37c224b25`
+- Fingerprint at that commit: `7ff88167512ca1259071e535e107c4c3ac8190490ac01a32e99f35798f732cc6`
+- Focused pytest 19 passed; affected 66; full pytest 358 passed, 1 warning.
+- Status remains IN_PROGRESS; independent verification required before PASS.
