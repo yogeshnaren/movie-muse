@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from movie_muse.identity.errors import (
     AclDeniedError,
+    ActorImmutableError,
     IdentityError,
     InvitationError,
     MembershipError,
@@ -29,6 +30,7 @@ from movie_muse.identity.types import (
 __all__ = [
     "AclDeniedError",
     "Actor",
+    "ActorImmutableError",
     "EpochBinding",
     "IdentityError",
     "IdentityService",

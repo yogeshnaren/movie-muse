@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 from movie_muse.identity.api import (
     AclDeniedError,
     Actor,
+    ActorImmutableError,
     IdentityService,
     InvitationStatus,
     MembershipError,
@@ -16,6 +18,7 @@ from movie_muse.identity.api import (
     PrincipalKind,
     Role,
     make_human_actor,
+    make_integration_actor,
 )
 from movie_muse.persistence.api import LocalSaveState, LocalWorkspace, PersistenceError
 from movie_muse.schemas.api import Project, ScreenplayDocument, new_id
@@ -363,3 +366,26 @@ def test_second_tenant_can_be_bound_in_the_same_authority(
     assert principal_a.organization_id == project_a.organization_id
     principal_b = identity.principal(owner_b_id)
     assert principal_b.organization_id == "org_b"
+
+
+def test_register_actor_is_idempotent_and_rejects_kind_overwrite(
+    bound_identity: tuple[IdentityService, LocalWorkspace, Project, ScreenplayDocument, Actor],
+) -> None:
+    identity, _workspace, project, _document, _owner = bound_identity
+    bot = make_integration_actor(
+        organization_id=project.organization_id, display_name="Bot"
+    )
+    first = identity.register_actor(bot)
+    snapshot_before = identity.permission_snapshot_id()
+    again = identity.register_actor(bot)
+    assert again.id == first.id
+    assert again.principal_kind is PrincipalKind.INTEGRATION_SERVICE
+    assert identity.permission_snapshot_id() == snapshot_before
+    try:
+        identity.register_actor(replace(bot, principal_kind=PrincipalKind.HUMAN))
+        raise AssertionError("actor principal kind must be immutable")
+    except ActorImmutableError:
+        pass
+    assert identity.get_actor(bot.id).principal_kind is PrincipalKind.INTEGRATION_SERVICE
+    assert identity.permission_snapshot_id() == snapshot_before
+    assert identity.acl_epoch() == 0

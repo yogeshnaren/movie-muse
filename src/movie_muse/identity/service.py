@@ -7,6 +7,7 @@ from typing import Any
 
 from movie_muse.identity.errors import (
     AclDeniedError,
+    ActorImmutableError,
     IdentityError,
     InvitationError,
     MembershipError,
@@ -74,7 +75,7 @@ class IdentityService:
         index = clone_index(index)
         now = utc_now()
         index["organizations"][organization.id] = organization.to_dict()
-        index["actors"][owner.id] = owner.to_dict()
+        self._put_actor(index, owner)
         index["projects"][project.id] = {
             "id": project.id,
             "organization_id": organization.id,
@@ -112,9 +113,9 @@ class IdentityService:
         index = clone_index(self._ensure_index())
         if actor.organization_id not in index["organizations"]:
             raise IdentityError(f"unknown organization: {actor.organization_id}")
-        index["actors"][actor.id] = actor.to_dict()
+        stored = self._put_actor(index, actor)
         self._commit(index)
-        return actor
+        return stored
 
     def register_project(self, project: Project) -> None:
         index = clone_index(self._ensure_index())
@@ -174,7 +175,7 @@ class IdentityService:
         return tuple(EpochBinding.from_dict(raw) for raw in index["epoch_log"])
 
     def permission_snapshot_id(self) -> str:
-        """Versioned grant id. Changes whenever membership or ACL epoch changes."""
+        """Versioned grant id. Changes whenever identity, membership, or ACL epoch changes."""
 
         index = self._ensure_index()
         memberships = [
@@ -188,9 +189,18 @@ class IdentityService:
             }
             for mid, raw in sorted(index["memberships"].items())
         ]
+        actors = [
+            {
+                "id": actor_id,
+                "principal_kind": raw["principal_kind"],
+                "organization_id": raw["organization_id"],
+            }
+            for actor_id, raw in sorted(index["actors"].items())
+        ]
         payload = {
             "acl_epoch": int(index["acl_epoch"]),
             "memberships": memberships,
+            "actors": actors,
         }
         _encoded, digest = digest_payload(payload)
         return digest
@@ -365,6 +375,21 @@ class IdentityService:
                 continue
             return membership
         return None
+
+    def _put_actor(self, index: dict[str, Any], actor: Actor) -> Actor:
+        existing = index["actors"].get(actor.id)
+        if existing is None:
+            index["actors"][actor.id] = actor.to_dict()
+            return actor
+        current = Actor.from_dict(existing)
+        if (
+            current.principal_kind != actor.principal_kind
+            or current.organization_id != actor.organization_id
+        ):
+            raise ActorImmutableError(
+                f"actor {actor.id} principal kind and tenant binding are immutable"
+            )
+        return current
 
     def _require_manage_acl(self, index: dict[str, Any], actor_id: str, project_id: str) -> None:
         membership = self._membership_for_actor(index, actor_id, project_id)

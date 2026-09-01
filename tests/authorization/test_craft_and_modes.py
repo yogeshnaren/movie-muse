@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from movie_muse.authorization.api import (
     Action,
     AuthContext,
@@ -10,7 +12,13 @@ from movie_muse.authorization.api import (
     ResourceKind,
     compose_modes,
 )
-from movie_muse.identity.api import Role, make_human_actor, make_integration_actor
+from movie_muse.identity.api import (
+    ActorImmutableError,
+    PrincipalKind,
+    Role,
+    make_human_actor,
+    make_integration_actor,
+)
 
 
 def _invite(acl_stack, actor, role: Role, *, department: str | None = None):
@@ -111,6 +119,50 @@ def test_integration_with_department_role_still_cannot_confirm(acl_stack) -> Non
         principal, Action.CONFIRM_CRAFT_DECISION, resource, acl_epoch=acl_stack.identity.acl_epoch()
     )
     assert decision.denied
+
+
+def test_integration_actor_cannot_be_reclassified_as_human_for_craft(
+    acl_stack,
+) -> None:
+    bot = make_integration_actor(
+        organization_id=acl_stack.project.organization_id, display_name="ReclassBot"
+    )
+    acl_stack.identity.register_actor(bot)
+    _invite(acl_stack, bot, Role.DEPARTMENT_CONTRIBUTOR, department="costume")
+    acl_stack.authorization.declare_operation(
+        project_id=acl_stack.project.id,
+        operation_id="op_costume_reclass",
+        department="costume",
+    )
+    epoch_before = acl_stack.identity.acl_epoch()
+    snapshot_before = acl_stack.authorization.permission_snapshot_id()
+    try:
+        acl_stack.commands.confirm_craft_decision(
+            actor_id=bot.id, department="costume", operation_id="op_costume_reclass"
+        )
+        raise AssertionError("integration must not confirm craft decisions")
+    except AuthorizationError:
+        pass
+
+    try:
+        acl_stack.identity.register_actor(
+            replace(bot, principal_kind=PrincipalKind.HUMAN, display_name="Human now")
+        )
+        raise AssertionError("principal kind must be immutable")
+    except ActorImmutableError:
+        pass
+
+    assert acl_stack.identity.acl_epoch() == epoch_before
+    assert acl_stack.authorization.permission_snapshot_id() == snapshot_before
+    stored = acl_stack.identity.get_actor(bot.id)
+    assert stored.principal_kind is PrincipalKind.INTEGRATION_SERVICE
+    try:
+        acl_stack.commands.confirm_craft_decision(
+            actor_id=bot.id, department="costume", operation_id="op_costume_reclass"
+        )
+        raise AssertionError("reclassified integration must still be denied")
+    except AuthorizationError:
+        pass
 
 
 def test_modes_do_not_fork_canonical_head(acl_stack) -> None:

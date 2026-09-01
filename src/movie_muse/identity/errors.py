@@ -21,3 +21,7 @@ class MembershipError(IdentityError):
 
 class AclDeniedError(IdentityError):
     """Actor lacks MANAGE_ACL for an identity/ACL mutation."""
+
+
+class ActorImmutableError(IdentityError):
+    """Registered actor identity, principal kind, and tenant binding cannot change."""
