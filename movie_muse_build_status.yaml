@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T11:15:48Z"
+last_updated_utc: "2026-09-01T11:22:57Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -91,12 +91,12 @@ items:
     title: Repository, toolchain, and quality baseline
     milestone: A
     priority: critical
-    status: STALE
+    status: PASS
     depends_on: []
     scope_keys: [global.toolchain, global.ci]
     pass_record:
-      verification_commit: 017c3cffe265733c676a591716361d8dc309893a
-      input_fingerprint: cd81bfe138f0f8a7452879a27394344d24e2401febabe93a6ba1cc9afb667e47
+      verification_commit: 14644008c60e9eb7bb4e3fef7e77b05c9289fbd2
+      input_fingerprint: 24fd1172bafd04b485910c63b1b220759093c52fb065595f3b4632be2e4cd7f8
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -121,10 +121,10 @@ items:
         - evidence/MM-001/quality-commands.txt
         - evidence/MM-001/frontend-tests.txt
         - evidence/secret-scan.txt
-      completed_at_utc: "2026-09-01T10:19:23Z"
+      completed_at_utc: "2026-09-01T11:22:57Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T10:19:23Z
-        independence_basis: Separate verifier agent/model; did not implement MM-001 and independently reran committed verification instructions.
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T11:21:51Z
+        independence_basis: Separate verifier agent/model; did not implement MM-001 and independently reproduced committed verification instructions from a fresh detached worktree.
         environment: Linux 6.12.94+ x86_64; python 3.12.3; node 20.20.2; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
         commands:
           - python3 scripts/validate_handoff.py
@@ -144,6 +144,8 @@ items:
           - evidence/secret-scan.txt
         limitations:
           - Verification covers MM-001 only; the complete prototype remains gated by later packages.
+          - VM lacked ensurepip/python3-venv; system-Python bootstrap succeeded with pip caching disabled.
+          - npm reported dependency vulnerabilities; dependency auditing is not an MM-001 acceptance gate.
     blocker: null
   - id: MM-002
     title: Domain constitution and versioned schemas
