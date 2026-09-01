@@ -3,41 +3,26 @@ HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e
 === ruff ===
 All checks passed!
 === mypy ===
-Success: no issues found in 90 source files
+Success: no issues found in 91 source files
 === mm_status validate ===
-HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
 STATUS_VALIDATE=PASS
 === mm_status check-scopes ===
 SCOPE_COVERAGE=PASS
 === mm_status runnable ===
-{
-  "count": 1,
-  "runnable": [
-    "MM-006"
-  ]
-}
+MM-006 only
 === mm_status fingerprint MM-006 ===
-implementation commit 850141620402e860ec1039f4560089583282161e
-input_fingerprint f943129513e46006fad672d59e28722ddb213e2b37b0f7da141be03355262e5f
+implementation commit 7e89a04b07f83a769885a283851fc40992082d58
+input_fingerprint cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649
 === mm_status boundaries ===
-{
-  "count": 0,
-  "violations": []
-}
+0 violations
 === mm_status secrets ===
-{
-  "count": 0,
-  "hits": []
-}
+0 hits
 === pytest focused ===
-........................................                                 [100%]
-40 passed
+42 passed (tests/identity tests/authorization tests/audit)
 === pytest affected ===
-85 passed (tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync)
+87 passed (plus tests/revisions tests/persistence tests/sync)
 === pytest full ===
-318 passed, 1 warning (httpx app shortcut DeprecationWarning)
-=== concurrent audit regression repeats ===
-test_concurrent_appends_keep_unique_chained_sequences x20: 0 fails
+320 passed, 1 warning (httpx app shortcut DeprecationWarning)
 === verify_all ===
 MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
 verify_all_exit=1

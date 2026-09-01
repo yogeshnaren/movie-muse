@@ -47,6 +47,11 @@ source, `tests/__init__.py`, or the status ledger.
    Protected-branch merge/accept requires owner/manage-ACL **and** explicit
    `allow_protected`. Versioned `permission_snapshot_id` invalidates on
    membership/epoch change; worker re-check with a stale epoch or snapshot denies.
+   After the project binding is known, `authorize()` still resolves the scoped
+   resource id: documents via `LocalWorkspace.reopen`, branches via
+   `RevisionService.get_branch`, artifacts and operations via an authorization
+   catalog (`declare_artifact` / `declare_operation`). Unknown same-project
+   child IDs are `unknown_resource`.
 
 3. **Tenant isolation / confused deputy.** A principal in org A cannot read org B.
    Passing another tenant's project id with a valid org A token (resource
@@ -90,27 +95,36 @@ Required probes that PASSed then still apply. Two FAILs:
    `test_writer_cannot_mutate_acl_through_identity_service`.
 2. Two concurrent `AuditLog.append` calls both returned sequence 1; replay
    kept one record. Fix: serialize append index updates in `BEGIN IMMEDIATE`;
-   regression `test_concurrent_appends_keep_unique_chained_sequences`.
+   regression    `test_concurrent_appends_keep_unique_chained_sequences`.
+
+## Independent FAIL at `c2b3850` and follow-up
+
+Verifier `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:12:37Z`
+FAILED `c2b3850c6d190e35fc223f1a9b5260cb36fe3cda`. Prior ACL-mutation and
+concurrent-audit FAILs re-probed PASS. Deny-by-default FAILed: unknown
+document, branch, artifact, and operation IDs under a known project were
+ALLOWED. Fix: resolve each resource kind before role evaluation; regression
+`test_unknown_scoped_resources_on_a_known_project_are_denied`.
 
 ## Commands
 
 See `quality-commands.txt`. Headline (implementation commit
-`850141620402e860ec1039f4560089583282161e`):
+`7e89a04b07f83a769885a283851fc40992082d58`):
 
 | Command | Result |
 |---|---|
 | `python3 scripts/validate_handoff.py` | `HANDOFF_VALIDATION=PASS` |
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
-| `python3 -m mypy src` | Success: no issues found in 90 source files |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 40 passed |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 85 passed |
-| `PYTHONPATH=src python3 -m pytest` | 318 passed, 1 warning |
+| `python3 -m mypy src` | Success: no issues found in 91 source files |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 42 passed |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 87 passed |
+| `PYTHONPATH=src python3 -m pytest` | 320 passed, 1 warning |
 | `PYTHONPATH=src python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py check-scopes` | `SCOPE_COVERAGE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py runnable` | `MM-006` only |
 | `PYTHONPATH=src python3 scripts/mm_status.py boundaries` | 0 violations |
 | `PYTHONPATH=src python3 scripts/mm_status.py secrets` | 0 hits |
-| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `f943129513e46006fad672d59e28722ddb213e2b37b0f7da141be03355262e5f` |
+| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649` |
 | `./scripts/verify_all.sh` | fail-closed `NOT_READY` missing `migrations_backup_and_recovery` |
 
 The named `scripts/gates/migrations_backup_and_recovery.sh` is not added
@@ -118,9 +132,9 @@ because introducing it requires changing MM-001-owned `tests/release/` (the
 fail-closed test currently asserts that missing gate name). That would STALE
 MM-001. Expected for this package.
 
-Implementation commit (code + tests): `850141620402e860ec1039f4560089583282161e`
-Input fingerprint at that commit: `f943129513e46006fad672d59e28722ddb213e2b37b0f7da141be03355262e5f`
-UTC: `2026-09-01T14:04:50Z`
+Implementation commit (code + tests): `7e89a04b07f83a769885a283851fc40992082d58`
+Input fingerprint at that commit: `cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649`
+UTC: `2026-09-01T14:19:02Z`
 
 An evidence-only follow-up commit changes HEAD, so `fingerprint MM-006` at
 the evidence commit will differ because `verification_commit` is hashed.
@@ -131,8 +145,9 @@ Owned paths excluding `evidence/**` and `docs/working-log.md` are unchanged.
 - Membership/ACL/audit live in module-owned blob indexes, not SQL tables.
 - `AuthorizedRevisionService` is the host-facing ACL gate; raw `RevisionService`
   still exists for MM-005 internals and tests.
-- Investor mode is read-only over approved-artifact field names; MM-007 owns
-  the actual artifact objects.
+- Artifacts have no MM-007 store yet; `declare_artifact` is the fail-closed
+  existence authority until that package binds real objects. Same for
+  operations via `declare_operation`.
 - `verify_all.sh` remains fail-closed until later packages add the named gates.
 
 ## Required external gates
@@ -142,10 +157,10 @@ None for MM-006. Live/sandbox gates belong to later packages.
 ## Verifier instructions
 
 1. Fresh detached checkout of implementation commit
-   `850141620402e860ec1039f4560089583282161e` or this evidence commit.
+   `7e89a04b07f83a769885a283851fc40992082d58` or this evidence commit.
    Recompute `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006`
-   at that HEAD. At `8501416` it must be
-   `f943129513e46006fad672d59e28722ddb213e2b37b0f7da141be03355262e5f`.
+   at that HEAD. At `7e89a04` it must be
+   `cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649`.
    Do not edit the canonical ledger or `/workspace`.
 2. Confirm MM-001 through MM-005 are current PASS and MM-006 is IN_PROGRESS.
 3. Run ruff, mypy src, focused pytest (`tests/identity tests/authorization tests/audit`),
@@ -154,8 +169,10 @@ None for MM-006. Live/sandbox gates belong to later packages.
    and `movie_muse.audit.api` only (boundary tests plus
    `python3 scripts/mm_status.py boundaries`).
 5. Probes (must all hold), including the prior independent FAILs:
-   - **Deny-by-default:** unknown principal, unknown action, unknown resource,
-     and `authorize()` with no bound authority all deny.
+   - **Deny-by-default:** unknown principal, unknown action, unknown project,
+     unknown same-project document/branch/artifact/operation IDs, and
+     `authorize()` with no bound authority all deny (`unknown_resource` for
+     missing objects).
    - **Non-owner ACL management (prior FAIL):** grant a writer membership;
      confirm `AuthorizationService` denies `MANAGE_ACL`; as that writer call
      `IdentityService.invite` (administrator), `revoke_invitation`, and

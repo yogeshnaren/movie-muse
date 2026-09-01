@@ -230,6 +230,25 @@ This file records orchestrator actions that the schema cannot store.
 - Focused pytest 40 passed; affected 85; full pytest 318 passed, 1 warning.
 - Status remains IN_PROGRESS; independent re-verification required before PASS.
 
+## 2026-09-01T14:12:37Z
+
+- Independent verifier FAIL for MM-006 at `c2b3850c6d190e35fc223f1a9b5260cb36fe3cda`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:12:37Z`
+- Prior FAILs (writer ACL mutation, concurrent audit LWW) re-probed PASS.
+- Deny-by-default FAILed: unknown document/branch/artifact/operation IDs under
+  a known project were ALLOWED.
+- Status remains IN_PROGRESS; do not self-PASS.
+
+## 2026-09-01T14:19:02Z
+
+- MM-006 follow-up at `7e89a04b07f83a769885a283851fc40992082d58`
+- Fingerprint at that commit: `cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649`
+- Scoped resources are resolved before role evaluation. Unknown same-project
+  child IDs deny `unknown_resource`.
+- Focused pytest 42 passed; affected 87; full pytest 320 passed, 1 warning.
+- Status remains IN_PROGRESS; independent re-verification required before PASS.
+
+
 
 
 
