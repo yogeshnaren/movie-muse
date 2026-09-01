@@ -248,6 +248,24 @@ This file records orchestrator actions that the schema cannot store.
 - Focused pytest 42 passed; affected 87; full pytest 320 passed, 1 warning.
 - Status remains IN_PROGRESS; independent re-verification required before PASS.
 
+## 2026-09-01T14:26:57Z
+
+- Independent verifier FAIL for MM-006 at `dd9b0b575e60e0a550f62698430f041f9bab6e51`
+- Verifier: `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:26:57Z`
+- Prior FAILs (writer ACL mutation, concurrent audit, unknown scoped
+  resources) re-probed PASS.
+- Revoke quarantine FAILed: owner queued outbox was also marked recovery_only.
+- Status remains IN_PROGRESS; do not self-PASS.
+
+## 2026-09-01T14:29:54Z
+
+- MM-006 follow-up at `7e6ae2c428129540ad8a2b9a601a72238520cd50`
+- Fingerprint at that commit: `8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5`
+- Revocation quarantine is scoped to the revoked actor and project.
+- Focused pytest 43 passed; affected 88; full pytest 321 passed, 1 warning.
+- Status remains IN_PROGRESS; independent re-verification required before PASS.
+
+
 
 
 

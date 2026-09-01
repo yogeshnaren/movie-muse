@@ -24,8 +24,9 @@ source, `tests/__init__.py`, or the status ledger.
    current ACL epoch. Accepting an invite writes membership and adds the actor
    to `authorized_actor_ids` workspace meta. Revoking membership increments
    `acl_epoch`, records an append-only epoch binding, removes the actor from
-   `authorized_actor_ids`, and calls `SyncProtocol.quarantine_unsynced`.
-   Project owner membership cannot be revoked.
+   `authorized_actor_ids`, and quarantines **only that principal's** unsynced
+   outbox envelopes for the project (`recovery_only`). Authorized collaborators
+   remain `queued_for_sync`. Project owner membership cannot be revoked.
    `invite`, `revoke_invitation`, and `revoke_membership` require an accepted
    owner or administrator membership on the target project (`AclDeniedError`
    otherwise). `accept_invitation` remains invitee-only. Identity does not
@@ -106,25 +107,35 @@ document, branch, artifact, and operation IDs under a known project were
 ALLOWED. Fix: resolve each resource kind before role evaluation; regression
 `test_unknown_scoped_resources_on_a_known_project_are_denied`.
 
+## Independent FAIL at `dd9b0b5` and follow-up
+
+Verifier `movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T14:26:57Z`
+FAILED `dd9b0b575e60e0a550f62698430f041f9bab6e51`. Prior ACL-mutation,
+concurrent-audit, and unknown-scoped-resource FAILs re-probed PASS. Revoke
+quarantine FAILed: owner and writer queued envelopes both became
+`recovery_only`. Fix: `IdentityService` quarantines only envelopes whose
+`actor_id` and `project_id` match the revoked membership; regression
+`test_revoke_quarantines_only_the_revoked_principal_outbox`.
+
 ## Commands
 
 See `quality-commands.txt`. Headline (implementation commit
-`7e89a04b07f83a769885a283851fc40992082d58`):
+`7e6ae2c428129540ad8a2b9a601a72238520cd50`):
 
 | Command | Result |
 |---|---|
 | `python3 scripts/validate_handoff.py` | `HANDOFF_VALIDATION=PASS` |
 | `python3 -m ruff check src tests scripts backend` | All checks passed |
 | `python3 -m mypy src` | Success: no issues found in 91 source files |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 42 passed |
-| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 87 passed |
-| `PYTHONPATH=src python3 -m pytest` | 320 passed, 1 warning |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit -q` | 43 passed |
+| `PYTHONPATH=src python3 -m pytest tests/identity tests/authorization tests/audit tests/revisions tests/persistence tests/sync -q` | 88 passed |
+| `PYTHONPATH=src python3 -m pytest` | 321 passed, 1 warning |
 | `PYTHONPATH=src python3 scripts/mm_status.py validate` | `STATUS_VALIDATE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py check-scopes` | `SCOPE_COVERAGE=PASS` |
 | `PYTHONPATH=src python3 scripts/mm_status.py runnable` | `MM-006` only |
 | `PYTHONPATH=src python3 scripts/mm_status.py boundaries` | 0 violations |
 | `PYTHONPATH=src python3 scripts/mm_status.py secrets` | 0 hits |
-| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649` |
+| `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006` | `8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5` |
 | `./scripts/verify_all.sh` | fail-closed `NOT_READY` missing `migrations_backup_and_recovery` |
 
 The named `scripts/gates/migrations_backup_and_recovery.sh` is not added
@@ -132,9 +143,9 @@ because introducing it requires changing MM-001-owned `tests/release/` (the
 fail-closed test currently asserts that missing gate name). That would STALE
 MM-001. Expected for this package.
 
-Implementation commit (code + tests): `7e89a04b07f83a769885a283851fc40992082d58`
-Input fingerprint at that commit: `cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649`
-UTC: `2026-09-01T14:19:02Z`
+Implementation commit (code + tests): `7e6ae2c428129540ad8a2b9a601a72238520cd50`
+Input fingerprint at that commit: `8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5`
+UTC: `2026-09-01T14:29:54Z`
 
 An evidence-only follow-up commit changes HEAD, so `fingerprint MM-006` at
 the evidence commit will differ because `verification_commit` is hashed.
@@ -157,10 +168,10 @@ None for MM-006. Live/sandbox gates belong to later packages.
 ## Verifier instructions
 
 1. Fresh detached checkout of implementation commit
-   `7e89a04b07f83a769885a283851fc40992082d58` or this evidence commit.
+   `7e6ae2c428129540ad8a2b9a601a72238520cd50` or this evidence commit.
    Recompute `PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-006`
-   at that HEAD. At `7e89a04` it must be
-   `cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649`.
+   at that HEAD. At `7e6ae2c` it must be
+   `8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5`.
    Do not edit the canonical ledger or `/workspace`.
 2. Confirm MM-001 through MM-005 are current PASS and MM-006 is IN_PROGRESS.
 3. Run ruff, mypy src, focused pytest (`tests/identity tests/authorization tests/audit`),
@@ -181,8 +192,10 @@ None for MM-006. Live/sandbox gates belong to later packages.
    - **Tenant / confused-deputy:** principal in org A cannot read org B;
      copying org B's project id onto an org A resource/token is `confused_deputy`.
    - **Revoke + quarantine:** invite → accept → local save queues outbox;
-     revoke bumps `acl_epoch`, unsynced outbox becomes `recovery_only`,
-     `flush_outbox` does not upload it, blobs remain, remaining owner can still save.
+     revoke bumps `acl_epoch`, **only the revoked actor's** unsynced outbox
+     becomes `recovery_only`, other authorized principals remain
+     `queued_for_sync`, `flush_outbox` does not upload the revoked work,
+     blobs remain, remaining owner can still save.
    - **Craft-decision AI deny:** human department contributor matching the
      department is allowed; integration principal is denied.
    - **Modes same canon:** writer and director (and composed modes) `project_view`

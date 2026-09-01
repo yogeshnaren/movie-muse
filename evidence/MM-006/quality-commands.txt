@@ -11,18 +11,18 @@ SCOPE_COVERAGE=PASS
 === mm_status runnable ===
 MM-006 only
 === mm_status fingerprint MM-006 ===
-implementation commit 7e89a04b07f83a769885a283851fc40992082d58
-input_fingerprint cbe4eb670045c7f254d03ac71f2e43d7c26eff53fa2f69118f15f1617ffeb649
+implementation commit 7e6ae2c428129540ad8a2b9a601a72238520cd50
+input_fingerprint 8cbdfbe691f34373b4e3fd183fa56e7652e63faf1eaf976f7bf9d6f0d5508ce5
 === mm_status boundaries ===
 0 violations
 === mm_status secrets ===
 0 hits
 === pytest focused ===
-42 passed (tests/identity tests/authorization tests/audit)
+43 passed (tests/identity tests/authorization tests/audit)
 === pytest affected ===
-87 passed (plus tests/revisions tests/persistence tests/sync)
+88 passed (plus tests/revisions tests/persistence tests/sync)
 === pytest full ===
-320 passed, 1 warning (httpx app shortcut DeprecationWarning)
+321 passed, 1 warning (httpx app shortcut DeprecationWarning)
 === verify_all ===
 MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
 verify_all_exit=1
