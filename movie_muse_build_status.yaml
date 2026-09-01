@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T12:04:07Z"
+last_updated_utc: "2026-09-01T12:37:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -269,16 +269,69 @@ items:
     title: Local-first persistence, migrations, and sync primitives
     milestone: A
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-001, MM-002]
     scope_keys: [module.persistence, module.sync]
-    pass_record: null
+    pass_record:
+      verification_commit: 0c63261ab84243d079a53dc9b7c90b8dce5575b6
+      input_fingerprint: f28434b6d7c1c640435f1ef1365dc6e2f0b02cc8d93109b94c75d8ce8fc8b188
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-004
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend
+        - python3 -m mypy src
+        - python3 -m pytest tests/persistence tests/sync -q
+        - python3 -m pytest
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-004/COMMANDS.md
+        - evidence/MM-004/quality-commands.txt
+        - src/movie_muse/persistence/
+        - src/movie_muse/sync/
+        - tests/persistence/
+        - tests/sync/
+      completed_at_utc: "2026-09-01T12:37:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T12:37:00Z
+        independence_basis: Separate verifier agent; did not implement MM-004. Used a fresh detached worktree and independently reran all commands and probes without relying on MM-004 evidence or summaries. Re-probed prior failures at 1c8c6e9 (interrupted v2 migration), 7b5a0c0 (forged resulting_revision_id), and 6766409 (forged actor_id).
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm004-independent-verify-0c63261
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-004
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend
+          - python3 -m mypy src
+          - python3 -m pytest tests/persistence tests/sync -q
+          - python3 -m pytest
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-004/COMMANDS.md
+          - evidence/MM-004/quality-commands.txt
+          - src/movie_muse/persistence/
+          - src/movie_muse/sync/
+          - tests/persistence/
+          - tests/sync/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 257 tests with one unrelated HTTPX deprecation warning.
+          - Changing device_id or operation_id while retaining the authorized owner actor applied; no unauthorized actor mutation was possible.
+          - GUI authoring belongs to later packages; no required MM-004 check was skipped.
     blocker: null
   - id: MM-005
     title: Immutable revisions, branches, checkpoints, ChangeSets, and merges
     milestone: A
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-003, MM-004]
     scope_keys: [module.revisions]
     pass_record: null
