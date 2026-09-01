@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from movie_muse.identity.api import (
+    AclDeniedError,
     Actor,
     IdentityService,
     InvitationStatus,
@@ -134,6 +135,123 @@ def test_cannot_revoke_project_owner(
     except MembershipError:
         pass
     assert identity.acl_epoch() == 0
+
+
+def test_writer_cannot_mutate_acl_through_identity_service(
+    bound_identity: tuple[IdentityService, LocalWorkspace, Project, ScreenplayDocument, Actor],
+) -> None:
+    """Denied principals cannot invite, grant administrator, or revoke via IdentityService.
+
+    Architecture §3.4: MANAGE_ACL is a distinct permission. AuthorizationService
+    deny-by-default is not sufficient if IdentityService trusts actor_id.
+    """
+
+    from movie_muse.authorization.api import Action, AuthorizationService
+
+    identity, workspace, project, _document, owner = bound_identity
+    writer = make_human_actor(
+        organization_id=project.organization_id, display_name="Writer"
+    )
+    viewer = make_human_actor(
+        organization_id=project.organization_id, display_name="Viewer"
+    )
+    admin_candidate = make_human_actor(
+        organization_id=project.organization_id, display_name="Admin candidate"
+    )
+    identity.register_actor(writer)
+    identity.register_actor(viewer)
+    identity.register_actor(admin_candidate)
+    writer_invite = identity.invite(
+        inviter_actor_id=owner.id,
+        invitee_actor_id=writer.id,
+        project_id=project.id,
+        role=Role.WRITER,
+    )
+    identity.accept_invitation(writer_invite.id, actor_id=writer.id)
+    viewer_invite = identity.invite(
+        inviter_actor_id=owner.id,
+        invitee_actor_id=viewer.id,
+        project_id=project.id,
+        role=Role.VIEWER,
+    )
+    viewer_membership = identity.accept_invitation(viewer_invite.id, actor_id=viewer.id)
+    pending = identity.invite(
+        inviter_actor_id=owner.id,
+        invitee_actor_id=admin_candidate.id,
+        project_id=project.id,
+        role=Role.VIEWER,
+    )
+
+    authorization = AuthorizationService(workspace, identity)
+    writer_principal = identity.principal(writer.id)
+    resource = authorization.resource_for_project(project.id)
+    manage = authorization.authorize(
+        writer_principal, Action.MANAGE_ACL, resource, acl_epoch=identity.acl_epoch()
+    )
+    assert manage.denied
+    assert manage.reason == "role_denied"
+
+    invitations_before = {item.id for item in identity.list_invitations()}
+    memberships_before = {item.id for item in identity.list_memberships(project_id=project.id)}
+    epoch_before = identity.acl_epoch()
+
+    try:
+        identity.invite(
+            inviter_actor_id=writer.id,
+            invitee_actor_id=admin_candidate.id,
+            project_id=project.id,
+            role=Role.ADMINISTRATOR,
+        )
+        raise AssertionError("writer must not invite through IdentityService")
+    except AclDeniedError:
+        pass
+
+    try:
+        identity.revoke_invitation(pending.id, actor_id=writer.id)
+        raise AssertionError("writer must not revoke invitations through IdentityService")
+    except AclDeniedError:
+        pass
+
+    try:
+        identity.revoke_membership(viewer_membership.id, actor_id=writer.id)
+        raise AssertionError("writer must not revoke membership through IdentityService")
+    except AclDeniedError:
+        pass
+
+    assert {item.id for item in identity.list_invitations()} == invitations_before
+    assert {item.id for item in identity.list_memberships(project_id=project.id)} == memberships_before
+    assert identity.acl_epoch() == epoch_before
+    assert identity.get_invitation(pending.id).status is InvitationStatus.PENDING
+    assert identity.get_membership(viewer_membership.id).status is MembershipStatus.ACCEPTED
+
+
+def test_administrator_can_invite_after_owner_grant(
+    bound_identity: tuple[IdentityService, LocalWorkspace, Project, ScreenplayDocument, Actor],
+) -> None:
+    identity, _workspace, project, _document, owner = bound_identity
+    admin = make_human_actor(
+        organization_id=project.organization_id, display_name="Admin"
+    )
+    writer = make_human_actor(
+        organization_id=project.organization_id, display_name="Writer"
+    )
+    identity.register_actor(admin)
+    identity.register_actor(writer)
+    admin_invite = identity.invite(
+        inviter_actor_id=owner.id,
+        invitee_actor_id=admin.id,
+        project_id=project.id,
+        role=Role.ADMINISTRATOR,
+    )
+    identity.accept_invitation(admin_invite.id, actor_id=admin.id)
+    invitation = identity.invite(
+        inviter_actor_id=admin.id,
+        invitee_actor_id=writer.id,
+        project_id=project.id,
+        role=Role.WRITER,
+    )
+    assert invitation.status is InvitationStatus.PENDING
+    assert invitation.inviter_actor_id == admin.id
 
 
 def test_invitation_is_explicit_and_invitee_only(

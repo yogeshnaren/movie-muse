@@ -17,3 +17,7 @@ class InvitationError(IdentityError):
 
 class MembershipError(IdentityError):
     """Membership cannot be granted, accepted, or revoked as requested."""
+
+
+class AclDeniedError(IdentityError):
+    """Actor lacks MANAGE_ACL for an identity/ACL mutation."""

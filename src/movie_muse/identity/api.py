@@ -6,6 +6,7 @@ Hosts and other modules must import this module, never sibling internals.
 from __future__ import annotations
 
 from movie_muse.identity.errors import (
+    AclDeniedError,
     IdentityError,
     InvitationError,
     MembershipError,
@@ -26,6 +27,7 @@ from movie_muse.identity.types import (
 )
 
 __all__ = [
+    "AclDeniedError",
     "Actor",
     "EpochBinding",
     "IdentityError",

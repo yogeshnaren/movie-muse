@@ -6,6 +6,7 @@ import json
 from typing import Any
 
 from movie_muse.identity.errors import (
+    AclDeniedError,
     IdentityError,
     InvitationError,
     MembershipError,
@@ -27,6 +28,11 @@ from movie_muse.identity.types import (
 from movie_muse.persistence.api import LocalWorkspace, digest_payload, utc_now
 from movie_muse.schemas.api import Project, new_id, new_ulid
 from movie_muse.sync.api import SyncProtocol
+
+# Must match authorization.policy.ROLE_ACTIONS for Action.MANAGE_ACL.
+# Identity cannot import authorization.policy: that would cycle through
+# identity.api and violate the public-sibling import boundary.
+_MANAGE_ACL_ROLES = frozenset({Role.OWNER, Role.ADMINISTRATOR})
 
 
 class IdentityService:
@@ -209,6 +215,7 @@ class IdentityService:
         invitee = Actor.from_dict(index["actors"][invitee_actor_id])
         if invitee.organization_id != str(project["organization_id"]):
             raise InvitationError("invitee organization does not match the project tenant")
+        self._require_manage_acl(index, inviter_actor_id, project_id)
         if role is Role.DEPARTMENT_CONTRIBUTOR and not department:
             raise InvitationError("department contributor invitations require a department")
         invitation = Invitation(
@@ -268,6 +275,7 @@ class IdentityService:
         invitation = Invitation.from_dict(raw)
         if invitation.status is not InvitationStatus.PENDING:
             raise InvitationError("only pending invitations can be revoked")
+        self._require_manage_acl(index, actor_id, invitation.project_id)
         now = utc_now()
         updated = invitation.to_dict()
         updated["status"] = InvitationStatus.REVOKED.value
@@ -290,6 +298,7 @@ class IdentityService:
         membership = Membership.from_dict(raw)
         if membership.status is not MembershipStatus.ACCEPTED:
             raise MembershipError("only accepted memberships can be revoked")
+        self._require_manage_acl(index, actor_id, membership.project_id)
         project = index["projects"].get(membership.project_id)
         if project is not None and str(project["owner_actor_id"]) == membership.actor_id:
             raise MembershipError("cannot revoke the project owner")
@@ -354,6 +363,11 @@ class IdentityService:
                 continue
             return membership
         return None
+
+    def _require_manage_acl(self, index: dict[str, Any], actor_id: str, project_id: str) -> None:
+        membership = self._membership_for_actor(index, actor_id, project_id)
+        if membership.role not in _MANAGE_ACL_ROLES:
+            raise AclDeniedError(f"actor {actor_id} is denied manage_acl on {project_id}")
 
     def _membership_for_actor(self, index: dict[str, Any], actor_id: str, project_id: str) -> Membership:
         for raw in index["memberships"].values():

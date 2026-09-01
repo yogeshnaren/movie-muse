@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
-from movie_muse.audit.api import AuditImmutableError, PolicyDecision
+import threading
+
+from movie_muse.audit.api import AuditImmutableError, AuditLog, PolicyDecision
 from movie_muse.authorization.api import Action, Resource, ResourceKind
+from movie_muse.identity.api import Actor, IdentityService, Organization, PrincipalKind
+from movie_muse.persistence.api import LocalWorkspace
 
 
 def test_append_only_and_hashes(audit_stack) -> None:
@@ -54,6 +58,83 @@ def test_append_only_and_hashes(audit_stack) -> None:
     still = audit.get(first.id)
     assert still.reason == "allow"
     assert still.integrity_hash == first.integrity_hash
+
+
+def test_concurrent_appends_keep_unique_chained_sequences(
+    tmp_path, project_bundle
+) -> None:
+    """Two LocalWorkspace connections must not last-writer-win the audit index."""
+
+    project, document, branch_id = project_bundle
+    root = tmp_path / "ws"
+    workspace_a = LocalWorkspace(root)
+    workspace_a.open_project(project, document, branch_id=branch_id)
+    identity = IdentityService(workspace_a)
+    owner = Actor(
+        id=project.owner_actor_id,
+        display_name="Owner",
+        principal_kind=PrincipalKind.HUMAN,
+        organization_id=project.organization_id,
+        created_at="2026-09-01T00:00:00Z",
+    )
+    identity.bootstrap(
+        organization=Organization(
+            id=project.organization_id, name="Studio", created_at="2026-09-01T00:00:00Z"
+        ),
+        project=project,
+        owner=owner,
+    )
+    workspace_a.close()
+    barrier = threading.Barrier(2)
+    results: list[object | None] = [None, None]
+    errors: list[BaseException | None] = [None, None]
+
+    def worker(index: int) -> None:
+        workspace = None
+        try:
+            workspace = LocalWorkspace(root)
+            audit = AuditLog(workspace)
+            barrier.wait(timeout=5)
+            results[index] = audit.append(
+                actor_id=owner.id,
+                effective_principal_id=owner.id,
+                operation=f"concurrent_{index}",
+                object_kind="project",
+                object_id=project.id,
+                policy_decision=PolicyDecision.ALLOW,
+                acl_epoch=0,
+                reason="concurrent_append",
+                correlation_id=f"corr_concurrent_{index}",
+            )
+        except Exception as exc:
+            errors[index] = exc
+        finally:
+            if workspace is not None:
+                workspace.close()
+
+    threads = [
+        threading.Thread(target=worker, args=(0,)),
+        threading.Thread(target=worker, args=(1,)),
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=10)
+    assert errors == [None, None]
+    first, second = results
+    assert first is not None and second is not None
+    sequences = {first.sequence, second.sequence}
+    assert sequences == {1, 2}
+    assert first.id != second.id
+
+    replayed = AuditLog(LocalWorkspace(root)).replay()
+    assert len(replayed) == 2
+    assert {record.sequence for record in replayed} == {1, 2}
+    assert replayed[0].sequence == 1
+    assert replayed[1].sequence == 2
+    assert replayed[1].previous_hash == replayed[0].integrity_hash
+    assert replayed[0].integrity_hash == replayed[0].expected_hash()
+    assert replayed[1].integrity_hash == replayed[1].expected_hash()
 
 
 def test_authorize_allow_and_deny_are_audited(audit_stack) -> None:

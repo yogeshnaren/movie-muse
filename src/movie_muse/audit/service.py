@@ -40,59 +40,62 @@ class AuditLog:
         after_revision_id: str | None = None,
         created_at: str | None = None,
     ) -> AuditRecord:
-        index = clone_index(self._ensure_index())
-        sequence = int(index["next_sequence"])
-        previous_hash = str(index["tail_hash"]) if index["tail_hash"] else None
-        decision = (
-            policy_decision
-            if isinstance(policy_decision, PolicyDecision)
-            else PolicyDecision(str(policy_decision))
-        )
-        stamp = created_at or utc_now()
-        correlation = correlation_id or new_ulid()
-        record_id = f"aud_{new_ulid()}"
-        integrity = compute_audit_hash(
-            sequence=sequence,
-            actor_id=actor_id,
-            effective_principal_id=effective_principal_id,
-            operation=operation,
-            object_kind=object_kind,
-            object_id=object_id,
-            before_revision_id=before_revision_id,
-            after_revision_id=after_revision_id,
-            policy_decision=decision.value,
-            created_at=stamp,
-            correlation_id=correlation,
-            acl_epoch=acl_epoch,
-            reason=reason,
-            previous_hash=previous_hash,
-            schema_version="1.0",
-        )
-        record = AuditRecord(
-            id=record_id,
-            sequence=sequence,
-            actor_id=actor_id,
-            effective_principal_id=effective_principal_id,
-            operation=operation,
-            object_kind=object_kind,
-            object_id=object_id,
-            policy_decision=decision,
-            created_at=stamp,
-            correlation_id=correlation,
-            integrity_hash=integrity,
-            acl_epoch=acl_epoch,
-            reason=reason,
-            before_revision_id=before_revision_id,
-            after_revision_id=after_revision_id,
-            previous_hash=previous_hash,
-        )
-        digest = put_json_blob(self.workspace, record.to_dict())
-        index["record_ids"].append(record.id)
-        index["record_digests"][record.id] = digest
-        index["tail_hash"] = integrity
-        index["next_sequence"] = sequence + 1
-        commit_index(self.workspace, index)
-        return record
+        # BEGIN IMMEDIATE serializes writers across LocalWorkspace connections
+        # so concurrent appends cannot last-writer-win the content-addressed index.
+        with self.workspace.store.transaction():
+            index = clone_index(self._ensure_index())
+            sequence = int(index["next_sequence"])
+            previous_hash = str(index["tail_hash"]) if index["tail_hash"] else None
+            decision = (
+                policy_decision
+                if isinstance(policy_decision, PolicyDecision)
+                else PolicyDecision(str(policy_decision))
+            )
+            stamp = created_at or utc_now()
+            correlation = correlation_id or new_ulid()
+            record_id = f"aud_{new_ulid()}"
+            integrity = compute_audit_hash(
+                sequence=sequence,
+                actor_id=actor_id,
+                effective_principal_id=effective_principal_id,
+                operation=operation,
+                object_kind=object_kind,
+                object_id=object_id,
+                before_revision_id=before_revision_id,
+                after_revision_id=after_revision_id,
+                policy_decision=decision.value,
+                created_at=stamp,
+                correlation_id=correlation,
+                acl_epoch=acl_epoch,
+                reason=reason,
+                previous_hash=previous_hash,
+                schema_version="1.0",
+            )
+            record = AuditRecord(
+                id=record_id,
+                sequence=sequence,
+                actor_id=actor_id,
+                effective_principal_id=effective_principal_id,
+                operation=operation,
+                object_kind=object_kind,
+                object_id=object_id,
+                policy_decision=decision,
+                created_at=stamp,
+                correlation_id=correlation,
+                integrity_hash=integrity,
+                acl_epoch=acl_epoch,
+                reason=reason,
+                before_revision_id=before_revision_id,
+                after_revision_id=after_revision_id,
+                previous_hash=previous_hash,
+            )
+            digest = put_json_blob(self.workspace, record.to_dict())
+            index["record_ids"].append(record.id)
+            index["record_digests"][record.id] = digest
+            index["tail_hash"] = integrity
+            index["next_sequence"] = sequence + 1
+            commit_index(self.workspace, index)
+            return record
 
     def get(self, record_id: str) -> AuditRecord:
         index = self._ensure_index()
