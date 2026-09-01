@@ -31,6 +31,11 @@ def test_human_department_role_can_confirm_matching_craft_decision(acl_stack) ->
     )
     acl_stack.identity.register_actor(costume)
     principal = _invite(acl_stack, costume, Role.DEPARTMENT_CONTRIBUTOR, department="costume")
+    acl_stack.authorization.declare_operation(
+        project_id=acl_stack.project.id,
+        operation_id="op_costume_palette",
+        department="costume",
+    )
     resource = acl_stack.authorization.resource_for_project(
         acl_stack.project.id,
         kind=ResourceKind.OPERATION,
@@ -56,6 +61,11 @@ def test_ai_integration_cannot_confirm_department_craft_decision(acl_stack) -> N
     )
     acl_stack.identity.register_actor(bot)
     principal = _invite(acl_stack, bot, Role.INTEGRATION_SERVICE)
+    acl_stack.authorization.declare_operation(
+        project_id=acl_stack.project.id,
+        operation_id="op_costume_palette",
+        department="costume",
+    )
     resource = acl_stack.authorization.resource_for_project(
         acl_stack.project.id,
         kind=ResourceKind.OPERATION,
@@ -86,6 +96,11 @@ def test_integration_with_department_role_still_cannot_confirm(acl_stack) -> Non
     )
     acl_stack.identity.register_actor(bot)
     principal = _invite(acl_stack, bot, Role.DEPARTMENT_CONTRIBUTOR, department="costume")
+    acl_stack.authorization.declare_operation(
+        project_id=acl_stack.project.id,
+        operation_id="op_costume_palette",
+        department="costume",
+    )
     resource = acl_stack.authorization.resource_for_project(
         acl_stack.project.id,
         kind=ResourceKind.OPERATION,

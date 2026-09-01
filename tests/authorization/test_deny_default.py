@@ -73,6 +73,58 @@ def test_unknown_resource_is_denied(acl_stack) -> None:
     assert decision.reason == "unknown_resource"
 
 
+def test_unknown_scoped_resources_on_a_known_project_are_denied(acl_stack) -> None:
+    principal = acl_stack.identity.principal(acl_stack.owner.id)
+    epoch = acl_stack.identity.acl_epoch()
+    for kind, resource_id in (
+        (ResourceKind.DOCUMENT, "doc_unknown"),
+        (ResourceKind.BRANCH, "branch_unknown"),
+        (ResourceKind.ARTIFACT, "artifact_unknown"),
+        (ResourceKind.OPERATION, "operation_unknown"),
+    ):
+        resource = Resource(
+            kind=kind,
+            id=resource_id,
+            organization_id=acl_stack.project.organization_id,
+            project_id=acl_stack.project.id,
+        )
+        decision = acl_stack.authorization.authorize(
+            principal, Action.READ, resource, acl_epoch=epoch
+        )
+        assert decision.denied, kind
+        assert decision.reason == "unknown_resource", kind
+
+
+def test_known_scoped_resources_on_the_bound_project_can_be_read(acl_stack) -> None:
+    principal = acl_stack.identity.principal(acl_stack.owner.id)
+    epoch = acl_stack.identity.acl_epoch()
+    branch = acl_stack.revisions.canon_branch()
+    acl_stack.authorization.declare_artifact(
+        project_id=acl_stack.project.id, artifact_id="art_known"
+    )
+    acl_stack.authorization.declare_operation(
+        project_id=acl_stack.project.id,
+        operation_id="op_known",
+        department="costume",
+    )
+    for kind, resource_id in (
+        (ResourceKind.DOCUMENT, acl_stack.document.id),
+        (ResourceKind.BRANCH, branch.id),
+        (ResourceKind.ARTIFACT, "art_known"),
+        (ResourceKind.OPERATION, "op_known"),
+    ):
+        resource = Resource(
+            kind=kind,
+            id=resource_id,
+            organization_id=acl_stack.project.organization_id,
+            project_id=acl_stack.project.id,
+        )
+        decision = acl_stack.authorization.authorize(
+            principal, Action.READ, resource, acl_epoch=epoch
+        )
+        assert decision.allowed, kind
+
+
 def test_registered_actor_without_membership_is_denied(acl_stack) -> None:
     stranger = make_human_actor(
         organization_id=acl_stack.project.organization_id, display_name="Stranger"

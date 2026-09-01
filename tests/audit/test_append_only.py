@@ -144,6 +144,11 @@ def test_authorize_allow_and_deny_are_audited(audit_stack) -> None:
     allow = authorization.authorize(
         principal, Action.READ, resource, acl_epoch=identity.acl_epoch()
     )
+    authorization.declare_operation(
+        project_id=project.id,
+        operation_id="op_costume",
+        department="costume",
+    )
     craft = authorization.resource_for_project(
         project.id,
         kind=ResourceKind.OPERATION,

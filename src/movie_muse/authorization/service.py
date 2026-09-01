@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from movie_muse.audit.api import AuditLog, PolicyDecision
+from movie_muse.authorization.catalog import clone_catalog, commit_catalog, load_catalog
 from movie_muse.authorization.errors import AuthorizationError
 from movie_muse.authorization.policy import ROLE_ACTIONS, craft_decision_allowed, role_allows
 from movie_muse.authorization.projections import compose_modes
@@ -19,6 +20,7 @@ from movie_muse.authorization.types import (
     parse_action,
 )
 from movie_muse.identity.api import (
+    IdentityError,
     IdentityService,
     Membership,
     Principal,
@@ -26,7 +28,8 @@ from movie_muse.identity.api import (
     Role,
     UnknownPrincipalError,
 )
-from movie_muse.persistence.api import LocalWorkspace
+from movie_muse.persistence.api import LocalWorkspace, PersistenceError
+from movie_muse.revisions.api import RevisionNotFoundError, RevisionService
 from movie_muse.schemas.api import Project
 
 
@@ -138,6 +141,37 @@ class AuthorizationService:
             protected=protected,
         )
 
+    def declare_operation(
+        self,
+        *,
+        project_id: str,
+        operation_id: str,
+        department: str | None = None,
+    ) -> None:
+        """Record an operation as a real ACL object on a known project."""
+
+        binding = self.identity.project_binding(project_id)
+        catalog = clone_catalog(load_catalog(self.workspace))
+        catalog["operations"][operation_id] = {
+            "id": operation_id,
+            "project_id": project_id,
+            "organization_id": str(binding["organization_id"]),
+            "department": department,
+        }
+        commit_catalog(self.workspace, catalog)
+
+    def declare_artifact(self, *, project_id: str, artifact_id: str) -> None:
+        """Record an artifact as a real ACL object on a known project."""
+
+        binding = self.identity.project_binding(project_id)
+        catalog = clone_catalog(load_catalog(self.workspace))
+        catalog["artifacts"][artifact_id] = {
+            "id": artifact_id,
+            "project_id": project_id,
+            "organization_id": str(binding["organization_id"]),
+        }
+        commit_catalog(self.workspace, catalog)
+
     def _evaluate(
         self,
         principal: Principal,
@@ -183,6 +217,12 @@ class AuthorizationService:
         if resource.kind is ResourceKind.ORGANIZATION:
             if principal.organization_id != resource.organization_id:
                 return deny("tenant_isolation")
+            try:
+                organization = self.identity.get_organization(resource.id)
+            except IdentityError:
+                return deny("unknown_resource")
+            if organization.id != resource.organization_id:
+                return deny("confused_deputy")
         elif binding is None:
             return deny("unknown_resource")
         else:
@@ -190,6 +230,9 @@ class AuthorizationService:
                 return deny("confused_deputy")
             if principal.organization_id != str(binding["organization_id"]):
                 return deny("tenant_isolation")
+            scoped = self._scoped_resource_reason(resource, binding)
+            if scoped is not None:
+                return deny(scoped)
 
         try:
             registered = self.identity.get_actor(principal.actor_id)
@@ -256,6 +299,53 @@ class AuthorizationService:
                 return deny("mode_denied", role=membership.role.value)
 
         return self._allow(parsed_action, resource, principal, membership, snapshot_id, acl_epoch)
+
+    def _scoped_resource_reason(self, resource: Resource, binding: dict[str, str]) -> str | None:
+        """Deny unknown child resources on a known project. Deny-by-default."""
+
+        project_id = str(binding["id"])
+        organization_id = str(binding["organization_id"])
+        if resource.kind is ResourceKind.PROJECT:
+            if resource.id != project_id:
+                return "unknown_resource"
+            return None
+        if resource.project_id != project_id:
+            return "confused_deputy"
+        if resource.kind is ResourceKind.DOCUMENT:
+            try:
+                document = self.workspace.reopen(resource.id)
+            except PersistenceError:
+                return "unknown_resource"
+            if document.project_id != project_id:
+                return "confused_deputy"
+            return None
+        if resource.kind is ResourceKind.BRANCH:
+            try:
+                branch = RevisionService(self.workspace).get_branch(resource.id)
+            except RevisionNotFoundError:
+                return "unknown_resource"
+            if branch.project_id != project_id:
+                return "confused_deputy"
+            return None
+        if resource.kind is ResourceKind.ARTIFACT:
+            record = load_catalog(self.workspace)["artifacts"].get(resource.id)
+            if record is None:
+                return "unknown_resource"
+            if str(record["project_id"]) != project_id:
+                return "confused_deputy"
+            if str(record["organization_id"]) != organization_id:
+                return "confused_deputy"
+            return None
+        if resource.kind is ResourceKind.OPERATION:
+            record = load_catalog(self.workspace)["operations"].get(resource.id)
+            if record is None:
+                return "unknown_resource"
+            if str(record["project_id"]) != project_id:
+                return "confused_deputy"
+            if str(record["organization_id"]) != organization_id:
+                return "confused_deputy"
+            return None
+        return "unknown_resource"
 
     @staticmethod
     def _allow(
