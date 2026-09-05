@@ -2,11 +2,11 @@ schema_version: "2.0"
 package_version: "2.1.0"
 project: movie-muse-working-prototype
 manifest_role: canonical_completion_ledger
-overall_status: STALE
+overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-05T23:05:00Z"
+last_updated_utc: "2026-09-05T23:20:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -834,12 +834,12 @@ items:
     title: FDX compatibility program
     milestone: B
     priority: critical
-    status: STALE
+    status: PASS
     depends_on: [MM-003, MM-005, MM-012]
     scope_keys: [module.fdx, test.fdx]
     pass_record:
-      verification_commit: be5a10c3e7aa43117a62ff8b5d0f2d04b3e63023
-      input_fingerprint: abe9e8f66f27492dd729d08a3e7857d64ca0060218284362c84c41293b2385dd
+      verification_commit: cb38e04d2b497a9a8975219ccfe949829cb8d762
+      input_fingerprint: 7c898f1512b2a6799cc1b3e38825bc8fe3e204aebde5ca77d941837cf3de534a
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -860,11 +860,11 @@ items:
         - src/movie_muse/fdx/
         - tests/fdx/
         - fixtures/fdx/
-      completed_at_utc: "2026-09-01T18:29:40Z"
+      completed_at_utc: "2026-09-05T23:20:00Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/grok-4.6/2026-09-01T18:29:40Z
-        independence_basis: Did not implement MM-013; independently verified a fresh detached worktree after MM-012 reverification restored DAG currency. Did not rely on screenshots, implementer summaries, or evidence/MM-013. Wrote independent probes under /tmp/mm013-verify-be5a10c-probes.
-        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-013-verify-be5a10c
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-05T23:20:00Z
+        independence_basis: Did not implement MM-013 or MM-014; independently re-verified a fresh detached worktree after tests/fdx/test_profile_coverage.py changed the owned test.fdx tree. Did not rely on screenshots, implementer summaries, or evidence/MM-013. Wrote independent probes under /tmp/mm013-reverify-cb38e04-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-013-reverify-cb38e04
         commands:
           - python3 scripts/validate_handoff.py
           - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -888,8 +888,8 @@ items:
           - fixtures/fdx/
         limitations:
           - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
-          - Full pytest passed 491 tests with one unrelated HTTPX deprecation warning.
-          - Pagination/layout hashes belong to MM-014 and were not faked.
+          - Full pytest passed 515 tests with two unrelated deprecation warnings (Starlette BlockingPortal, HTTPX app= shortcut).
+          - Pagination/layout hashes belong to MM-014. FDX still forbids inventing layout_hash or importing movie_muse.layout; the layout package may exist.
           - EXT-FDX-FINAL-DRAFT remains NOT_RUN; unset MOVIE_MUSE_FINAL_DRAFT_BIN raises FinalDraftUnavailableError and is not skipped.
           - movie_muse.fdx is absent from MM-001-owned module-layout.yaml; public surface is movie_muse.fdx.api and boundaries were clean.
           - No required MM-013 check was skipped.
