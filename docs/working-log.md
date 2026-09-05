@@ -549,3 +549,15 @@ This file records orchestrator actions that the schema cannot store.
 - Orchestrator recorded canonical PASS; fingerprint
   `3966694bf538080b1f19a41267402e16eea6cefae3ac91c49d7cdaf8b0ee1767`
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-015
+
+## 2026-09-05T23:50:00Z
+
+- Implementer: MM-015 professional editor and offline authoring UX on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-014 are current PASS; MM-015 is DAG-runnable.
+  Moved MM-015 to IN_PROGRESS. `pass_record` remains null.
+- Public surface: `movie_muse.editor.api`. Not adding `editor` to
+  MM-001-owned `config/module-layout.yaml`. Editor state is a
+  projection; mutations go through document/revision commands only.
+  Added `src/movie_muse/editor/**` to `app.editor` owned paths.
+  Did not mark PASS.

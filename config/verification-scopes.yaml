@@ -234,9 +234,11 @@ scopes:
       - apps/editor/**
       - frontend/src/editor/**
       - tests/editor/**
+      - src/movie_muse/editor/**
     shared:
       - src/movie_muse/document/**
       - src/movie_muse/layout/**
+      - src/movie_muse/revisions/**
       - frontend/src/**
   ux.authoring:
     owned:
@@ -245,6 +247,7 @@ scopes:
       - tests/ux/authoring/**
     shared:
       - src/movie_muse/document/**
+      - src/movie_muse/editor/**
   test.competitive:
     owned:
       - tests/competitive/**
