@@ -500,3 +500,27 @@ This file records orchestrator actions that the schema cannot store.
 - Orchestrator recorded canonical PASS; fingerprint
   `abe9e8f66f27492dd729d08a3e7857d64ca0060218284362c84c41293b2385dd`
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-014
+
+## 2026-09-05T22:59:00Z
+
+- Implementer: MM-014 deterministic layout, pagination, and production
+  revisions on `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-013 are current PASS; MM-014 is DAG-runnable (only
+  runnable item). Moved MM-014 to IN_PROGRESS. `pass_record` remains null.
+- Public surfaces: `movie_muse.layout.api` and
+  `movie_muse.production_revisions.api`. Not adding either module to
+  MM-001-owned `config/module-layout.yaml`. Not adding `fixtures/render`
+  (would STALE MM-012). Status remains IN_PROGRESS; independent
+  verification required before PASS. Did not implement MM-015 or later.
+  Did not mark PASS.
+
+## 2026-09-05T23:05:00Z
+
+- Implementer: MM-014 landed `src/movie_muse/layout` and
+  `src/movie_muse/production_revisions`. Updated
+  `tests/fdx/test_profile_coverage.py` so FDX still cannot skip or invent
+  `layout_hash` / import `movie_muse.layout`, without requiring the
+  layout package to be absent. That file is owned by `test.fdx`, so
+  MM-013 is STALE (prior `pass_record` retained as history). MM-014
+  remains IN_PROGRESS and is not DAG-runnable until MM-013 is
+  independently re-verified. Did not self-PASS.

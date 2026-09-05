@@ -2,11 +2,11 @@ schema_version: "2.0"
 package_version: "2.1.0"
 project: movie-muse-working-prototype
 manifest_role: canonical_completion_ledger
-overall_status: IN_PROGRESS
+overall_status: STALE
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-01T18:32:00Z"
+last_updated_utc: "2026-09-05T23:05:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -834,7 +834,7 @@ items:
     title: FDX compatibility program
     milestone: B
     priority: critical
-    status: PASS
+    status: STALE
     depends_on: [MM-003, MM-005, MM-012]
     scope_keys: [module.fdx, test.fdx]
     pass_record:
@@ -898,7 +898,7 @@ items:
     title: Deterministic layout, pagination, and production revisions
     milestone: B
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-003, MM-005, MM-012, MM-013]
     scope_keys: [module.layout, module.production_revisions, test.render]
     pass_record: null

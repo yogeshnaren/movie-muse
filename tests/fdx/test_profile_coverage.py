@@ -32,7 +32,8 @@ def test_fdx_tests_do_not_skip_required_checks() -> None:
 def test_layout_module_is_not_faked_here() -> None:
     """Pagination hashes belong to MM-014. FDX must not skip or invent them."""
 
-    assert not (repo_root() / "src" / "movie_muse" / "layout").exists()
     package = repo_root() / "src" / "movie_muse" / "fdx"
     joined = "\n".join(path.read_text(encoding="utf-8") for path in package.glob("*.py"))
     assert ("pytest." + "skip(") not in joined
+    assert "layout_hash" not in joined
+    assert "from movie_muse.layout" not in joined
