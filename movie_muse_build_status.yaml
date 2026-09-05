@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-05T23:50:00Z"
+last_updated_utc: "2026-09-05T23:45:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -966,10 +966,69 @@ items:
     title: Professional editor and offline authoring UX
     milestone: B
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-003, MM-004, MM-005, MM-006, MM-014]
     scope_keys: [app.editor, ux.authoring]
-    pass_record: null
+    pass_record:
+      verification_commit: 706fc79e0d4fa6019da95db03bf795e455f2ce87
+      input_fingerprint: 9961c1eda45e3f194151442823e3ffac2137f9208ab002f723dcd63ce29cb0c6
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-015
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/editor tests/ux/authoring -q
+        - PYTHONPATH=src python3 -m pytest tests/editor tests/ux/authoring tests/document tests/revisions tests/layout --tb=no
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-015/COMMANDS.md
+        - evidence/MM-015/quality-commands.txt
+        - src/movie_muse/editor/
+        - apps/editor/
+        - frontend/src/editor/
+        - tests/editor/
+        - tests/ux/authoring/
+      completed_at_utc: "2026-09-05T23:44:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-05T23:44:00Z
+        independence_basis: Did not implement MM-015; independently verified a fresh detached worktree at 706fc79 after the first pass FAILed on CHARACTER Enter/Tab adjacency. Did not rely on screenshots, implementer summaries, or evidence/MM-015. Wrote independent probes under /tmp/mm015-verify-706fc79-probes.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; Node v22.14.0; detached worktree /tmp/mm-015-verify-706fc79
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-015
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/editor tests/ux/authoring -q
+          - PYTHONPATH=src python3 -m pytest tests/editor tests/ux/authoring tests/document tests/revisions tests/layout --tb=no
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-015/COMMANDS.md
+          - evidence/MM-015/quality-commands.txt
+          - src/movie_muse/editor/
+          - apps/editor/
+          - frontend/src/editor/
+          - tests/editor/
+          - tests/ux/authoring/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 546 tests with two unrelated deprecation warnings.
+          - Frontend tests use a local TypeScript command reducer; durable canon writes are EditorService over RevisionService.
+          - movie_muse.editor is absent from MM-001-owned module-layout.yaml; public surface is movie_muse.editor.api and boundaries were clean.
+          - First independent pass FAILed when Enter/Tab on a sample CHARACTER split an existing dialogue pair; the adjacency fix was independently re-verified.
+          - No required MM-015 check was skipped.
     blocker: null
   - id: MM-016
     title: Competitive workflow regression suite

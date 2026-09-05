@@ -572,3 +572,13 @@ This file records orchestrator actions that the schema cannot store.
   raised SemanticValidationError. Fix in `0377f79`: insert after the
   speech run or no-op when the target speech element already follows.
   Did not mark PASS.
+
+## 2026-09-05T23:44:00Z
+
+- Independent verifier PASS for MM-015 at
+  `706fc79e0d4fa6019da95db03bf795e455f2ce87`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-05T23:44:00Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `9961c1eda45e3f194151442823e3ffac2137f9208ab002f723dcd63ce29cb0c6`
+- The prior CHARACTER Enter/Tab adjacency FAIL is closed.
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-016
