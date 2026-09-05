@@ -24,6 +24,46 @@ def next_kind(current: str, key: str) -> str:
     return nxt
 
 
+_SPEECH_KINDS = frozenset({BlockKind.PARENTHETICAL, BlockKind.DIALOGUE})
+
+
+def _valid_predecessor(follower: BlockKind, predecessor: BlockKind) -> bool:
+    if follower is BlockKind.PARENTHETICAL:
+        return predecessor in {BlockKind.CHARACTER, BlockKind.DIALOGUE}
+    if follower is BlockKind.DIALOGUE:
+        return predecessor in {BlockKind.CHARACTER, BlockKind.PARENTHETICAL}
+    return True
+
+
+def _speech_run_end(blocks: tuple[Block, ...], start: int) -> int:
+    index = start
+    if blocks[index].kind is BlockKind.CHARACTER:
+        index += 1
+    while index < len(blocks) and blocks[index].kind in _SPEECH_KINDS:
+        index += 1
+    return max(start, index - 1)
+
+
+def insertion_after_id(document: ScreenplayDocument, block_id: str, new_kind: str) -> str | None:
+    """Return the block to insert after, or None when the transition already exists."""
+
+    index = next((i for i, block in enumerate(document.blocks) if block.id == block_id), None)
+    if index is None:
+        raise EditorCommandError(f"unknown block {block_id}")
+    kind = BlockKind(new_kind)
+    blocks = document.blocks
+    if index + 1 < len(blocks):
+        follower = blocks[index + 1]
+        if follower.kind is kind and kind in _SPEECH_KINDS:
+            return None
+        if not _valid_predecessor(follower.kind, kind):
+            end = _speech_run_end(blocks, index)
+            if end + 1 < len(blocks) and not _valid_predecessor(blocks[end + 1].kind, kind):
+                return None
+            return blocks[end].id
+    return blocks[index].id
+
+
 def transition_change_set(
     document: ScreenplayDocument,
     *,
@@ -31,12 +71,15 @@ def transition_change_set(
     key: str,
     actor_id: str,
     created_at: str,
-) -> ChangeSet:
+) -> ChangeSet | None:
     index = next((i for i, block in enumerate(document.blocks) if block.id == block_id), None)
     if index is None:
         raise EditorCommandError(f"unknown block {block_id}")
     current = document.blocks[index]
     kind = next_kind(current.kind.value, key)
+    after_id = insertion_after_id(document, block_id, kind)
+    if after_id is None:
+        return None
     block = _new_block(kind, current)
     base = document.base_revision_id
     if not base:
@@ -52,7 +95,7 @@ def transition_change_set(
                 order=0,
                 op_type=OperationType.INSERT_BLOCK,
                 target_id=block.id,
-                payload={"block": block.to_dict(), "after_id": current.id},
+                payload={"block": block.to_dict(), "after_id": after_id},
             ),
         ),
     )

@@ -31,7 +31,7 @@ from movie_muse.editor.types import (
     SceneCard,
     SearchHit,
 )
-from movie_muse.persistence.api import SaveAck, utc_now
+from movie_muse.persistence.api import LocalSaveState, SaveAck, digest_payload, utc_now
 from movie_muse.revisions.api import RevisionService
 from movie_muse.schemas.api import ChangeSet, Note, ScreenplayDocument, new_id
 
@@ -274,7 +274,20 @@ class EditorService:
         change = transition_change_set(
             document, block_id=block_id, key=key, actor_id=self.actor_id, created_at=utc_now()
         )
+        if change is None:
+            if ack_journal:
+                self._ack_last()
+            return self._unchanged_ack(document)
         return self._commit(document, change, ack_journal=ack_journal)
+
+    def _unchanged_ack(self, document: ScreenplayDocument) -> SaveAck:
+        _, digest = digest_payload(document.to_dict())
+        return SaveAck(
+            revision_id=document.base_revision_id or "",
+            blob_digest=digest,
+            operation_id="editor_transition_noop",
+            state=LocalSaveState.SAVED_LOCALLY,
+        )
 
     def _commit(self, before: ScreenplayDocument, change: ChangeSet, *, ack_journal: bool = True) -> SaveAck:
         inverse = invert_change_set(before, change, created_at=utc_now())

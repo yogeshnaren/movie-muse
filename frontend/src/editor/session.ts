@@ -88,6 +88,29 @@ function nextId(prefix: string): string {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
+const SPEECH = new Set<BlockKind>(["parenthetical", "dialogue"]);
+
+function validPredecessor(follower: BlockKind, predecessor: BlockKind): boolean {
+  if (follower === "parenthetical") {
+    return predecessor === "character" || predecessor === "dialogue";
+  }
+  if (follower === "dialogue") {
+    return predecessor === "character" || predecessor === "parenthetical";
+  }
+  return true;
+}
+
+function speechRunEnd(blocks: BlockSnapshot[], start: number): number {
+  let index = start;
+  if (blocks[index].kind === "character") {
+    index += 1;
+  }
+  while (index < blocks.length && SPEECH.has(blocks[index].kind)) {
+    index += 1;
+  }
+  return Math.max(start, index - 1);
+}
+
 function applyTransition(blocks: BlockSnapshot[], blockId: string, key: "Enter" | "Tab"): BlockSnapshot[] {
   const table = key === "Enter" ? ENTER_TRANSITIONS : TAB_TRANSITIONS;
   const index = blocks.findIndex((block) => block.id === blockId);
@@ -99,6 +122,14 @@ function applyTransition(blocks: BlockSnapshot[], blockId: string, key: "Enter" 
     return blocks;
   }
   const inserted: BlockSnapshot = { id: nextId("blk"), kind: kind as BlockKind, text: "" };
+  const follower = blocks[index + 1];
+  if (follower && follower.kind === kind && SPEECH.has(kind)) {
+    return blocks;
+  }
+  if (follower && !validPredecessor(follower.kind, kind)) {
+    const end = speechRunEnd(blocks, index);
+    return [...blocks.slice(0, end + 1), inserted, ...blocks.slice(end + 1)];
+  }
   return [...blocks.slice(0, index + 1), inserted, ...blocks.slice(index + 1)];
 }
 

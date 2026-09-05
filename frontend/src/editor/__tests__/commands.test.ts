@@ -26,6 +26,35 @@ describe("command protocol", () => {
     expect(next.document.revisionId).not.toBe("rev_local_0");
   });
 
+  it("does not split an existing character/dialogue pair on Enter", () => {
+    const next = reduceSession(initialSession(), {
+      type: "transition",
+      blockId: "blk_character",
+      key: "Enter",
+    });
+    expect(next.document.blocks.map((block) => block.kind)).toEqual([
+      "scene_heading",
+      "action",
+      "character",
+      "dialogue",
+    ]);
+  });
+
+  it("inserts action after dialogue when Tab is pressed on a speaking character", () => {
+    const next = reduceSession(initialSession(), {
+      type: "transition",
+      blockId: "blk_character",
+      key: "Tab",
+    });
+    expect(next.document.blocks.map((block) => block.kind)).toEqual([
+      "scene_heading",
+      "action",
+      "character",
+      "dialogue",
+      "action",
+    ]);
+  });
+
   it("inserts a character block on Tab from action", () => {
     const next = reduceSession(initialSession(), {
       type: "transition",

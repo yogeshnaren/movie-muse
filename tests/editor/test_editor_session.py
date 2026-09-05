@@ -149,6 +149,59 @@ def test_editor_json_cannot_become_canon(
     assert adopted.title == session.document().title
 
 
+def test_enter_on_existing_character_does_not_split_dialogue(
+    editor_session: tuple[EditorService, object, ScreenplayDocument],
+) -> None:
+    session, _project, original = editor_session
+    character = next(block for block in original.blocks if block.kind is BlockKind.CHARACTER)
+    before = [block.kind for block in session.document().blocks]
+    session.transition(character.id, "Enter")
+    after = [block.kind for block in session.document().blocks]
+    assert after == before
+    dialogue = next(block for block in session.document().blocks if block.kind is BlockKind.DIALOGUE)
+    assert dialogue.text == "It's not locked."
+
+
+def test_tab_on_existing_character_inserts_action_after_dialogue(
+    editor_session: tuple[EditorService, object, ScreenplayDocument],
+) -> None:
+    session, _project, original = editor_session
+    character = next(block for block in original.blocks if block.kind is BlockKind.CHARACTER)
+    session.transition(character.id, "Tab")
+    kinds = [block.kind for block in session.document().blocks]
+    assert kinds[-1] is BlockKind.ACTION
+    assert kinds == [
+        BlockKind.SCENE_HEADING,
+        BlockKind.ACTION,
+        BlockKind.CHARACTER,
+        BlockKind.DIALOGUE,
+        BlockKind.ACTION,
+    ]
+
+
+def test_sample_element_transition_matrix(
+    editor_session: tuple[EditorService, object, ScreenplayDocument],
+) -> None:
+    session, _project, original = editor_session
+    by_kind = {block.kind: block.id for block in original.blocks}
+    session.transition(by_kind[BlockKind.SCENE_HEADING], "Enter")
+    session.transition(by_kind[BlockKind.ACTION], "Enter")
+    session.transition(by_kind[BlockKind.CHARACTER], "Enter")
+    session.transition(by_kind[BlockKind.DIALOGUE], "Enter")
+    session.transition(by_kind[BlockKind.ACTION], "Tab")
+    session.transition(by_kind[BlockKind.CHARACTER], "Tab")
+    session.transition(by_kind[BlockKind.DIALOGUE], "Tab")
+    session.transition(by_kind[BlockKind.SCENE_HEADING], "Tab")
+    kinds = [block.kind for block in session.document().blocks]
+    assert BlockKind.DIALOGUE in kinds
+    assert kinds.count(BlockKind.CHARACTER) >= 1
+    assert all(
+        block.kind is not BlockKind.DIALOGUE
+        or (index > 0 and session.document().blocks[index - 1].kind in {BlockKind.CHARACTER, BlockKind.PARENTHETICAL})
+        for index, block in enumerate(session.document().blocks)
+    )
+
+
 def test_unsupported_transition_fails_closed(
     editor_session: tuple[EditorService, object, ScreenplayDocument],
 ) -> None:
