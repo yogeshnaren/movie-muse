@@ -582,3 +582,13 @@ This file records orchestrator actions that the schema cannot store.
   `9961c1eda45e3f194151442823e3ffac2137f9208ab002f723dcd63ce29cb0c6`
 - The prior CHARACTER Enter/Tab adjacency FAIL is closed.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-016
+
+## 2026-09-05T23:50:00Z
+
+- Implementer: MM-016 competitive workflow regression suite on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-015 are current PASS; MM-016 is DAG-runnable.
+  Moved MM-016 to IN_PROGRESS. `pass_record` remains null.
+- Documented supported/gap/external workflow matrix. Did not add
+  `fixtures/**` (would STALE MM-012). Did not claim product equivalence.
+  Did not mark PASS.

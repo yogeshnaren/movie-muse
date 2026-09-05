@@ -256,6 +256,10 @@ scopes:
       - fixtures/**
       - src/movie_muse/fdx/**
       - src/movie_muse/layout/**
+      - src/movie_muse/editor/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/production_revisions/**
+      - src/movie_muse/persistence/**
   module.context:
     owned:
       - src/movie_muse/context/**
