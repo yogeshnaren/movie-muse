@@ -53,7 +53,9 @@ See `quality-commands.txt`. Headline results:
 | `PYTHONPATH=src python3 scripts/mm_status.py secrets` | 0 hits |
 | `./scripts/verify_all.sh` | fail-closed missing `migrations_backup_and_recovery` |
 
-Implementation commit: `4c6ba75`
+Implementation commit: `4c6ba751b2d5fe4754c61369e13c158f2a612d7d`
+Implementer fingerprint at that commit:
+`07a821acc28a0e5f6b202d3ba15c35c3197244c2c921d44b915169ff8a53c8c8`
 UTC: `2026-09-05T23:50:00Z`
 
 An evidence-only follow-up commit changes HEAD, so fingerprints at the
