@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-05T23:50:00Z"
+last_updated_utc: "2026-09-05T23:58:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -1034,10 +1034,62 @@ items:
     title: Competitive workflow regression suite
     milestone: B
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-012, MM-013, MM-014, MM-015]
     scope_keys: [test.competitive]
-    pass_record: null
+    pass_record:
+      verification_commit: e80a6bf4c9889de121572fa712149a97f62f2987
+      input_fingerprint: 668307e04e58992c508ba7f7845344b836ec59dfbd5a09d622bb2735b8407837
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-016
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/competitive -q
+        - PYTHONPATH=src python3 -m pytest tests/competitive tests/editor tests/fdx tests/layout tests/production_revisions tests/revisions --tb=no
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-016/COMMANDS.md
+        - evidence/MM-016/quality-commands.txt
+        - docs/competitive/
+        - tests/competitive/
+      completed_at_utc: "2026-09-05T23:58:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-05T23:58:00Z
+        independence_basis: Did not implement MM-016; independently verified a fresh detached worktree at e80a6bf. Did not rely on implementer summaries or evidence/MM-016. Wrote independent probes under /tmp/mm016-verify-e80a6bf-probes and re-ran supported workflows through public APIs without importing tests.competitive.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-016-verify-e80a6bf
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-016
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/competitive -q
+          - PYTHONPATH=src python3 -m pytest tests/competitive tests/editor tests/fdx tests/layout tests/production_revisions tests/revisions --tb=no
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-016/COMMANDS.md
+          - evidence/MM-016/quality-commands.txt
+          - docs/competitive/
+          - tests/competitive/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 559 tests with two unrelated deprecation warnings.
+          - Licensed Final Draft inspection remains EXT-FDX-FINAL-DRAFT NOT_RUN.
+          - Breakdown, schedule, budget, live collab, PDF ingest, and annotation transfer remain documented gaps.
+          - No required MM-016 check was skipped.
     blocker: null
   - id: MM-017
     title: Context builder and rights-controlled retrieval

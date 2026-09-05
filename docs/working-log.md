@@ -592,3 +592,13 @@ This file records orchestrator actions that the schema cannot store.
 - Documented supported/gap/external workflow matrix. Did not add
   `fixtures/**` (would STALE MM-012). Did not claim product equivalence.
   Did not mark PASS.
+
+## 2026-09-05T23:58:00Z
+
+- Independent verifier PASS for MM-016 at
+  `e80a6bf4c9889de121572fa712149a97f62f2987`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-05T23:58:00Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `668307e04e58992c508ba7f7845344b836ec59dfbd5a09d622bb2735b8407837`
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-017, MM-027
+
