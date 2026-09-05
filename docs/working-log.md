@@ -564,3 +564,11 @@ This file records orchestrator actions that the schema cannot store.
   Implementer fingerprint
   `07a821acc28a0e5f6b202d3ba15c35c3197244c2c921d44b915169ff8a53c8c8`.
   Did not mark PASS.
+
+## 2026-09-05T23:55:00Z
+
+- Independent verifier FAIL on first MM-015 pass: Enter/Tab on a
+  sample CHARACTER that already has DIALOGUE split the pair and
+  raised SemanticValidationError. Fix in `0377f79`: insert after the
+  speech run or no-op when the target speech element already follows.
+  Did not mark PASS.
