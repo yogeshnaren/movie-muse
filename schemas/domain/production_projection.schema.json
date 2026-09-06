@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/production-projection-v1.json",
+  "title": "ProductionProjection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "project_id", "kind", "source_revision_id", "computed_at", "is_stale", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/productionProjectionId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "kind": {"enum": ["continuity", "breakdown", "schedule", "resources", "budget_evidence", "insurance_readiness"]},
+    "source_revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+    "computed_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "data": {"type": "object"},
+    "is_stale": {"type": "boolean"},
+    "budget_maturity": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "enum": [
+            "concept_feasibility_band", "script_breakdown_range", "preliminary_production_estimate",
+            "department_confirmed_working_budget", "bid_backed_estimate", "production_forecast_to_complete"
+          ]
+        }
+      ]
+    },
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"kind": {"const": "budget_evidence"}}, "required": ["kind"]},
+      "then": {"required": ["budget_maturity"], "properties": {"budget_maturity": {"not": {"type": "null"}}}}
+    },
+    {
+      "if": {"properties": {"kind": {"not": {"const": "budget_evidence"}}}, "required": ["kind"]},
+      "then": {"properties": {"budget_maturity": {"type": "null"}}}
+    }
+  ]
+}

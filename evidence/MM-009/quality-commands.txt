@@ -1,0 +1,42 @@
+MM-009 IMPLEMENTER QUALITY EVIDENCE
+Implementation HEAD: 35b79c09389016c2a7449b643e21aa534915446a
+Role: implementer; status remains IN_PROGRESS; this is not independent verification.
+
+=== python3 scripts/validate_handoff.py ===
+exit=0
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+
+=== python3 -m ruff check src tests scripts backend ===
+exit=0
+All checks passed!
+
+=== python3 -m mypy src ===
+exit=0
+Success: no issues found in 120 source files
+
+=== PYTHONPATH=src python3 -m pytest tests/model_router tests/policy/models -q ===
+exit=0
+35 passed in 0.79s
+
+=== PYTHONPATH=src python3 -m pytest tests/model_router tests/policy/models tests/jobs tests/worker tests/authorization -q ===
+exit=0
+81 passed in 1.59s
+
+=== PYTHONPATH=src python3 -m pytest ===
+exit=0
+393 passed, 1 warning (httpx app shortcut DeprecationWarning)
+
+=== PYTHONPATH=src python3 scripts/mm_status.py validate / check-scopes / runnable / boundaries / secrets ===
+STATUS_VALIDATE=PASS
+SCOPE_COVERAGE=PASS
+runnable: MM-009, MM-010, MM-011
+0 violations
+0 hits
+
+=== PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-009 ===
+input_fingerprint a3eda7bba96e49d334887e9eb471d51d42c3b407048fd2f3552612534a8ccc20
+verification_commit 35b79c09389016c2a7449b643e21aa534915446a
+
+=== ./scripts/verify_all.sh ===
+exit=1
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery

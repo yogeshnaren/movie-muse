@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FinalDraft DocumentType="Script" Template="MovieMuse" Version="1" xmlns:mm="https://movie-muse.dev/fdx">
+  <Content>
+    <Paragraph Number="99" Type="Scene Heading" mm:block-id="blk_01J6NE39P800000000000000P8" mm:is-extension="true" mm:scene-id="scn_01J6NE39P200000000000000P2" mm:scene-number="99" mm:schema-version="1.0" mm:unknown-extensions='{"custom_formatting":{"align":"start","rtl":false},"fdx_unknown_safe":{"element":"CustomTag","preserve":true}}'>
+      <Text>INT. ARCHIVE - NIGHT</Text>
+    </Paragraph>
+    <Paragraph Type="Action" mm:block-id="blk_01J6NE39P900000000000000P9" mm:scene-id="scn_01J6NE39P200000000000000P2" mm:schema-version="1.0" mm:unknown-extensions='{"unicode_sample":true}'>
+      <Text>A café sign hangs above Hebrew notes: שלום.</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Character" mm:block-id="blk_01J6NE39PA00000000000000PA" mm:character-cue-id="cue_01J6NE39P300000000000000P3" mm:dialogue-pair-id="dlg_01J6NE39P500000000000000P5" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE39P700000000000000P7" mm:is-dual-dialogue="true" mm:is-extension="true" mm:scene-id="scn_01J6NE39P200000000000000P2" mm:schema-version="1.0">
+      <Text>ADA (V.O.)</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Dialogue" mm:block-id="blk_01J6NE39PB00000000000000PB" mm:dialogue-pair-id="dlg_01J6NE39P500000000000000P5" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE39P700000000000000P7" mm:is-dual-dialogue="true" mm:scene-id="scn_01J6NE39P200000000000000P2" mm:schema-version="1.0">
+      <Text>The letters keep their order.</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Character" mm:block-id="blk_01J6NE39PC00000000000000PC" mm:character-cue-id="cue_01J6NE39P400000000000000P4" mm:dialogue-pair-id="dlg_01J6NE39P600000000000000P6" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE39P700000000000000P7" mm:is-dual-dialogue="true" mm:scene-id="scn_01J6NE39P200000000000000P2" mm:schema-version="1.0" mm:unknown-extensions='{"rtl_character":true}'>
+      <Text>NOURA</Text>
+    </Paragraph>
+    <Paragraph DualDialogue="true" Type="Dialogue" mm:block-id="blk_01J6NE39PD00000000000000PD" mm:dialogue-pair-id="dlg_01J6NE39P600000000000000P6" mm:dual-dialogue="true" mm:dual-dialogue-group-id="ddg_01J6NE39P700000000000000P7" mm:is-dual-dialogue="true" mm:scene-id="scn_01J6NE39P200000000000000P2" mm:schema-version="1.0" mm:unknown-extensions='{"rtl":true,"script":"arab"}'>
+      <Text>مرحبا. نقرأ من اليمين.</Text>
+    </Paragraph>
+    <Paragraph Type="Page Break" mm:block-id="blk_01J6NE39PE00000000000000PE" mm:is-forced="true" mm:schema-version="1.0" mm:unknown-extensions='{"forced_page_break":true}'/>
+  </Content>
+  <TitlePage/>
+  <mm:Document base-revision-id="rev_01J6NE39P000000000000000P0" id="doc_01J6NE39NZ00000000000000NZ" paper-size="us_letter" profile="movie_muse_fdx" profile-version="1.0.0" project-id="proj_01J6NE39NY00000000000000NY" schema-version="1.0" style="standard_screenplay" title="Archive café"/>
+  <mm:Sequences>
+    <mm:Sequence id="seq_01J6NE39P100000000000000P1" order="0" schema-version="1.0" title="Adversary">
+      <mm:SceneRef id="scn_01J6NE39P200000000000000P2"/>
+    </mm:Sequence>
+  </mm:Sequences>
+  <mm:Notes>
+    <mm:Note author-actor-id="act_01J6NE39NX00000000000000NX" block-id="blk_01J6NE39P800000000000000P8" created-at="2026-09-01T00:00:00Z" id="note_01J6NE39PF00000000000000PF" resolved="false" schema-version="1.0">Preserve unknown-but-safe extension elements.</mm:Note>
+  </mm:Notes>
+  <mm:RevisionMarks/>
+  <mm:ProductionTags/>
+  <mm:Attachments/>
+</FinalDraft>

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/creative-intent-ir-v1.json",
+  "title": "CreativeIntentIR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "project_id", "scope", "scope_target_id", "statement", "source_role",
+    "is_locked", "revision_id", "created_at", "schema_version"
+  ],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/creativeIntentId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "scope": {"enum": ["film", "sequence", "scene", "beat"]},
+    "scope_target_id": {"type": "string", "minLength": 1},
+    "statement": {"type": "string", "minLength": 1},
+    "source_role": {"enum": ["writer", "director", "cinematographer", "other_craft", "inferred"]},
+    "is_locked": {"type": "boolean"},
+    "revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "exceptions": {"type": "array", "items": {"type": "string"}},
+    "anti_rules": {"type": "array", "items": {"type": "string"}},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"source_role": {"const": "inferred"}}, "required": ["source_role"]},
+      "then": {"properties": {"is_locked": {"const": false}}}
+    }
+  ]
+}

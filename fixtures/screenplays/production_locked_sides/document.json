@@ -1,0 +1,299 @@
+{
+  "attachments": [],
+  "base_revision_id": "rev_01J6NE39CM00000000000000CM",
+  "blocks": [
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39CY00000000000000CY",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "scene_heading",
+      "note_ids": [],
+      "production_tag_ids": [
+        "ptg_01J6NE39CX00000000000000CX"
+      ],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CP00000000000000CP",
+      "scene_number": "10",
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "INT. SOUNDSTAGE - DAY",
+      "unknown_extensions": {
+        "lock_revision_color": "blue",
+        "locked_scene": true
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39CZ00000000000000CZ",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "action",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [
+        "rvm_01J6NE39CW00000000000000CW"
+      ],
+      "scene_id": "scn_01J6NE39CP00000000000000CP",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "The set is frozen. No one moves a mark.",
+      "unknown_extensions": {
+        "locked_page": true,
+        "page_lock": "10"
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D000000000000000D0",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": true,
+      "kind": "page_break",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": null,
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "",
+      "unknown_extensions": {
+        "locked_page": true,
+        "page_number": "10"
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D100000000000000D1",
+      "is_boneyard": true,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "scene_heading",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CQ00000000000000CQ",
+      "scene_number": "11",
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "INT. CUT SCENE - NIGHT",
+      "unknown_extensions": {
+        "omitted_reason": "production_cut",
+        "omitted_scene": true
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D200000000000000D2",
+      "is_boneyard": true,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "action",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CQ00000000000000CQ",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "OMITTED.",
+      "unknown_extensions": {
+        "omitted_scene": true
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D300000000000000D3",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "scene_heading",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CR00000000000000CR",
+      "scene_number": "12A",
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "EXT. BACKLOT - DAY",
+      "unknown_extensions": {
+        "ab_scene": "A"
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D400000000000000D4",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "action",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CR00000000000000CR",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "A second unit covers the insert.",
+      "unknown_extensions": {}
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D500000000000000D5",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "scene_heading",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CS00000000000000CS",
+      "scene_number": "12B",
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "EXT. BACKLOT - DUSK",
+      "unknown_extensions": {
+        "ab_scene": "B"
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": "cue_01J6NE39CT00000000000000CT",
+      "dialogue_pair_id": "dlg_01J6NE39CV00000000000000CV",
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D600000000000000D6",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "character",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CS00000000000000CS",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "AD",
+      "unknown_extensions": {}
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": "dlg_01J6NE39CV00000000000000CV",
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39D700000000000000D7",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "dialogue",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39CS00000000000000CS",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "Scene 12B is the holdover.",
+      "unknown_extensions": {}
+    }
+  ],
+  "id": "doc_01J6NE39CK00000000000000CK",
+  "notes": [
+    {
+      "author_actor_id": "act_01J6NE39CH00000000000000CH",
+      "block_id": "blk_01J6NE39CY00000000000000CY",
+      "created_at": "2026-09-01T00:00:00Z",
+      "id": "note_01J6NE39D800000000000000D8",
+      "resolved": false,
+      "schema_version": "1.0",
+      "text": "Do not unlock without production."
+    }
+  ],
+  "paper_size": "us_letter",
+  "production_tags": [
+    {
+      "block_id": "blk_01J6NE39CY00000000000000CY",
+      "department": "ad",
+      "id": "ptg_01J6NE39CX00000000000000CX",
+      "schema_version": "1.0",
+      "tag_type": "lock",
+      "value": "scene 10 locked"
+    }
+  ],
+  "project_id": "proj_01J6NE39CJ00000000000000CJ",
+  "revision_marks": [
+    {
+      "block_id": "blk_01J6NE39CZ00000000000000CZ",
+      "created_at": "2026-09-01T00:00:00Z",
+      "id": "rvm_01J6NE39CW00000000000000CW",
+      "revision_color": "blue",
+      "revision_label": "Blue",
+      "schema_version": "1.0"
+    }
+  ],
+  "schema_version": "1.0",
+  "sequences": [
+    {
+      "id": "seq_01J6NE39CN00000000000000CN",
+      "order": 0,
+      "scene_ids": [
+        "scn_01J6NE39CP00000000000000CP",
+        "scn_01J6NE39CQ00000000000000CQ",
+        "scn_01J6NE39CR00000000000000CR",
+        "scn_01J6NE39CS00000000000000CS"
+      ],
+      "schema_version": "1.0",
+      "title": "Production Pages"
+    }
+  ],
+  "style": "standard_screenplay",
+  "title": "Locked Sides"
+}

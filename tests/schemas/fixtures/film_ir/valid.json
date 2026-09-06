@@ -1,0 +1,21 @@
+{
+  "computed_at": "2026-09-01T12:00:00Z",
+  "entities": [
+    {
+      "canonical_name": "Ada",
+      "id": "char-ada",
+      "kind": "character",
+      "scene_ids": [
+        "scn_01M1E62D76714367YC1WWF2F3F"
+      ]
+    }
+  ],
+  "extractor_version": "1.0.0",
+  "id": "fir_01M1E62D79VGK6Y7F1HQ3WV16C",
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "scene_order": [
+    "scn_01M1E62D76714367YC1WWF2F3F"
+  ],
+  "schema_version": "1.0",
+  "source_revision_id": "rev_01M1E62D76RATSCXCXASR9GKGC"
+}

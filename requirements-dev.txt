@@ -1,0 +1,10 @@
+# Movie Muse development dependencies. Exact pins are the lockfile.
+-r backend/requirements.txt
+jsonschema==4.26.0
+PyYAML==6.0.2
+ruamel.yaml==0.18.10
+ruff==0.12.12
+mypy==1.17.1
+pytest==8.4.1
+pytest-asyncio==1.1.0
+types-PyYAML==6.0.12.20250822

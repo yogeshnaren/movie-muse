@@ -1,0 +1,208 @@
+{
+  "attachments": [],
+  "base_revision_id": "rev_01J6NE39P000000000000000P0",
+  "blocks": [
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39P800000000000000P8",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": true,
+      "is_forced": false,
+      "kind": "scene_heading",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39P200000000000000P2",
+      "scene_number": "99",
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "INT. ARCHIVE - NIGHT",
+      "unknown_extensions": {
+        "custom_formatting": {
+          "align": "start",
+          "rtl": false
+        },
+        "fdx_unknown_safe": {
+          "element": "CustomTag",
+          "preserve": true
+        }
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39P900000000000000P9",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "action",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39P200000000000000P2",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "A café sign hangs above Hebrew notes: שלום.",
+      "unknown_extensions": {
+        "unicode_sample": true
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": "cue_01J6NE39P300000000000000P3",
+      "dialogue_pair_id": "dlg_01J6NE39P500000000000000P5",
+      "dual_dialogue_group_id": "ddg_01J6NE39P700000000000000P7",
+      "id": "blk_01J6NE39PA00000000000000PA",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": true,
+      "is_extension": true,
+      "is_forced": false,
+      "kind": "character",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39P200000000000000P2",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "ADA (V.O.)",
+      "unknown_extensions": {}
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": "dlg_01J6NE39P500000000000000P5",
+      "dual_dialogue_group_id": "ddg_01J6NE39P700000000000000P7",
+      "id": "blk_01J6NE39PB00000000000000PB",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": true,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "dialogue",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39P200000000000000P2",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "The letters keep their order.",
+      "unknown_extensions": {}
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": "cue_01J6NE39P400000000000000P4",
+      "dialogue_pair_id": "dlg_01J6NE39P600000000000000P6",
+      "dual_dialogue_group_id": "ddg_01J6NE39P700000000000000P7",
+      "id": "blk_01J6NE39PC00000000000000PC",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": true,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "character",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39P200000000000000P2",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "NOURA",
+      "unknown_extensions": {
+        "rtl_character": true
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": "dlg_01J6NE39P600000000000000P6",
+      "dual_dialogue_group_id": "ddg_01J6NE39P700000000000000P7",
+      "id": "blk_01J6NE39PD00000000000000PD",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": true,
+      "is_extension": false,
+      "is_forced": false,
+      "kind": "dialogue",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": "scn_01J6NE39P200000000000000P2",
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "مرحبا. نقرأ من اليمين.",
+      "unknown_extensions": {
+        "rtl": true,
+        "script": "arab"
+      }
+    },
+    {
+      "attachment_ids": [],
+      "character_cue_id": null,
+      "dialogue_pair_id": null,
+      "dual_dialogue_group_id": null,
+      "id": "blk_01J6NE39PE00000000000000PE",
+      "is_boneyard": false,
+      "is_continued": false,
+      "is_dual_dialogue": false,
+      "is_extension": false,
+      "is_forced": true,
+      "kind": "page_break",
+      "note_ids": [],
+      "production_tag_ids": [],
+      "revision_mark_ids": [],
+      "scene_id": null,
+      "scene_number": null,
+      "schema_version": "1.0",
+      "spans": [],
+      "text": "",
+      "unknown_extensions": {
+        "forced_page_break": true
+      }
+    }
+  ],
+  "id": "doc_01J6NE39NZ00000000000000NZ",
+  "notes": [
+    {
+      "author_actor_id": "act_01J6NE39NX00000000000000NX",
+      "block_id": "blk_01J6NE39P800000000000000P8",
+      "created_at": "2026-09-01T00:00:00Z",
+      "id": "note_01J6NE39PF00000000000000PF",
+      "resolved": false,
+      "schema_version": "1.0",
+      "text": "Preserve unknown-but-safe extension elements."
+    }
+  ],
+  "paper_size": "us_letter",
+  "production_tags": [],
+  "project_id": "proj_01J6NE39NY00000000000000NY",
+  "revision_marks": [],
+  "schema_version": "1.0",
+  "sequences": [
+    {
+      "id": "seq_01J6NE39P100000000000000P1",
+      "order": 0,
+      "scene_ids": [
+        "scn_01J6NE39P200000000000000P2"
+      ],
+      "schema_version": "1.0",
+      "title": "Adversary"
+    }
+  ],
+  "style": "standard_screenplay",
+  "title": "Archive café"
+}

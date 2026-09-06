@@ -1,0 +1,9 @@
+{
+  "assumed_by_actor_id": "act_01M1E62D76BMKXW2Q4NM6BD84F",
+  "attribute": "shoot_days",
+  "id": "aso_01M1E62D7BVCAE19HRGDNKPSZK",
+  "kind": "operational",
+  "schema_version": "1.0",
+  "subject_id": "scn_01M1E62D76714367YC1WWF2F3F",
+  "value": 1.5
+}

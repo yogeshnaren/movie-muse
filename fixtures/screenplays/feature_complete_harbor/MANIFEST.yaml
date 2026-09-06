@@ -1,0 +1,19 @@
+id: feature_complete_harbor
+class: feature_complete
+title: Harbor Night
+edges:
+- title_page
+- scene_heading
+- action
+- character
+- dialogue
+- dual_dialogue
+- transition
+- shot
+- lyrics
+- general_text
+- notes
+- tags
+- revisions
+license_file: LICENSE.md
+rights_file: rights.yaml

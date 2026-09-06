@@ -1,0 +1,30 @@
+{
+  "assumptions": [
+    "genre comp set is representative"
+  ],
+  "computed_at": "2026-09-01T12:00:00Z",
+  "data_as_of": "2026-09-01T12:00:00Z",
+  "id": "scm_01M1E62D7ACB7KX6XATN6EJCT9",
+  "is_out_of_distribution": false,
+  "methodology_summary": "comparable-title analogs",
+  "model_version": "1.0.0",
+  "outcomes": [
+    {
+      "percentile": "P10",
+      "unit": "usd",
+      "value": 1000000
+    },
+    {
+      "percentile": "P50",
+      "unit": "usd",
+      "value": 4000000
+    },
+    {
+      "percentile": "P90",
+      "unit": "usd",
+      "value": 12000000
+    }
+  ],
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "schema_version": "1.0"
+}

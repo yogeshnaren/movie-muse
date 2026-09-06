@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/screenplay-document-v1.json",
+  "title": "ScreenplayDocument",
+  "$defs": {
+    "inlineSpan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "start_offset", "end_offset", "span_kind", "schema_version"],
+      "properties": {
+        "id": {"$ref": "common-v1.json#/$defs/inlineSpanId"},
+        "start_offset": {"type": "integer", "minimum": 0},
+        "end_offset": {"type": "integer", "minimum": 0},
+        "span_kind": {"type": "string", "minLength": 1},
+        "ref_id": {"type": ["string", "null"]},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      }
+    },
+    "block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "text", "schema_version"],
+      "properties": {
+        "id": {"$ref": "common-v1.json#/$defs/blockId"},
+        "kind": {
+          "enum": [
+            "scene_heading", "action", "character", "parenthetical", "dialogue",
+            "transition", "shot", "general", "lyrics", "page_break", "title_page_element"
+          ]
+        },
+        "text": {"type": "string"},
+        "spans": {"type": "array", "items": {"$ref": "#/$defs/inlineSpan"}},
+        "scene_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/sceneId"}]},
+        "scene_number": {"type": ["string", "null"]},
+        "character_cue_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/characterCueId"}]},
+        "dialogue_pair_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/dialoguePairId"}]},
+        "is_dual_dialogue": {"type": "boolean"},
+        "dual_dialogue_group_id": {"type": ["string", "null"]},
+        "is_forced": {"type": "boolean"},
+        "is_continued": {"type": "boolean"},
+        "is_extension": {"type": "boolean"},
+        "is_boneyard": {"type": "boolean"},
+        "production_tag_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/productionTagId"}},
+        "note_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/noteId"}},
+        "revision_mark_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/revisionMarkId"}},
+        "attachment_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/attachmentId"}},
+        "unknown_extensions": {"type": "object"},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"kind": {"const": "scene_heading"}}, "required": ["kind"]},
+          "then": {"required": ["scene_id"]}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "character"}}, "required": ["kind"]},
+          "then": {"required": ["character_cue_id"]}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "dialogue"}}, "required": ["kind"]},
+          "then": {"required": ["dialogue_pair_id"]}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "page_break"}}, "required": ["kind"]},
+          "then": {"properties": {"text": {"const": ""}}}
+        },
+        {
+          "if": {"properties": {"is_dual_dialogue": {"const": true}}, "required": ["is_dual_dialogue"]},
+          "then": {"required": ["dual_dialogue_group_id"]}
+        }
+      ]
+    },
+    "note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "block_id", "author_actor_id", "text", "created_at", "schema_version"],
+      "properties": {
+        "id": {"$ref": "common-v1.json#/$defs/noteId"},
+        "block_id": {"$ref": "common-v1.json#/$defs/blockId"},
+        "author_actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+        "text": {"type": "string", "minLength": 1},
+        "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+        "resolved": {"type": "boolean"},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      }
+    },
+    "revisionMark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "block_id", "revision_color", "revision_label", "created_at", "schema_version"],
+      "properties": {
+        "id": {"$ref": "common-v1.json#/$defs/revisionMarkId"},
+        "block_id": {"$ref": "common-v1.json#/$defs/blockId"},
+        "revision_color": {"type": "string", "minLength": 1},
+        "revision_label": {"type": "string", "minLength": 1},
+        "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      }
+    },
+    "productionTag": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "block_id", "department", "tag_type", "value", "schema_version"],
+      "properties": {
+        "id": {"$ref": "common-v1.json#/$defs/productionTagId"},
+        "block_id": {"$ref": "common-v1.json#/$defs/blockId"},
+        "department": {"type": "string", "minLength": 1},
+        "tag_type": {"type": "string", "minLength": 1},
+        "value": {"type": "string"},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "uri", "checksum", "schema_version"],
+      "properties": {
+        "id": {"$ref": "common-v1.json#/$defs/attachmentId"},
+        "block_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/blockId"}]},
+        "kind": {"type": "string", "minLength": 1},
+        "uri": {"type": "string", "minLength": 1},
+        "checksum": {"type": "string", "minLength": 1},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      }
+    },
+    "sequence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "order", "schema_version"],
+      "properties": {
+        "id": {"$ref": "common-v1.json#/$defs/sequenceId"},
+        "title": {"type": "string", "minLength": 1},
+        "order": {"type": "integer", "minimum": 0},
+        "scene_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/sceneId"}},
+        "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "project_id", "title", "sequences", "blocks", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/documentId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "title": {"type": "string", "minLength": 1},
+    "base_revision_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/revisionId"}]},
+    "sequences": {"type": "array", "items": {"$ref": "#/$defs/sequence"}},
+    "blocks": {"type": "array", "items": {"$ref": "#/$defs/block"}},
+    "notes": {"type": "array", "items": {"$ref": "#/$defs/note"}},
+    "revision_marks": {"type": "array", "items": {"$ref": "#/$defs/revisionMark"}},
+    "production_tags": {"type": "array", "items": {"$ref": "#/$defs/productionTag"}},
+    "attachments": {"type": "array", "items": {"$ref": "#/$defs/attachment"}},
+    "paper_size": {"type": "string", "minLength": 1},
+    "style": {"type": "string", "minLength": 1},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

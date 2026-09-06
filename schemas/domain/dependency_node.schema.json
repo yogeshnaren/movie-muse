@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/dependency-node-v1.json",
+  "title": "DependencyNode",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "project_id", "node_type", "input_ids", "input_hashes", "code_version", "produced_at", "is_stale", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/dependencyNodeId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "node_type": {"type": "string", "minLength": 1},
+    "input_ids": {"type": "array", "items": {"type": "string"}},
+    "input_hashes": {"type": "array", "items": {"type": "string"}},
+    "code_version": {"type": "string", "minLength": 1},
+    "produced_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "model_version": {"type": ["string", "null"]},
+    "prompt_template_version": {"type": ["string", "null"]},
+    "rights_snapshot_id": {"type": ["string", "null"]},
+    "is_stale": {"type": "boolean"},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

@@ -1,0 +1,18 @@
+id: production_locked_sides
+class: production
+title: Locked Sides
+edges:
+- scene_heading
+- action
+- character
+- dialogue
+- locked_pages
+- locked_scenes
+- omitted_scenes
+- ab_scenes
+- revisions
+- tags
+- notes
+- unknown_extensions
+license_file: LICENSE.md
+rights_file: rights.yaml

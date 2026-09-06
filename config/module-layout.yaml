@@ -1,0 +1,74 @@
+# Canonical modular-monolith layout. Modules communicate through public api.py
+# surfaces only. Cross-module table or internal imports are forbidden.
+schema_version: "2.0"
+architecture: modular_monolith_plus_durable_worker
+monolith_package: movie_muse
+source_root: src/movie_muse
+application_hosts:
+  - backend/app
+  - frontend/src
+modules:
+  - id: toolchain
+    package: movie_muse.toolchain
+    owner_item: MM-001
+    public: movie_muse.toolchain
+  - id: schemas
+    package: movie_muse.schemas
+    owner_item: MM-002
+    public: movie_muse.schemas.api
+  - id: document
+    package: movie_muse.document
+    owner_item: MM-003
+    public: movie_muse.document.api
+  - id: persistence
+    package: movie_muse.persistence
+    owner_item: MM-004
+    public: movie_muse.persistence.api
+  - id: sync
+    package: movie_muse.sync
+    owner_item: MM-004
+    public: movie_muse.sync.api
+  - id: revisions
+    package: movie_muse.revisions
+    owner_item: MM-005
+    public: movie_muse.revisions.api
+  - id: identity
+    package: movie_muse.identity
+    owner_item: MM-006
+    public: movie_muse.identity.api
+  - id: authorization
+    package: movie_muse.authorization
+    owner_item: MM-006
+    public: movie_muse.authorization.api
+  - id: audit
+    package: movie_muse.audit
+    owner_item: MM-006
+    public: movie_muse.audit.api
+  - id: artifacts
+    package: movie_muse.artifacts
+    owner_item: MM-007
+    public: movie_muse.artifacts.api
+  - id: jobs
+    package: movie_muse.jobs
+    owner_item: MM-008
+    public: movie_muse.jobs.api
+  - id: worker
+    package: movie_muse.worker
+    owner_item: MM-008
+    public: movie_muse.worker.api
+  - id: model_router
+    package: movie_muse.model_router
+    owner_item: MM-009
+    public: movie_muse.model_router.api
+  - id: rights
+    package: movie_muse.rights
+    owner_item: MM-010
+    public: movie_muse.rights.api
+  - id: provenance
+    package: movie_muse.provenance
+    owner_item: MM-010
+    public: movie_muse.provenance.api
+  - id: dependencies
+    package: movie_muse.dependencies
+    owner_item: MM-011
+    public: movie_muse.dependencies.api

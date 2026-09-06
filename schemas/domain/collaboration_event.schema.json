@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/collaboration-event-v1.json",
+  "title": "CollaborationEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "project_id", "source", "record_kind", "summary", "captured_at", "promotion_state", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/collaborationEventId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "source": {"type": "string", "minLength": 1},
+    "record_kind": {
+      "enum": ["idea", "decision", "question", "assignment", "research_request", "character_fact", "scene_proposal", "rejected_idea"]
+    },
+    "summary": {"type": "string", "minLength": 1},
+    "captured_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "speaker_actor_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/actorId"}]},
+    "promotion_state": {"enum": ["captured", "under_review", "promoted", "discarded"]},
+    "promoted_project_memory_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/projectMemoryId"}]},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"promotion_state": {"const": "promoted"}}, "required": ["promotion_state"]},
+      "then": {"required": ["promoted_project_memory_id"]}
+    }
+  ]
+}

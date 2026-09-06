@@ -1,0 +1,178 @@
+===== COMMAND: python3 scripts/validate_handoff.py =====
+CWD: /workspace
+START: 2026-09-01T16:31:50Z
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+EXIT: 0
+
+===== COMMAND: python3 -m ruff check src tests scripts backend =====
+CWD: /workspace
+START: 2026-09-01T16:31:50Z
+All checks passed!
+EXIT: 0
+
+===== COMMAND: python3 -m mypy src =====
+CWD: /workspace
+START: 2026-09-01T16:31:50Z
+Success: no issues found in 132 source files
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 -m pytest tests/rights tests/provenance -q =====
+CWD: /workspace
+START: 2026-09-01T16:31:51Z
+..............................                                           [100%]
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 -m pytest tests/rights tests/provenance tests/authorization tests/artifacts tests/audit -q =====
+CWD: /workspace
+START: 2026-09-01T16:31:52Z
+........................................................................ [ 91%]
+.......                                                                  [100%]
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 -m pytest =====
+CWD: /workspace
+START: 2026-09-01T16:31:54Z
+........................................................................ [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 51%]
+........................................................................ [ 68%]
+........................................................................ [ 85%]
+...............................................................          [100%]
+=============================== warnings summary ===============================
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+423 passed, 1 warning in 36.66s
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 scripts/mm_status.py validate =====
+CWD: /workspace
+START: 2026-09-01T16:32:32Z
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 scripts/mm_status.py check-scopes =====
+CWD: /workspace
+START: 2026-09-01T16:32:33Z
+SCOPE_COVERAGE=PASS
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 scripts/mm_status.py runnable =====
+CWD: /workspace
+START: 2026-09-01T16:32:33Z
+{
+  "count": 2,
+  "runnable": [
+    "MM-010",
+    "MM-011"
+  ]
+}
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 scripts/mm_status.py boundaries =====
+CWD: /workspace
+START: 2026-09-01T16:32:33Z
+{
+  "count": 0,
+  "violations": []
+}
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 scripts/mm_status.py secrets =====
+CWD: /workspace
+START: 2026-09-01T16:32:33Z
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+EXIT: 0
+
+===== COMMAND: env PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-010 =====
+CWD: /workspace
+START: 2026-09-01T16:32:42Z
+{
+  "input_fingerprint": "31cf080db2d8ef8215b90fb221f784211abd2c232d966a31a83270360c6a2dbe",
+  "item_id": "MM-010",
+  "resolved_paths": [
+    "src/movie_muse/artifacts/__init__.py",
+    "src/movie_muse/artifacts/api.py",
+    "src/movie_muse/artifacts/errors.py",
+    "src/movie_muse/artifacts/index.py",
+    "src/movie_muse/artifacts/service.py",
+    "src/movie_muse/artifacts/types.py",
+    "src/movie_muse/authorization/__init__.py",
+    "src/movie_muse/authorization/api.py",
+    "src/movie_muse/authorization/catalog.py",
+    "src/movie_muse/authorization/errors.py",
+    "src/movie_muse/authorization/policy.py",
+    "src/movie_muse/authorization/projections.py",
+    "src/movie_muse/authorization/service.py",
+    "src/movie_muse/authorization/types.py",
+    "src/movie_muse/authorization/wrapper.py",
+    "src/movie_muse/provenance/__init__.py",
+    "src/movie_muse/provenance/api.py",
+    "src/movie_muse/provenance/errors.py",
+    "src/movie_muse/provenance/index.py",
+    "src/movie_muse/provenance/service.py",
+    "src/movie_muse/provenance/types.py",
+    "src/movie_muse/rights/__init__.py",
+    "src/movie_muse/rights/api.py",
+    "src/movie_muse/rights/errors.py",
+    "src/movie_muse/rights/index.py",
+    "src/movie_muse/rights/service.py",
+    "src/movie_muse/rights/types.py",
+    "tests/provenance/conftest.py",
+    "tests/provenance/test_evidence_bundles.py",
+    "tests/provenance/test_export_and_honesty.py",
+    "tests/provenance/test_provenance_boundaries.py",
+    "tests/rights/conftest.py",
+    "tests/rights/test_acl_and_concurrency.py",
+    "tests/rights/test_registry_and_permitted_use.py",
+    "tests/rights/test_rights_boundaries.py"
+  ],
+  "verification_commit": "7ef3c92952874683b0e6e2cb4aaff675c356c3b7"
+}
+EXIT: 0
+
+===== COMMAND: ./scripts/verify_all.sh =====
+CWD: /workspace
+START: 2026-09-01T16:32:42Z
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+SCOPE_COVERAGE=PASS
+{
+  "count": 2,
+  "runnable": [
+    "MM-010",
+    "MM-011"
+  ]
+}
+All checks passed!
+Success: no issues found in 132 source files
+.......................                                                  [100%]
+=============================== warnings summary ===============================
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+23 passed, 1 warning in 8.81s
+{
+  "count": 0,
+  "violations": []
+}
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+EXIT: 1
+
+DONE 2026-09-01T16:33:02Z

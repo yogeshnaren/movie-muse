@@ -1,0 +1,11 @@
+{
+  "attribute": "motive",
+  "confidence": 1.4,
+  "evidence_bundle_id": "evb_01M1E62D797A1HRTYSQ77H6YJD",
+  "id": "cli_01M1E62D7B006BPAD54GK1GD98",
+  "kind": "inferred",
+  "model_id": "semantic-claims-v1",
+  "schema_version": "1.0",
+  "subject_id": "char-ada",
+  "value": "protect her sister"
+}

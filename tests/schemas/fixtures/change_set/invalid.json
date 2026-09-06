@@ -1,0 +1,17 @@
+{
+  "author_actor_id": "act_01M1E62D76BMKXW2Q4NM6BD84F",
+  "base_revision_id": "rev_01M1E62D76RATSCXCXASR9GKGC",
+  "created_at": "2026-09-01T12:00:00Z",
+  "id": "cst_01M1E62D7739T079N34SQ1W246",
+  "operations": [
+    {
+      "id": "op-1",
+      "op_type": "not_a_real_op",
+      "order": 0,
+      "payload": {},
+      "schema_version": "1.0",
+      "target_id": "blk_01M1E62D76990WNDTF9RK0EN8H"
+    }
+  ],
+  "schema_version": "1.0"
+}

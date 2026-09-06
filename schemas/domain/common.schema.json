@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/common-v1.json",
+  "title": "Movie Muse domain constitution — shared definitions",
+  "$defs": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "epistemicLevel": {
+      "enum": ["authored", "structural", "inferred", "operational", "scenario"]
+    },
+    "compatibilityKind": {
+      "enum": ["additive", "breaking"]
+    },
+    "percentile": {
+      "enum": ["P10", "P50", "P90"]
+    },
+    "documentId": {"type": "string", "pattern": "^doc_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "sequenceId": {"type": "string", "pattern": "^seq_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "blockId": {"type": "string", "pattern": "^blk_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "inlineSpanId": {"type": "string", "pattern": "^spn_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "sceneId": {"type": "string", "pattern": "^scn_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "characterCueId": {"type": "string", "pattern": "^cue_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "dialoguePairId": {"type": "string", "pattern": "^dlg_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "noteId": {"type": "string", "pattern": "^note_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "revisionMarkId": {"type": "string", "pattern": "^rvm_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "productionTagId": {"type": "string", "pattern": "^ptg_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "attachmentId": {"type": "string", "pattern": "^att_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "projectId": {"type": "string", "pattern": "^proj_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "revisionId": {"type": "string", "pattern": "^rev_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "branchId": {"type": "string", "pattern": "^brn_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "actorId": {"type": "string", "pattern": "^act_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "eventId": {"type": "string", "pattern": "^evt_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "changeSetId": {"type": "string", "pattern": "^cst_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "proposalId": {"type": "string", "pattern": "^prp_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "evidenceBundleId": {"type": "string", "pattern": "^evb_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "rightsRecordId": {"type": "string", "pattern": "^rgt_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "collaborationEventId": {"type": "string", "pattern": "^cev_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "shotId": {"type": "string", "pattern": "^sht_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "sceneSpaceId": {"type": "string", "pattern": "^ssp_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "productionProjectionId": {"type": "string", "pattern": "^opj_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "scenarioModelId": {"type": "string", "pattern": "^scm_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "artifactId": {"type": "string", "pattern": "^art_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "artifactVersionId": {"type": "string", "pattern": "^avr_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "dependencyNodeId": {"type": "string", "pattern": "^dep_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "projectMemoryId": {"type": "string", "pattern": "^mem_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "filmIrId": {"type": "string", "pattern": "^fir_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "creativeIntentId": {"type": "string", "pattern": "^cin_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "authoredFactId": {"type": "string", "pattern": "^fca_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "structuralFactId": {"type": "string", "pattern": "^fcs_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "inferredClaimId": {"type": "string", "pattern": "^cli_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "operationalAssumptionId": {"type": "string", "pattern": "^aso_[0-9A-HJKMNP-TV-Z]{26}$"},
+    "scenarioOutputId": {"type": "string", "pattern": "^osc_[0-9A-HJKMNP-TV-Z]{26}$"}
+  }
+}

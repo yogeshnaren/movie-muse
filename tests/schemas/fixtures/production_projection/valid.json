@@ -1,0 +1,14 @@
+{
+  "budget_maturity": "script_breakdown_range",
+  "computed_at": "2026-09-01T12:00:00Z",
+  "data": {
+    "total_high": 250000,
+    "total_low": 100000
+  },
+  "id": "opj_01M1E62D7A5PXCZDEHX6ZJMS4J",
+  "is_stale": false,
+  "kind": "budget_evidence",
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "schema_version": "1.0",
+  "source_revision_id": "rev_01M1E62D76RATSCXCXASR9GKGC"
+}

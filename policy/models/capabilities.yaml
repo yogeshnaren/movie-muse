@@ -1,0 +1,131 @@
+# Capability registry. Disabled capabilities fail closed even when the project
+# has AI enabled. allowed_roles is intersected with role_contracts.yaml.
+capabilities:
+  generate_text:
+    enabled: true
+    description: Draft or rewrite screenplay-adjacent text. Never mutates canon.
+    allowed_roles:
+      - actor
+      - audience
+      - expert
+      - researcher
+      - divergence
+      - executor
+      - production_analyst
+    providers:
+      - deterministic_double
+      - local_stub
+      - remote_http
+      - finetune_script_adapter
+    fallbacks:
+      - local_stub
+      - deterministic_double
+  extract_structure:
+    enabled: true
+    description: Bounded structured extraction into candidate claims.
+    allowed_roles:
+      - expert
+      - researcher
+      - executor
+      - production_analyst
+    providers:
+      - deterministic_double
+      - local_stub
+    fallbacks:
+      - deterministic_double
+  calculate_production:
+    enabled: true
+    description: Numeric production estimates. Restricted to production_analyst.
+    allowed_roles:
+      - production_analyst
+    providers:
+      - remote_http
+      - local_stub
+      - deterministic_double
+    fallbacks:
+      - local_stub
+      - deterministic_double
+  retrieve:
+    enabled: true
+    description: Retrieve permitted context. Expert/researcher contract.
+    allowed_roles:
+      - expert
+      - researcher
+    providers:
+      - deterministic_double
+      - local_stub
+    fallbacks:
+      - deterministic_double
+  propose_alternatives:
+    enabled: true
+    description: Divergence partner proposes alternatives, not canon.
+    allowed_roles:
+      - divergence
+    providers:
+      - deterministic_double
+    fallbacks: []
+  propose_structured_ops:
+    enabled: true
+    description: Executor may propose structured operations, never auto-apply.
+    allowed_roles:
+      - executor
+    providers:
+      - deterministic_double
+      - finetune_script_adapter
+    fallbacks:
+      - deterministic_double
+  experience:
+    enabled: true
+    description: Actor/audience experiential interpretation. Must not calculate.
+    allowed_roles:
+      - actor
+      - audience
+    providers:
+      - deterministic_double
+    fallbacks: []
+  script_suggest:
+    enabled: true
+    description: Fine-tuned adapter route for script suggestions.
+    allowed_roles:
+      - executor
+      - expert
+    providers:
+      - finetune_script_adapter
+    fallbacks:
+      - deterministic_double
+  disabled_capability:
+    enabled: false
+    description: Capability-level AI-off control used by policy tests.
+    allowed_roles:
+      - expert
+    providers:
+      - deterministic_double
+    fallbacks: []
+  remote_only:
+    enabled: true
+    description: Remote-only route used to prove honest unavailability.
+    allowed_roles:
+      - expert
+      - executor
+    providers:
+      - remote_http
+    fallbacks: []
+  remote_preferred:
+    enabled: true
+    description: Prefer remote then fall back to an allowed double.
+    allowed_roles:
+      - expert
+      - executor
+    providers:
+      - remote_http
+    fallbacks:
+      - deterministic_double
+  restricted_remote_only:
+    enabled: true
+    description: Remote-only including fallback; restricted data must fail closed.
+    allowed_roles:
+      - expert
+    providers:
+      - remote_http
+    fallbacks:
+      - remote_http

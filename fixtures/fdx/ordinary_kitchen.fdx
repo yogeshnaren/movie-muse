@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FinalDraft DocumentType="Script" Template="MovieMuse" Version="1" xmlns:mm="https://movie-muse.dev/fdx">
+  <Content>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE39090000000000000009" mm:schema-version="1.0">
+      <Text>THE LOCK</Text>
+    </Paragraph>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE390A000000000000000A" mm:schema-version="1.0">
+      <Text>Written by Jordan Hale</Text>
+    </Paragraph>
+    <Paragraph Number="1" Type="Scene Heading" mm:block-id="blk_01J6NE390B000000000000000B" mm:scene-id="scn_01J6NE39060000000000000006" mm:scene-number="1" mm:schema-version="1.0">
+      <Text>INT. KITCHEN - DAY</Text>
+    </Paragraph>
+    <Paragraph Type="Action" mm:block-id="blk_01J6NE390C000000000000000C" mm:scene-id="scn_01J6NE39060000000000000006" mm:schema-version="1.0">
+      <Text>Ada studies the lock.</Text>
+    </Paragraph>
+    <Paragraph Type="Character" mm:block-id="blk_01J6NE390D000000000000000D" mm:character-cue-id="cue_01J6NE39070000000000000007" mm:dialogue-pair-id="dlg_01J6NE39080000000000000008" mm:scene-id="scn_01J6NE39060000000000000006" mm:schema-version="1.0">
+      <Text>ADA</Text>
+    </Paragraph>
+    <Paragraph Type="Parenthetical" mm:block-id="blk_01J6NE390E000000000000000E" mm:dialogue-pair-id="dlg_01J6NE39080000000000000008" mm:scene-id="scn_01J6NE39060000000000000006" mm:schema-version="1.0">
+      <Text>quietly</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue" mm:block-id="blk_01J6NE390F000000000000000F" mm:dialogue-pair-id="dlg_01J6NE39080000000000000008" mm:scene-id="scn_01J6NE39060000000000000006" mm:schema-version="1.0">
+      <Text>It's not locked.</Text>
+    </Paragraph>
+    <Paragraph Type="Transition" mm:block-id="blk_01J6NE390G000000000000000G" mm:scene-id="scn_01J6NE39060000000000000006" mm:schema-version="1.0">
+      <Text>CUT TO:</Text>
+    </Paragraph>
+  </Content>
+  <TitlePage>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE39090000000000000009" mm:schema-version="1.0">
+      <Text>THE LOCK</Text>
+    </Paragraph>
+    <Paragraph Type="Title" mm:block-id="blk_01J6NE390A000000000000000A" mm:schema-version="1.0">
+      <Text>Written by Jordan Hale</Text>
+    </Paragraph>
+  </TitlePage>
+  <mm:Document base-revision-id="rev_01J6NE39040000000000000004" id="doc_01J6NE39030000000000000003" paper-size="us_letter" profile="movie_muse_fdx" profile-version="1.0.0" project-id="proj_01J6NE39020000000000000002" schema-version="1.0" style="standard_screenplay" title="The Lock"/>
+  <mm:Sequences>
+    <mm:Sequence id="seq_01J6NE39050000000000000005" order="0" schema-version="1.0" title="Cold Open">
+      <mm:SceneRef id="scn_01J6NE39060000000000000006"/>
+    </mm:Sequence>
+  </mm:Sequences>
+  <mm:Notes>
+    <mm:Note author-actor-id="act_01J6NE39010000000000000001" block-id="blk_01J6NE390B000000000000000B" created-at="2026-09-01T00:00:00Z" id="note_01J6NE390H000000000000000H" resolved="false" schema-version="1.0">Keep the kitchen practical.</mm:Note>
+  </mm:Notes>
+  <mm:RevisionMarks/>
+  <mm:ProductionTags/>
+  <mm:Attachments/>
+</FinalDraft>

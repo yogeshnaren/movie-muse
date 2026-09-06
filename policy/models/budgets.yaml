@@ -1,0 +1,8 @@
+# Default cost/latency budgets applied when a request omits a tighter bound.
+# Request budgets still win: a cheaper/faster request cannot select a provider
+# whose estimate exceeds the request.
+budgets:
+  currency: credits
+  default_cost: 5.0
+  default_latency_ms: 5000
+  quote_before_execute: true
