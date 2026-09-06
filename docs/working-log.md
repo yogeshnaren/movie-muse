@@ -602,3 +602,16 @@ This file records orchestrator actions that the schema cannot store.
   `668307e04e58992c508ba7f7845344b836ec59dfbd5a09d622bb2735b8407837`
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-017, MM-027
 
+## 2026-09-06T00:10:00Z
+
+- Implementer: MM-017 context builder and rights-controlled retrieval on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-016 are current PASS; MM-017 is DAG-runnable.
+  Moved MM-017 to IN_PROGRESS. `pass_record` remains null.
+- Assembly is token/model-independent and does not call ModelRouter.
+  ProjectMemory/CreativeIntentIR/typed states are optional schema inputs
+  (those services are later packages). Did not add `fixtures/**`.
+  Did not mark PASS.
+- Focused pytest: 32 passed. Full pytest: 591 passed. ruff/mypy clean.
+  verify_all fail-closed at migrations_backup_and_recovery.
+

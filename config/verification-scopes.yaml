@@ -267,6 +267,13 @@ scopes:
     shared:
       - src/movie_muse/model_router/**
       - src/movie_muse/rights/**
+      - src/movie_muse/retrieval/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/audit/**
   module.retrieval:
     owned:
       - src/movie_muse/retrieval/**
@@ -274,6 +281,11 @@ scopes:
     shared:
       - src/movie_muse/context/**
       - src/movie_muse/rights/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/audit/**
   module.compiler:
     owned:
       - src/movie_muse/compiler/**
