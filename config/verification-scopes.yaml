@@ -316,6 +316,13 @@ scopes:
       - tests/state_engine/**
     shared:
       - src/movie_muse/film_ir/**
+      - src/movie_muse/compiler/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/document/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/revisions/**
   module.creative_intent:
     owned:
       - src/movie_muse/creative_intent/**

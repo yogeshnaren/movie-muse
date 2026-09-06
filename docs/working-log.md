@@ -653,3 +653,21 @@ This file records orchestrator actions that the schema cannot store.
   structured output, and precision/recall 1.0 against compiler truth.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-019, MM-027
 
+## 2026-09-06T01:05:00Z
+
+- Implementer: MM-019 character knowledge and deterministic state engine
+  on `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-018 are current PASS; MM-019 is DAG-runnable.
+  Moved MM-019 to IN_PROGRESS. `pass_record` remains null.
+- Reducer is deterministic over FilmIR scene order. Human corrections
+  outrank inferred claims. Did not add `fixtures/**`. Did not mark PASS.
+
+## 2026-09-06T00:32:00Z
+
+- Implementer quality commands for MM-019: 9 focused tests passed;
+  full pytest 616 passed; ruff/mypy clean. verify_all fail-closed at
+  `migrations_backup_and_recovery`. Evidence under `evidence/MM-019/`.
+- Later-scene location/world changes are succession, not contradictions.
+  Same-scene inferred-vs-authored conflicts still record evidence.
+- Did not mark PASS. Independent verification is still required.
+
