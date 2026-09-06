@@ -641,3 +641,15 @@ This file records orchestrator actions that the schema cannot store.
 - Focused pytest: 16 passed. Full pytest: 607 passed. ruff/mypy clean.
   verify_all fail-closed at migrations_backup_and_recovery.
 
+## 2026-09-06T00:55:00Z
+
+- Independent verifier PASS for MM-018 at
+  `85f11d0b08023e96cdf62732415f767864878077`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-06T00:22:18Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `2922220a9d657723b41dbb83c9c77ee2c305be18d8a3c2a2d8f39083657ebfe4`
+- Independent probes confirmed deterministic compile, idempotent FilmIR,
+  ModelRouter-owned extraction, inferred-only candidates, repair/fail-closed
+  structured output, and precision/recall 1.0 against compiler truth.
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-019, MM-027
+

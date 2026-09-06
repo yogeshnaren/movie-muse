@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-06T00:35:00Z"
+last_updated_utc: "2026-09-06T00:55:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -1160,10 +1160,66 @@ items:
     title: Screenplay compiler and FilmIR extraction
     milestone: C
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-003, MM-009, MM-010, MM-011, MM-012, MM-017]
     scope_keys: [module.compiler, module.film_ir]
-    pass_record: null
+    pass_record:
+      verification_commit: 85f11d0b08023e96cdf62732415f767864878077
+      input_fingerprint: 2922220a9d657723b41dbb83c9c77ee2c305be18d8a3c2a2d8f39083657ebfe4
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-018
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/compiler tests/film_ir -q
+        - PYTHONPATH=src python3 -m pytest tests/compiler tests/film_ir tests/document tests/model_router tests/context --tb=no
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-018/COMMANDS.md
+        - evidence/MM-018/quality-commands.txt
+        - src/movie_muse/compiler/
+        - src/movie_muse/film_ir/
+        - tests/compiler/
+        - tests/film_ir/
+      completed_at_utc: "2026-09-06T00:55:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-06T00:22:18Z
+        independence_basis: Did not implement MM-018; independently verified a fresh detached worktree at 85f11d0. Did not rely on implementer summaries or evidence/MM-018. Wrote independent probes under /tmp/mm018-verify-85f11d0-probes using public compiler/film_ir/model_router APIs without importing tests.compiler or tests.film_ir.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-018-verify-85f11d0
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-018
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/compiler tests/film_ir -q
+          - PYTHONPATH=src python3 -m pytest tests/compiler tests/film_ir tests/document tests/model_router tests/context --tb=no
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-018/COMMANDS.md
+          - evidence/MM-018/quality-commands.txt
+          - src/movie_muse/compiler/
+          - src/movie_muse/film_ir/
+          - tests/compiler/
+          - tests/film_ir/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 607 tests with two unrelated deprecation warnings.
+          - Fixture FilmIR goldens remain deferred; precision/recall was scored against compiler ground truth.
+          - EXT-REMOTE-MODEL remains NOT_RUN; extract_candidates used the policy-routed deterministic double.
+          - No required MM-018 check was skipped.
     blocker: null
   - id: MM-019
     title: Character knowledge and deterministic state engine
