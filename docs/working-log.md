@@ -628,3 +628,16 @@ This file records orchestrator actions that the schema cannot store.
   and no ModelRouter import from assembly.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-018, MM-027
 
+## 2026-09-06T00:35:00Z
+
+- Implementer: MM-018 screenplay compiler and FilmIR extraction on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-017 are current PASS; MM-018 is DAG-runnable.
+  Moved MM-018 to IN_PROGRESS. `pass_record` remains null.
+- Deterministic compiler owns syntax; ModelRouter owns every AI call.
+  Inferred extraction cannot become AuthoredFact or silent FilmIR
+  entities. Did not add `fixtures/**` (FilmIR goldens stay deferred).
+  Did not mark PASS.
+- Focused pytest: 16 passed. Full pytest: 607 passed. ruff/mypy clean.
+  verify_all fail-closed at migrations_backup_and_recovery.
+

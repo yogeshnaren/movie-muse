@@ -293,12 +293,23 @@ scopes:
     shared:
       - src/movie_muse/document/**
       - src/movie_muse/model_router/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/revisions/**
   module.film_ir:
     owned:
       - src/movie_muse/film_ir/**
       - tests/film_ir/**
     shared:
       - src/movie_muse/compiler/**
+      - src/movie_muse/model_router/**
+      - src/movie_muse/context/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
   module.state_engine:
     owned:
       - src/movie_muse/state_engine/**
