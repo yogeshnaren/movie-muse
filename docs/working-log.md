@@ -671,3 +671,16 @@ This file records orchestrator actions that the schema cannot store.
   Same-scene inferred-vs-authored conflicts still record evidence.
 - Did not mark PASS. Independent verification is still required.
 
+## 2026-09-06T00:38:00Z
+
+- Independent verifier PASS for MM-019 at
+  `459fd27770425ea4133dfaa5228f9f51fb2db264`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-06T00:36:21Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `47864bbdee1711d474595c42fa810ae221c4a2f5755fe3f3611d849a3308ff5e`
+- Independent probes confirmed deterministic kitchen→harbor queries,
+  same-scene possession contradictions with evidence, second-order
+  belief + misunderstanding recovery, persisted AUTHORED corrections,
+  all 15 dimensions queryable, and no ModelRouter import.
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-020, MM-027
+
