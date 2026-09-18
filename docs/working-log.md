@@ -839,4 +839,15 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-025, MM-027,
   MM-031
 
+## 2026-09-18T22:01:28Z
+
+- Implementer: MM-025 Project Memory and reviewed capture on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-024 are current PASS; MM-025 is DAG-runnable.
+  Moved MM-025 to IN_PROGRESS. `pass_record` remains null.
+- Candidates (idea/decision/question/research/assignment/rejected idea/
+  fact/link) stay candidates until explicit human promotion. Rejected
+  ideas remain searchable but never enter list_memories. Edits append
+  provenance. Did not add `fixtures/**`. Did not mark PASS.
+
 

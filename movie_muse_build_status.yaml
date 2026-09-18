@@ -1580,7 +1580,7 @@ items:
     title: Project Memory and reviewed capture
     milestone: D
     priority: high
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-007, MM-010, MM-018, MM-021]
     scope_keys: [module.project_memory]
     pass_record: null

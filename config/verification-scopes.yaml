@@ -412,6 +412,12 @@ scopes:
     shared:
       - src/movie_muse/artifacts/**
       - src/movie_muse/rights/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
   capability.room_mode:
     owned:
       - src/movie_muse/room_mode/**
