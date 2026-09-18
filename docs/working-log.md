@@ -956,4 +956,18 @@ This file records orchestrator actions that the schema cannot store.
   `migrations_backup_and_recovery`. Evidence under `evidence/MM-028/`.
 - Did not mark PASS. Independent verification is still required.
 
+## 2026-09-18T23:15:24Z
+
+- Independent verifier PASS for MM-028 at
+  `0a4f2df67617c80be7d869f8c0e43f37efc08e91`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-18T23:14:38Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `b103edbbf535c58ff5b834d537017d03a8b5bd9c258b3c849792da1cbc28406a`
+- Independent probes confirmed visible consent, deny/withdraw fail-closed,
+  viewer ACL, timestamped artifact transcripts, speaker/text provenance,
+  searchable media, harvest auto-promote fail-closed, explicit promote/
+  discard, deletion, and retention expiry.
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-029, MM-030,
+  MM-031
+
 
