@@ -1006,4 +1006,16 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-029, MM-031,
   MM-035, MM-040, MM-041
 
+## 2026-09-18T23:45:13Z
+
+- Implementer: MM-031 Director Mode, DirectorVisionGraph, and ShotIR on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-030 are current PASS; MM-031 is DAG-runnable.
+  Moved MM-031 to IN_PROGRESS. `pass_record` remains null.
+- DirectorVisionService owns deterministic SceneSpace, blocking, coverage,
+  producer constraints, and role-specific semantic annotations. ShotIRService
+  owns provider-independent shots, locked attributes, and diagrammatic
+  shot cards that work with generation disabled. Scene/intent changes
+  invalidate affected shots. Did not add `fixtures/**`. Did not mark PASS.
+
 

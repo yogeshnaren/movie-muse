@@ -488,12 +488,25 @@ scopes:
     shared:
       - src/movie_muse/film_ir/**
       - src/movie_muse/creative_intent/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/dependencies/**
+      - src/movie_muse/revisions/**
   module.shot_ir:
     owned:
       - src/movie_muse/shot_ir/**
       - tests/shot_ir/**
     shared:
       - src/movie_muse/director/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/dependencies/**
   capability.storyboard:
     owned:
       - src/movie_muse/storyboard/**
