@@ -923,4 +923,18 @@ This file records orchestrator actions that the schema cannot store.
   `migrations_backup_and_recovery`. Evidence under `evidence/MM-026/`.
 - Did not mark PASS. Independent verification is still required.
 
+## 2026-09-18T22:55:32Z
+
+- Independent verifier PASS for MM-026 at
+  `8d7d465ec007818db68856fa5d405bfb85f7c884`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-18T22:54:42Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `8c2ada3d12c96e860ee30c0b8c2368c37dcdaf98d1fb38e414bdf22238a5b9a5`
+- Independent probes confirmed solo rooms never present simulated seats
+  as humans, multi-writer attribution and ACL, harvest auto-promote
+  fail-closed, explicit harvest review before promote/discard,
+  research-team default capture, timers/boards/votes, and closed-room
+  fail-closed.
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-030, MM-031
+
 
