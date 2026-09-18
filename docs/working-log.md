@@ -904,4 +904,16 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-026, MM-030,
   MM-031
 
+## 2026-09-18T22:40:00Z
+
+- Implementer: MM-026 Single/multi-writer Room Mode on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-027 are current PASS; MM-026 is DAG-runnable.
+  Moved MM-026 to IN_PROGRESS. `pass_record` remains null.
+- RoomModeService provides solo/multi sessions, simulated seats that are
+  never presented as humans, timers, shared boards, idea/decision
+  capture through ProjectMemory, voting/acknowledgement, and Room Harvest
+  that requires explicit review. Did not add `fixtures/**`. Did not mark
+  PASS.
+
 
