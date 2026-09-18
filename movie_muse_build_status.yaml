@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-18T21:35:07Z"
+last_updated_utc: "2026-09-18T22:37:29Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -1647,10 +1647,64 @@ items:
     title: Live collaboration and sync
     milestone: D
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-004, MM-005, MM-006, MM-015]
     scope_keys: [module.collaboration, module.sync]
-    pass_record: null
+    pass_record:
+      verification_commit: 17274d794e27da7dc8bf05038bd6fa372b5eb4ff
+      input_fingerprint: 16ec4fa8b9faf3f25f8c3ff399c6650c5c28e3be3a63c6ba373091e9d0b55b72
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-027
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/collaboration tests/sync -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-027/COMMANDS.md
+        - evidence/MM-027/quality-commands.txt
+        - src/movie_muse/collaboration/
+        - tests/collaboration/
+        - src/movie_muse/sync/
+        - tests/sync/
+      completed_at_utc: "2026-09-18T22:37:29Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-18T22:35:50Z
+        independence_basis: Did not implement MM-027; independently verified a fresh detached worktree at 17274d7. Did not rely on implementer summaries or evidence/MM-027. Wrote independent probes under /tmp using public collaboration and sync APIs without importing tests.collaboration or tests.sync.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-027-independent-verify
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-027
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/collaboration tests/sync -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-027/COMMANDS.md
+          - evidence/MM-027/quality-commands.txt
+          - src/movie_muse/collaboration/
+          - tests/collaboration/
+          - src/movie_muse/sync/
+          - tests/sync/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 696 tests with two unrelated deprecation warnings.
+          - Concurrent same-target patches with a shared base_revision_id surface ConflictView; a non-matching overlapping base raises StaleOperationError.
+          - Conflict UI is the ConflictView record; hosts do not yet import CollaborationService.
+          - No required MM-027 check was skipped.
     blocker: null
   - id: MM-028
     title: Meeting capture and transcript intelligence
