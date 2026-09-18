@@ -1580,10 +1580,59 @@ items:
     title: Project Memory and reviewed capture
     milestone: D
     priority: high
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-007, MM-010, MM-018, MM-021]
     scope_keys: [module.project_memory]
-    pass_record: null
+    pass_record:
+      verification_commit: a0d5a2ae49dd5ba861dc6ded1ee680a97084be08
+      input_fingerprint: ecc35a882c8a9a10af06909d3045b0ae046fb7724945369f3cae1ea5dee58dd2
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-025
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/project_memory -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-025/COMMANDS.md
+        - evidence/MM-025/quality-commands.txt
+        - src/movie_muse/project_memory/
+        - tests/project_memory/
+      completed_at_utc: "2026-09-18T22:12:27Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-18T22:11:50Z
+        independence_basis: Did not implement MM-025; independently verified a fresh detached worktree at a0d5a2a. Did not rely on implementer summaries or evidence/MM-025. Wrote independent probes under /tmp using public project_memory APIs without importing tests.project_memory.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-025-independent-verify
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-025
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/project_memory -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-025/COMMANDS.md
+          - evidence/MM-025/quality-commands.txt
+          - src/movie_muse/project_memory/
+          - tests/project_memory/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 682 tests with two unrelated deprecation warnings.
+          - Idea, question, and link candidates are not mappable to the sealed ProjectMemoryKind enum and stay reviewed candidates.
+          - No required MM-025 check was skipped.
     blocker: null
   - id: MM-026
     title: Single/multi-writer Room Mode
