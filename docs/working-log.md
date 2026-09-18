@@ -713,4 +713,15 @@ This file records orchestrator actions that the schema cannot store.
   FilmIR scene validation, and viewer write denial.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-021, MM-027
 
+## 2026-09-18T20:45:00Z
+
+- Implementer: MM-021 Proposal/ChangeSet and impact review engine
+  on `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-020 are current PASS; MM-021 is DAG-runnable.
+  Moved MM-021 to IN_PROGRESS. `pass_record` remains null.
+- AI/integration principals may propose but cannot write canon.
+  Partial accept is explicit. Stale proposals rebase or fail closed.
+  Accepted proposals create a revision, audit event, and invalidations.
+  Did not add `fixtures/**`. Did not mark PASS.
+
 

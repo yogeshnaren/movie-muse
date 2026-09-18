@@ -343,6 +343,12 @@ scopes:
     shared:
       - src/movie_muse/revisions/**
       - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/dependencies/**
+      - src/movie_muse/jobs/**
       - src/movie_muse/creative_intent/**
   capability.writer_unblock:
     owned:
