@@ -731,4 +731,18 @@ This file records orchestrator actions that the schema cannot store.
   `migrations_backup_and_recovery`. Evidence under `evidence/MM-021/`.
 - Did not mark PASS. Independent verification is still required.
 
+## 2026-09-18T20:51:16Z
+
+- Independent verifier PASS for MM-021 at
+  `43d682c2e22c1a52cf13335815a03635517e5c49`
+- Verifier: `movie-muse-independent-verifier/grok-4.6/2026-09-18T20:49:43Z`
+- Orchestrator recorded canonical PASS; fingerprint
+  `81cb24aacf74087aada47143a6fa084061441db3c39f6860eb81c8b44091d2e9`
+- Independent probes confirmed AI cannot write canon, explicit partial
+  accept with remainder, stale fail-closed + rebase supersede,
+  accept creates revision + audit + derived-node invalidation, and
+  human-only alternative accept with author retarget.
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-022, MM-023,
+  MM-024, MM-027
+
 
