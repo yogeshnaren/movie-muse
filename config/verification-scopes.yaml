@@ -474,6 +474,13 @@ scopes:
     shared:
       - src/movie_muse/film_ir/**
       - src/movie_muse/creative_intent/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/rights/**
+      - src/movie_muse/dependencies/**
   module.director:
     owned:
       - src/movie_muse/director/**

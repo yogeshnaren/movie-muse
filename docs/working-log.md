@@ -970,4 +970,18 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-029, MM-030,
   MM-031
 
+## 2026-09-18T23:21:08Z
+
+- Implementer: MM-030 beat frameworks and completion tracking on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-028 are current PASS; MM-030 is DAG-runnable
+  (depends on MM-018/020/021/025). Moved MM-030 to IN_PROGRESS.
+  `pass_record` remains null.
+- BeatService treats Save the Cat and Hero's Journey as licensed named
+  templates: rights required, original story-function keys only, no
+  copyrighted beat-sheet prose. Three-movement and custom frameworks
+  are permitted. Manual override wins. `not applicable` is supported.
+  Mapping changes invalidate dependent analysis. Themes are accessible.
+  Did not add `fixtures/**`. Did not mark PASS.
+
 
