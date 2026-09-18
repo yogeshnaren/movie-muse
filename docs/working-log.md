@@ -937,4 +937,16 @@ This file records orchestrator actions that the schema cannot store.
   fail-closed.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-030, MM-031
 
+## 2026-09-18T22:58:00Z
+
+- Implementer: MM-028 meeting capture and transcript intelligence on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-027 are current PASS; MM-028 is DAG-runnable.
+  Moved MM-028 to IN_PROGRESS. `pass_record` remains null.
+- MeetingCaptureService is consent-first: consent state is visible;
+  recording/import fail closed without grant. Transcript speaker/text
+  edits keep provenance and new artifact versions. Candidates never
+  auto-promote; harvest requires explicit review. Deletion and retention
+  expiry fail closed. Did not add `fixtures/**`. Did not mark PASS.
+
 

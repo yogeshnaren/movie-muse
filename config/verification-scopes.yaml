@@ -449,6 +449,12 @@ scopes:
     shared:
       - src/movie_muse/artifacts/**
       - src/movie_muse/project_memory/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
   adapter.zoom:
     owned:
       - src/movie_muse/adapters/zoom/**
