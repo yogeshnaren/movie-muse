@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-18T20:05:00Z"
+last_updated_utc: "2026-09-18T20:26:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -1283,10 +1283,59 @@ items:
     title: CreativeIntentIR and creator invariants
     milestone: C
     priority: high
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-018, MM-019]
     scope_keys: [module.creative_intent]
-    pass_record: null
+    pass_record:
+      verification_commit: cc956dc4064637df4f0c136ca89d6db5cdfa8465
+      input_fingerprint: 4b99e7b5f617918372280ad41b8dae633efef402363cc15f89b27abd7dcbc9d4
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-020
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/creative_intent -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-020/COMMANDS.md
+        - evidence/MM-020/quality-commands.txt
+        - src/movie_muse/creative_intent/
+        - tests/creative_intent/
+      completed_at_utc: "2026-09-18T20:26:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-18T20:24:49Z
+        independence_basis: Did not implement MM-020; independently verified a fresh detached worktree at cc956dc. Did not rely on implementer summaries or evidence/MM-020. Wrote independent probes under /tmp/mm020-verify-cc956dc-probes using public creative_intent/revisions/authorization APIs without importing tests.creative_intent.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-020-verify-cc956dc
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-020
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/creative_intent -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-020/COMMANDS.md
+          - evidence/MM-020/quality-commands.txt
+          - src/movie_muse/creative_intent/
+          - tests/creative_intent/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 627 tests with two unrelated deprecation warnings.
+          - Suggestion text is host-supplied; this package does not call ModelRouter.
+          - No required MM-020 check was skipped.
     blocker: null
   - id: MM-021
     title: Proposal/ChangeSet and impact review engine
