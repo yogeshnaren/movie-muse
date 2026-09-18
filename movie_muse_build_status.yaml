@@ -1647,7 +1647,7 @@ items:
     title: Live collaboration and sync
     milestone: D
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-004, MM-005, MM-006, MM-015]
     scope_keys: [module.collaboration, module.sync]
     pass_record: null

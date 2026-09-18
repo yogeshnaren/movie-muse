@@ -433,6 +433,11 @@ scopes:
       - src/movie_muse/sync/**
       - src/movie_muse/revisions/**
       - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/document/**
   capability.meeting_capture:
     owned:
       - src/movie_muse/meeting_capture/**

@@ -871,4 +871,15 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-026, MM-027,
   MM-030, MM-031
 
+## 2026-09-18T22:15:00Z
+
+- Implementer: MM-027 live collaboration and sync on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-025 are current PASS; MM-027 is DAG-runnable.
+  Moved MM-027 to IN_PROGRESS. `pass_record` remains null.
+- CollaborationService provides ephemeral presence, durable comments and
+  decisions, CRDT merge for collab ops, conflict UI for concurrent same-
+  target patches, and fail-closed stale/forbidden-domain ops. SyncProtocol
+  gains reconnect(). Did not add `fixtures/**`. Did not mark PASS.
+
 
