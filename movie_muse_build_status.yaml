@@ -1517,7 +1517,7 @@ items:
     title: Continuity and material production-impact analysis
     milestone: C
     priority: high
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-018, MM-019, MM-021]
     scope_keys: [capability.continuity, capability.impact]
     pass_record: null

@@ -383,6 +383,12 @@ scopes:
     shared:
       - src/movie_muse/film_ir/**
       - src/movie_muse/state_engine/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/compiler/**
   capability.impact:
     owned:
       - src/movie_muse/impact/**
@@ -390,6 +396,15 @@ scopes:
     shared:
       - src/movie_muse/continuity/**
       - src/movie_muse/proposals/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/dependencies/**
+      - src/movie_muse/state_engine/**
+      - src/movie_muse/film_ir/**
+      - src/movie_muse/compiler/**
   module.project_memory:
     owned:
       - src/movie_muse/project_memory/**

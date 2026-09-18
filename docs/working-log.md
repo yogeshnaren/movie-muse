@@ -805,4 +805,17 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-024, MM-025,
   MM-027, MM-031
 
+## 2026-09-18T21:44:10Z
+
+- Implementer: MM-024 continuity and material production-impact analysis on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-023 are current PASS; MM-024 is DAG-runnable.
+  Moved MM-024 to IN_PROGRESS. `pass_record` remains null.
+- ContinuityService maps StateEngine contradictions onto mode-filtered
+  findings with evidence, resolve/suppress audit, and a CONTINUITY
+  ProductionProjection envelope. ImpactService projects findings into
+  ImpactSummary (semantic/continuity/production). Author mode compresses
+  logistics; production mode may invert. Did not add `fixtures/**`.
+  Did not mark PASS.
+
 
