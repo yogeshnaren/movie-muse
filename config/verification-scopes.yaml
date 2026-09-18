@@ -371,6 +371,11 @@ scopes:
     shared:
       - src/movie_muse/rights/**
       - src/movie_muse/retrieval/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
   capability.continuity:
     owned:
       - src/movie_muse/continuity/**

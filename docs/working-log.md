@@ -775,4 +775,14 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-023, MM-024,
   MM-025, MM-027, MM-031
 
+## 2026-09-18T21:20:00Z
+
+- Implementer: MM-023 Reference Lens on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-022 are current PASS; MM-023 is DAG-runnable.
+  Moved MM-023 to IN_PROGRESS. `pass_record` remains null.
+- Lens retrieves only rights-registered sources, explains similarity
+  and contrast, refuses training-memory claims, and can be disabled
+  or locally tombstoned. Did not add `fixtures/**`. Did not mark PASS.
+
 
