@@ -1517,10 +1517,64 @@ items:
     title: Continuity and material production-impact analysis
     milestone: C
     priority: high
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-018, MM-019, MM-021]
     scope_keys: [capability.continuity, capability.impact]
-    pass_record: null
+    pass_record:
+      verification_commit: e0fe90fd714781e9c2a6e79cfd79d9fc5d6b189a
+      input_fingerprint: 4f0a06c2396de14e88f435e3b7b06831692362058f9f2862082297207d845c93
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-024
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/continuity tests/impact -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-024/COMMANDS.md
+        - evidence/MM-024/quality-commands.txt
+        - src/movie_muse/continuity/
+        - tests/continuity/
+        - src/movie_muse/impact/
+        - tests/impact/
+      completed_at_utc: "2026-09-18T21:56:39Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-18T21:55:09Z
+        independence_basis: Did not implement MM-024; independently verified a fresh detached worktree at e0fe90f. Did not rely on implementer summaries or evidence/MM-024. Wrote independent probes under /tmp using public continuity/impact/state_engine APIs without importing tests.continuity or tests.impact.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-024-independent-verify
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-024
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/continuity tests/impact -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-024/COMMANDS.md
+          - evidence/MM-024/quality-commands.txt
+          - src/movie_muse/continuity/
+          - tests/continuity/
+          - src/movie_muse/impact/
+          - tests/impact/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 671 tests with two unrelated deprecation warnings.
+          - Probe contradictions are constructed extra_transitions, not natural-language extraction.
+          - Dependency-graph stale labels are included only when a DependencyEngine is injected; MM-011 is not a DAG dependency of MM-024.
+          - No required MM-024 check was skipped.
     blocker: null
   - id: MM-025
     title: Project Memory and reviewed capture
