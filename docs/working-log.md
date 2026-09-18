@@ -745,4 +745,14 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-022, MM-023,
   MM-024, MM-027
 
+## 2026-09-18T21:05:00Z
+
+- Implementer: MM-022 Creative Divergence / writer-unblock workflow
+  on `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-021 are current PASS; MM-022 is DAG-runnable.
+  Moved MM-022 to IN_PROGRESS. `pass_record` remains null.
+- Routes are non-canonical proposal branches. Executor mode is required
+  for prose. Metrics require consent and are never training-eligible.
+  Did not add `fixtures/**`. Did not mark PASS.
+
 
