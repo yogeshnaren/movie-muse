@@ -949,4 +949,11 @@ This file records orchestrator actions that the schema cannot store.
   auto-promote; harvest requires explicit review. Deletion and retention
   expiry fail closed. Did not add `fixtures/**`. Did not mark PASS.
 
+## 2026-09-18T23:03:24Z
+
+- Implementer quality commands for MM-028: 11 focused tests passed;
+  full pytest 718 passed; ruff/mypy clean. verify_all fail-closed at
+  `migrations_backup_and_recovery`. Evidence under `evidence/MM-028/`.
+- Did not mark PASS. Independent verification is still required.
+
 
