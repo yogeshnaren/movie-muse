@@ -330,6 +330,12 @@ scopes:
     shared:
       - src/movie_muse/film_ir/**
       - src/movie_muse/state_engine/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/document/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/revisions/**
   module.proposals:
     owned:
       - src/movie_muse/proposals/**

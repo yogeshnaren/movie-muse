@@ -684,3 +684,20 @@ This file records orchestrator actions that the schema cannot store.
   all 15 dimensions queryable, and no ModelRouter import.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-020, MM-027
 
+## 2026-09-18T20:05:00Z
+
+- Implementer: MM-020 CreativeIntentIR and creator invariants
+  on `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-019 are current PASS; MM-020 is DAG-runnable.
+  Moved MM-020 to IN_PROGRESS. `pass_record` remains null.
+- Direct and chat write the same typed IntentCommand. Inferred
+  suggestions cannot lock or self-promote. Did not add `fixtures/**`.
+  Did not mark PASS.
+
+## 2026-09-18T20:10:00Z
+
+- Implementer quality commands for MM-020: 11 focused tests passed;
+  full pytest 627 passed; ruff/mypy clean. verify_all fail-closed at
+  `migrations_backup_and_recovery`. Evidence under `evidence/MM-020/`.
+- Did not mark PASS. Independent verification is still required.
+
