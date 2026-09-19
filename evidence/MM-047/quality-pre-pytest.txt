@@ -1,0 +1,54 @@
+=== ruff --no-cache ===
+All checks passed!
+=== mypy ===
+Success: no issues found in 466 source files
+=== validate_handoff ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+=== mm_status ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+SCOPE_COVERAGE=PASS
+{
+  "count": 1,
+  "runnable": [
+    "MM-047"
+  ]
+}
+{
+  "input_fingerprint": "292d0901c1689000622372c3bd79f8fd1493d7f34228e9cd9344988ca4686637",
+  "item_id": "MM-047",
+  "resolved_paths": [
+    "config/verification-scopes.yaml",
+    "dependency_dag.yaml",
+    "fixtures/golden_path/LICENSE.md",
+    "fixtures/golden_path/MANIFEST.yaml",
+    "scripts/gates/_run_pytest.sh",
+    "scripts/gates/ai_contract_and_evaluation.sh",
+    "scripts/gates/api_mcp_webhooks.sh",
+    "scripts/gates/competitive_regressions.sh",
+    "scripts/gates/external_live_providers.sh",
+    "scripts/gates/golden_path_41_steps.sh",
+    "scripts/gates/integration_sync_concurrency_and_crash.sh",
+    "scripts/gates/layout_render_and_fdx.sh",
+    "scripts/gates/manifest_and_staleness.sh",
+    "scripts/gates/migrations_backup_and_recovery.sh",
+    "scripts/gates/security_privacy_and_rights.sh",
+    "scripts/gates/static_quality_and_boundaries.sh",
+    "scripts/gates/unit_and_property.sh",
+    "scripts/gates/web_desktop_and_mobile.sh",
+    "scripts/verify_all.sh",
+    "tests/golden_path/conftest.py",
+    "tests/golden_path/test_golden_path_boundaries.py",
+    "tests/golden_path/test_golden_path_journey.py"
+  ],
+  "verification_commit": "9f849f7a5366fc9f89af6f7680f8d7e190a2e1b6"
+}
+{
+  "count": 0,
+  "violations": []
+}
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
