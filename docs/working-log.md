@@ -1061,4 +1061,16 @@ This file records orchestrator actions that the schema cannot store.
 - `verify_all.sh` remains fail-closed at `migrations_backup_and_recovery`.
 - Did not mark PASS.
 
+## 2026-09-19T00:27:00Z
+
+- Independent Grok verification PASS for MM-035 at
+  `3935938f6f488ad04c23643de81f0b03da840c6b`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T00:26:04Z`.
+- Fingerprint `38c7ad72a6373e32a8ff4830417282e65dd1bab8194a4254dafc4ce6dc19b4da`.
+- Independent probes confirmed locked-revision derivation, evidence
+  links, human verification thresholds, ChangeSet edits, and source-change
+  staleness. Did not import tests.breakdown.
+- EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-029, MM-032,
+  MM-033, MM-040, MM-041
+
 
