@@ -746,37 +746,68 @@ scopes:
       - frontend/**
       - apps/web/**
       - tests/apps/web/**
+      - src/movie_muse/platforms/**
+      - tests/platforms/**
     shared:
       - src/movie_muse/api/**
       - backend/app/**
+      - src/movie_muse/editor/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/layout/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/sync/**
+      - src/movie_muse/room_mode/**
+      - src/movie_muse/meeting_capture/**
+      - src/movie_muse/project_memory/**
+      - src/movie_muse/artifacts/**
+      - src/movie_muse/document/**
   app.macos:
     owned:
       - apps/macos/**
       - tests/apps/macos/**
     shared:
+      - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
       - src/movie_muse/document/**
+      - src/movie_muse/editor/**
+      - src/movie_muse/layout/**
+      - src/movie_muse/sync/**
   app.windows:
     owned:
       - apps/windows/**
       - tests/apps/windows/**
     shared:
+      - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
       - src/movie_muse/document/**
+      - src/movie_muse/editor/**
+      - src/movie_muse/layout/**
+      - src/movie_muse/sync/**
   app.ios:
     owned:
       - apps/ios/**
       - tests/apps/ios/**
     shared:
+      - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
       - src/movie_muse/sync/**
+      - src/movie_muse/room_mode/**
+      - src/movie_muse/meeting_capture/**
+      - src/movie_muse/editor/**
   app.android:
     owned:
       - apps/android/**
       - tests/apps/android/**
     shared:
+      - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
       - src/movie_muse/sync/**
+      - src/movie_muse/room_mode/**
+      - src/movie_muse/meeting_capture/**
+      - src/movie_muse/editor/**
   global.security:
     owned:
       - src/movie_muse/security/**

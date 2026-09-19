@@ -1484,5 +1484,17 @@ This file records orchestrator actions that the schema cannot store.
   tests.webhooks.
 - Next runnable: MM-045
 
+## 2026-09-19T08:40:00Z
+
+- Implementer: MM-045 Web, macOS, Windows, iPhone, and Android applications on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-004/MM-006/MM-015/MM-025/MM-027/MM-044 PASS unblocked MM-045. Moved MM-045
+  to IN_PROGRESS. `pass_record` remains null.
+- Five live hosts open the same golden project and layout identity. Desktop
+  hosts keep professional long-form authoring. iPhone/Android emphasize Room,
+  capture, cards, approvals, references, and fast annotations with explicit
+  long-form limitations. Offline edits recover; auth/subscription outages
+  keep local work and fail-close upload.
+
 
 
