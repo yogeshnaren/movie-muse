@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T01:00:00Z"
+last_updated_utc: "2026-09-19T01:14:15Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -2093,10 +2093,59 @@ items:
     title: Scheduling and constraint engine
     milestone: F
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-035, MM-036]
     scope_keys: [module.scheduling]
-    pass_record: null
+    pass_record:
+      verification_commit: f1123d63e37343ccd1da3d7208449ffd81fe0794
+      input_fingerprint: eefeda63bc3a32a55ddc223c5fb14990bf440dce4ffd8c5e3e15d504d70a4281
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-037
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/scheduling -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-037/COMMANDS.md
+        - evidence/MM-037/quality-commands.txt
+        - src/movie_muse/scheduling/
+        - tests/scheduling/
+      completed_at_utc: "2026-09-19T01:14:15Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T01:13:25Z
+        independence_basis: Did not implement MM-037; independently verified a fresh detached worktree at f1123d6. Did not rely on implementer summaries or evidence/MM-037. Wrote independent probes under /tmp using public scheduling APIs without importing tests.scheduling.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-037-independent-verify
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-037
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/scheduling -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-037/COMMANDS.md
+          - evidence/MM-037/quality-commands.txt
+          - src/movie_muse/scheduling/
+          - tests/scheduling/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 792 tests with two unrelated deprecation warnings.
+          - Packing is a seeded constraint packer, not a MIP solver; hard constraints still fail closed.
+          - No required MM-037 check was skipped.
     blocker: null
   - id: MM-038
     title: Budget Evidence Ledger
