@@ -161,4 +161,9 @@ PYTHONPATH=src python3 -m pytest -q
 # Did not invalidate --apply
 # Did not mock live providers
 
+# --- 2026-09-20T03:40:00Z isolate contract pytest from live env ---
+# unit/layout/competitive/external-live pytest now use _run_pytest_isolated_live.sh
+# Did not invalidate --apply
+# Did not mock live providers
+
 

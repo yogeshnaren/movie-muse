@@ -3,7 +3,7 @@
 # tests/release is excluded because it invokes verify_all.sh.
 set -euo pipefail
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-exec "${SCRIPT_DIR}/_run_pytest.sh" \
+exec "${SCRIPT_DIR}/_run_pytest_isolated_live.sh" \
   tests/schemas tests/document tests/compiler tests/film_ir \
   tests/identity tests/revisions tests/proposals tests/audit \
   tests/artifacts tests/beats tests/breakdown tests/budget \

@@ -242,6 +242,13 @@ not PASS.
 
 UTC: `2026-09-20T03:20:00Z`
 
+## Continuation (2026-09-20T03:40:00Z)
+
+Contract pytest for unit, layout/FDX, competitive, and external-live now
+runs with live/sandbox env vars unset in the child process. `_live_probes.py`
+and golden-path pytest still see the parent environment. This revision is
+not a self-PASS. Live EXT remains the required external blocker.
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

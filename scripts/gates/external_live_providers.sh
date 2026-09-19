@@ -7,7 +7,7 @@ REPO_ROOT="$(CDPATH= cd -- "${SCRIPT_DIR}/../.." && pwd)"
 cd "${REPO_ROOT}"
 export PYTHONPATH="${REPO_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}"
 
-"${SCRIPT_DIR}/_run_pytest.sh" \
+"${SCRIPT_DIR}/_run_pytest_isolated_live.sh" \
   tests/fdx/test_final_draft_unavailable.py \
   tests/model_router/test_remote_smoke.py \
   tests/adapters/zoom \
@@ -18,6 +18,7 @@ export PYTHONPATH="${REPO_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}"
   tests/correspondence \
   tests/golden_path/test_live_probes.py
 
+# Probes run in this process so they still see genuine live/sandbox env vars.
 python3 "${SCRIPT_DIR}/_live_probes.py"
 
 python3 - <<'PY'

@@ -1861,3 +1861,13 @@ This file records orchestrator actions that the schema cannot store.
   required EXT ids. PASS sentinel not printed.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-20T03:40:00Z
+
+- MM-047 returned to IN_PROGRESS. Contract pytest in `unit_and_property`,
+  `layout_render_and_fdx`, `competitive_regressions`, and
+  `external_live_providers` now runs through `_run_pytest_isolated_live.sh`
+  so tests that pop live env vars cannot hide later `_live_probes.py`.
+  Golden-path pytest still sees the parent live env. Did not mock live
+  providers. Did not `invalidate --apply`. Product PASS still requires
+  genuine live EXT.

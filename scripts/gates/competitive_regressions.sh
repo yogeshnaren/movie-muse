@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -euo pipefail
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-exec "${SCRIPT_DIR}/_run_pytest.sh" tests/competitive
+exec "${SCRIPT_DIR}/_run_pytest_isolated_live.sh" tests/competitive
