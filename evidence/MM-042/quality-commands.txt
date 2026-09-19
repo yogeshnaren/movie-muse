@@ -1,0 +1,75 @@
+# MM-042 implementer quality commands
+# UTC 2026-09-19T05:15:00Z
+# SHA 4cb2670009732704060641d7ecb06d04197fb7dd
+
+$ python3 scripts/validate_handoff.py
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+STATUS_VALIDATE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+SCOPE_COVERAGE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py runnable
+{
+  "count": 2,
+  "runnable": [
+    "MM-042",
+    "MM-044"
+  ]
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-042
+input_fingerprint=a4150b363bf8d3497abbb0942400630a47b605ad8bfe76d75cacb9e0e6aaac66
+item_id=MM-042
+verification_commit=4cb2670009732704060641d7ecb06d04197fb7dd
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{
+  "count": 0,
+  "violations": []
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{
+  "count": 0,
+  "hits": []
+}
+exit 0
+
+$ python3 -m ruff check src/movie_muse/commercial_forecast tests/commercial_forecast
+All checks passed!
+exit 0
+
+$ python3 -m mypy src/movie_muse/commercial_forecast
+Success: no issues found in 6 source files
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest tests/commercial_forecast -q --tb=short
+....................
+20 passed
+exit 0
+
+$ python3 -m ruff check src tests scripts backend apps
+All checks passed!
+exit 0
+
+$ python3 -m mypy src
+Success: no issues found in 400 source files
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest --tb=no
+973 passed, 2 warnings in 116.37s
+exit 0
+
+$ ./scripts/verify_all.sh
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit 1
+# expected: fail-closed at later migrations_backup_and_recovery; no PASS sentinel
