@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from apps.macos.host import open_macos_app, resume_macos_app
+
 from movie_muse.platforms.api import GOLDEN_PROJECT_ID, ProtectionClass
 
 

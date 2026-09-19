@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from apps.android.host import open_android_app, resume_android_app
+
 from movie_muse.platforms.api import GOLDEN_PROJECT_ID, ProtectionClass
 
 

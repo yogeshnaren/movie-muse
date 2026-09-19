@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from apps.web.host import open_web_app, resume_web_app
+
 from movie_muse.platforms.api import GOLDEN_PROJECT_ID, ProtectionClass
 
 

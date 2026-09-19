@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from apps.windows.host import open_windows_app, resume_windows_app
+
 from movie_muse.platforms.api import GOLDEN_PROJECT_ID, ProtectionClass
 
 

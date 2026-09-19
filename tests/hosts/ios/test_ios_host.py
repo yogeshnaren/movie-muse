@@ -5,8 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from apps.ios.host import open_ios_app, resume_ios_app
+
 from movie_muse.platforms.api import GOLDEN_PROJECT_ID, LongFormUnavailableError, ProtectionClass
 
 

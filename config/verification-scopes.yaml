@@ -745,7 +745,7 @@ scopes:
     owned:
       - frontend/**
       - apps/web/**
-      - tests/apps/web/**
+      - tests/hosts/web/**
       - src/movie_muse/platforms/**
       - tests/platforms/**
     shared:
@@ -767,7 +767,7 @@ scopes:
   app.macos:
     owned:
       - apps/macos/**
-      - tests/apps/macos/**
+      - tests/hosts/macos/**
     shared:
       - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
@@ -778,7 +778,7 @@ scopes:
   app.windows:
     owned:
       - apps/windows/**
-      - tests/apps/windows/**
+      - tests/hosts/windows/**
     shared:
       - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
@@ -789,7 +789,7 @@ scopes:
   app.ios:
     owned:
       - apps/ios/**
-      - tests/apps/ios/**
+      - tests/hosts/ios/**
     shared:
       - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
@@ -800,7 +800,7 @@ scopes:
   app.android:
     owned:
       - apps/android/**
-      - tests/apps/android/**
+      - tests/hosts/android/**
     shared:
       - src/movie_muse/platforms/**
       - src/movie_muse/persistence/**
