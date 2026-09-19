@@ -1625,3 +1625,17 @@ This file records orchestrator actions that the schema cannot store.
   insurance handoff (`network_sent` remains false). Did not mock live EXT.
 - `pass_record` remains null. Product PASS still requires genuine sandbox/live
   EXT evidence.
+
+## 2026-09-19T15:00:00Z
+
+- Independent Grok verification of MM-047 dual-mode golden path at
+  `6f977a9ef1061bf6ae5a5bbbfb55170e44628b16`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T08:17:40Z`.
+- Fingerprint `baf3cbb8f13d3af30cc35435582c64b75e7031784147944b40ea802feca2e5de`.
+- Implementation quality PASS: ruff `--no-cache`, mypy, 6 golden_path, 1078
+  full pytest, probes A–K. Product-acceptance FAIL: `verify_all` exits 1 with
+  all eight required EXT ids in `missing_live_gates`. PASS sentinel not printed.
+- Recorded MM-047 `BLOCKED_EXTERNAL` with blocker covering those eight EXT ids.
+  `pass_record` remains null. `overall_status` remains IN_PROGRESS. Did not mock
+  live providers. Product success still requires genuine sandbox/live EXT
+  evidence and a later `verify_all` PASS.

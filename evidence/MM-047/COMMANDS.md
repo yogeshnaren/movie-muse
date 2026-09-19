@@ -50,6 +50,19 @@ gates. Ledger stamped `BLOCKED_EXTERNAL`, not PASS and not FAIL.
 
 UTC: `2026-09-19T13:00:00Z`
 
+## Independent verification (Grok 4.6) — dual-mode golden path
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T08:17:40Z`
+verified a detached worktree at
+`6f977a9ef1061bf6ae5a5bbbfb55170e44628b16`
+(fingerprint `baf3cbb8f13d3af30cc35435582c64b75e7031784147944b40ea802feca2e5de`).
+Implementation quality PASS (validate, ruff, mypy, 6 golden_path, 1078 full
+pytest, probes A–K). Product-acceptance FAIL because
+`./scripts/verify_all.sh` cannot print the PASS sentinel without live EXT
+gates. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-19T15:00:00Z`
+
 ## Continuation (2026-09-19T14:00:00Z)
 
 Golden path no longer forbids an all-EXT-PASS world. Live `require_*` calls
