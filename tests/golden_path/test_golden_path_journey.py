@@ -20,12 +20,17 @@ from movie_muse.api.api import (
     require_review_connector,
     review_connector_base_url,
 )
+from movie_muse.artifacts.api import ArtifactClassification, ArtifactType
 from movie_muse.audience_lab.api import DISCLAIMER as AUDIENCE_DISCLAIMER
-from movie_muse.audience_lab.api import AudienceLabService
+from movie_muse.audience_lab.api import AudienceLabService, EvidenceTier
 from movie_muse.beats.api import FrameworkKind
 from movie_muse.collaboration.api import CollabOp, CollabOpKind, ForbiddenDomainError
 from movie_muse.commercial_forecast.api import DISCLAIMER as FORECAST_DISCLAIMER
-from movie_muse.commercial_forecast.api import CommercialForecastService
+from movie_muse.commercial_forecast.api import (
+    AssumptionKey,
+    CommercialForecastService,
+    InsufficientEvidenceError,
+)
 from movie_muse.creative_intent.api import (
     IntentAction,
     IntentKind,
@@ -38,7 +43,7 @@ from movie_muse.fdx.api import FinalDraftUnavailableError, require_final_draft
 from movie_muse.identity.api import Role, make_human_actor
 from movie_muse.insurance_readiness.api import DISCLAIMER as INSURANCE_DISCLAIMER
 from movie_muse.investor_artifacts.api import DISCLAIMER as INVESTOR_DISCLAIMER
-from movie_muse.investor_artifacts.api import InvestorArtifactService
+from movie_muse.investor_artifacts.api import InvestorArtifactService, PackKind
 from movie_muse.mcp.api import MCP_TOOLS, MeshMcpService
 from movie_muse.meeting_capture.api import HarvestRequiresReviewError, Utterance
 from movie_muse.platforms.api import (
@@ -53,8 +58,14 @@ from movie_muse.proposals.api import ImpactSummary, ProposalOrigin, ProposalStat
 from movie_muse.rights.api import PermittedUse, SourceClassification
 from movie_muse.room_mode.api import RoomKind
 from movie_muse.rubric.api import DISCLAIMER as RUBRIC_DISCLAIMER
-from movie_muse.rubric.api import RubricService
-from movie_muse.schemas.api import ChangeSet, ChangeSetOperation, OperationType, new_id
+from movie_muse.rubric.api import CriterionKind, RubricService
+from movie_muse.schemas.api import (
+    ArtifactStatus,
+    ChangeSet,
+    ChangeSetOperation,
+    OperationType,
+    new_id,
+)
 from movie_muse.shot_ir.api import CameraSpec as ShotCameraSpec
 from movie_muse.storyboard.api import DISCLAIMER as STORYBOARD_DISCLAIMER
 from movie_muse.storyboard.api import ImageProviderUnavailableError, require_image_provider
@@ -714,7 +725,7 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     if "EXT-INSURANCE-PARTNER" in missing_live:
         assert stack.insurance.live_partner_configured is False
 
-    # 35–39. Audience, rubric, forecast, investor — public APIs + labeled evidence.
+    # 35. Synthetic audience hypotheses with evidence-tier labeling.
     lab = AudienceLabService(
         stack.workspace,
         stack.authorization,
@@ -726,6 +737,15 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         stack.intents,
     )
     lab.grant_consent(project_id, principal=principal, acl_epoch=epoch)
+    hypothesis = lab.propose_segment_hypothesis(
+        project_id,
+        segment="playback-tension",
+        statement="Holding for playback is a labeled hypothesis about first-view tension.",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert hypothesis.labeled_hypothesis is True
+    assert hypothesis.population_estimate is False
     synthetic = lab.run_synthetic(
         project_id,
         principal=principal,
@@ -734,7 +754,34 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         prompt="How does holding for playback land for a first-time viewer?",
         sample_count=2,
     )
+    assert synthetic.tier is EvidenceTier.SYNTHETIC_LLM
+    assert synthetic.is_synthetic is True
     assert AUDIENCE_DISCLAIMER in synthetic.disclaimer
+
+    # 36. Consented human/expert response and calibration against the hypothesis.
+    human_run = lab.record_human(
+        project_id,
+        principal=principal,
+        acl_epoch=epoch,
+        tier=EvidenceTier.EXPERT_READER,
+        segment="playback-tension",
+        source_id=source.source_id,
+        responses=(
+            {"reading": "The hold for playback kept Ada investigating.", "score": 0.72},
+        ),
+    )
+    assert human_run.tier is EvidenceTier.EXPERT_READER
+    assert human_run.is_synthetic is False
+    calibration = lab.calibrate(
+        synthetic.id,
+        human_run.id,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert calibration.population_estimate is False
+    assert calibration.synthetic_run_id == synthetic.id
+
+    # 37. Rubric analysis with disagreement and counter-evidence.
     rubric = RubricService(
         stack.workspace,
         stack.authorization,
@@ -761,6 +808,46 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         intent_ids=(envelope.intent.id,),
     )
     assert RUBRIC_DISCLAIMER in analysis.disclaimer
+    assert analysis.advisory is True
+    evidence_ref = film_ir.id
+    owner_rating = rubric.rate_human(
+        analysis.id,
+        principal=principal,
+        acl_epoch=epoch,
+        criterion=CriterionKind.PACING,
+        score=0.4,
+        evidence_refs=(evidence_ref,),
+        rationale="The playback hold sits on Ada longer than the call-sheet beat.",
+    )
+    writer_rating = rubric.rate_human(
+        analysis.id,
+        principal=writer,
+        acl_epoch=epoch,
+        criterion=CriterionKind.PACING,
+        score=0.8,
+        evidence_refs=(evidence_ref,),
+        rationale="The hold is the intended rhythm of the playback scene.",
+    )
+    disagreement = rubric.disagreement(
+        analysis.id,
+        CriterionKind.PACING,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert disagreement.rater_count == 2
+    assert disagreement.spread == pytest.approx(writer_rating.score - owner_rating.score)
+    counter = rubric.add_counter_evidence(
+        analysis.id,
+        principal=principal,
+        acl_epoch=epoch,
+        statement="The heading already states the hold; pacing is not extra dwell.",
+        evidence_refs=(evidence_ref,),
+        rating_id=owner_rating.id,
+        criterion=CriterionKind.PACING,
+    )
+    assert counter.analysis_id == analysis.id
+
+    # 38. Commercial P10/P50/P90 scenarios and out-of-distribution fail-closed.
     forecast_service = CommercialForecastService(
         stack.workspace,
         stack.authorization,
@@ -770,6 +857,69 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         lab,
     )
     assert "not a guarantee" in FORECAST_DISCLAIMER.casefold()
+    as_of = "2024-12-31"
+    assumption_values = {
+        AssumptionKey.DISTRIBUTION: "limited theatrical plus SVOD window",
+        AssumptionKey.MARKETING: "festival-to-specialty spend",
+        AssumptionKey.RELEASE: "platform exclusive after 45-day theatrical",
+        AssumptionKey.TERRITORY: "US",
+        AssumptionKey.TALENT: "ensemble without a global star quote",
+        AssumptionKey.PLATFORM: "specialty-svod",
+    }
+    for key, value in assumption_values.items():
+        forecast_service.set_assumption(
+            project_id,
+            principal=principal,
+            acl_epoch=epoch,
+            key=key,
+            value=value,
+            data_as_of=as_of,
+            evidence=f"producer memo {key.value}",
+        )
+    for title, budget_amount, gross, released, dated in (
+        ("Latch Key", 800_000, 2_400_000, "2022-03-01", "2022-12-31"),
+        ("Harbor Night", 1_100_000, 3_000_000, "2023-04-15", "2023-12-31"),
+        ("Kitchen Watch", 950_000, 2_200_000, "2023-09-01", "2024-01-15"),
+    ):
+        forecast_service.register_comparable(
+            project_id,
+            principal=principal,
+            acl_epoch=epoch,
+            title=title,
+            territory="US",
+            platform="specialty-svod",
+            budget=budget_amount,
+            observed_gross=gross,
+            release_date=released,
+            data_as_of=dated,
+            source="internal released-outcome ledger",
+            rationale=f"{title} matches specialty US SVOD because of budget class.",
+        )
+    with pytest.raises(InsufficientEvidenceError):
+        forecast_service.forecast(
+            project_id,
+            principal=principal,
+            acl_epoch=epoch,
+            budget_id=budget.id,
+            as_of="2020-01-01",
+        )
+    forecast_record = forecast_service.forecast(
+        project_id,
+        principal=principal,
+        acl_epoch=epoch,
+        budget_id=budget.id,
+        as_of=as_of,
+        audience_run_id=synthetic.id,
+    )
+    percentiles = [item.percentile for item in forecast_record.scenario.outcomes]
+    assert percentiles == ["P10", "P50", "P90"]
+    p10, p50, p90 = (forecast_record.outcome(name).value for name in percentiles)
+    assert p10 <= p50 <= p90
+    assert forecast_record.guarantee is False
+    assert forecast_record.scenario.is_out_of_distribution is False
+    assert FORECAST_DISCLAIMER in forecast_record.scenario.uncertainty_notes
+
+    # 39. Generate, review, and export an evidence-backed investor deck.
     investor = InvestorArtifactService(
         stack.workspace,
         stack.authorization,
@@ -780,7 +930,73 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         stack.rights,
     )
     assert "not a guarantee" in INVESTOR_DISCLAIMER.casefold()
-    assert investor.rights is stack.rights
+    stack.artifacts.register_template(
+        project_id=project_id,
+        version="1",
+        renderer_version="json/1",
+        body="golden reviewed source {title}",
+        principal=principal,
+        acl_epoch=epoch,
+        template_id="tmpl_golden_reviewed_source",
+    )
+    lookbook = stack.artifacts.create_artifact(
+        project_id=project_id,
+        artifact_type=ArtifactType.DOCUMENT,
+        title="Golden reviewed lookbook",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    lookbook_version = stack.artifacts.create_version(
+        lookbook.id,
+        inputs={"title": "Golden reviewed lookbook", "page_count": 1},
+        source_revision_id=stack.head,
+        template_id="tmpl_golden_reviewed_source",
+        template_version="1",
+        renderer_version="json/1",
+        classification=ArtifactClassification.INTERNAL,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    stack.artifacts.transition_review(
+        lookbook_version.version.id,
+        ArtifactStatus.IN_REVIEW,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    approved_source = stack.artifacts.transition_review(
+        lookbook_version.version.id,
+        ArtifactStatus.APPROVED,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    pack = investor.compile(
+        project_id,
+        principal=principal,
+        acl_epoch=epoch,
+        kind=PackKind.DECK,
+        budget_id=budget.id,
+        forecast_id=forecast_record.id,
+        source_version_ids=(approved_source.version.id,),
+        rights_source_id=source.source_id,
+    )
+    assert pack.kind is PackKind.DECK
+    assert INVESTOR_DISCLAIMER in pack.disclaimer
+    pack_preview = investor.preview(
+        pack.id,
+        principal=principal,
+        acl_epoch=epoch,
+        recipient="producer@golden.test",
+    )
+    approved_pack = investor.approve(pack.id, principal=principal, acl_epoch=epoch)
+    assert approved_pack.approved is True
+    exported = investor.export_pack(
+        approved_pack.id,
+        tmp_path / "golden-investor-deck.txt",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert INVESTOR_DISCLAIMER in exported.read_text(encoding="utf-8")
+    assert pack_preview.pack_id == pack.id
 
     # 40. Read/propose through API/MCP; neither bypasses approval.
     mesh = IntegrationMeshService(

@@ -1749,3 +1749,12 @@ This file records orchestrator actions that the schema cannot store.
 - Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:26:22Z`.
 - `_completion_preflight.py` exits 0 on the clean tree. 1081 pytest green.
   Product FAIL: live probes still list all eight required EXT ids.
+
+## 2026-09-19T22:00:00Z
+
+- MM-047 returned to IN_PROGRESS. Golden-path steps 35–39 now execute public
+  APIs for labeled synthetic audience hypotheses, consented human calibration,
+  rubric disagreement/counter-evidence, P10/P50/P90 forecasts with
+  out-of-distribution fail-closed, and reviewed investor-deck export.
+- Did not mock live providers. Did not `invalidate --apply`. `pass_record`
+  remains null. Product PASS still requires genuine live EXT evidence.

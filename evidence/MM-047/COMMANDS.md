@@ -139,6 +139,14 @@ Product-acceptance FAIL: eight required EXT ids still missing. Ledger stays
 
 UTC: `2026-09-19T21:15:00Z`
 
+## Continuation (2026-09-19T22:00:00Z)
+
+Golden-path steps 35–39 now run public APIs for synthetic audience hypotheses,
+consented human calibration, rubric disagreement/counter-evidence, commercial
+P10/P50/P90 with out-of-distribution fail-closed, and reviewed investor-deck
+export. This revision is not a self-PASS. Live EXT remains the required
+external blocker.
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:
