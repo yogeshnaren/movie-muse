@@ -1505,5 +1505,23 @@ This file records orchestrator actions that the schema cannot store.
 - `verify_all.sh` remains fail-closed at `migrations_backup_and_recovery`.
 - MM-045 `pass_record` stays null pending independent Grok verification.
 
+## 2026-09-19T09:20:00Z
+
+- Relocated MM-045 host tests from `tests/apps/**` to `tests/hosts/**` so
+  ruff isort does not treat `apps` as a first-party package and break
+  `tests/editor/test_editor_host.py`. Did not edit that editor test.
+
+## 2026-09-19T09:30:00Z
+
+- Implementer quality re-recorded for MM-045 at
+  `f29a2a0e11a9fa5f94c716d02ba88f88f78a001b` after the host-test relocate.
+- Fingerprint `cef30931e4709dfe536f2aec3f8f3e4c2fd6be4954bf2c6e9d27834bd2099033`.
+- Focused pytest 20 passed (`tests/platforms`, `tests/hosts`); full pytest
+  1042 passed; ruff `--no-cache` / mypy clean.
+- `verify_all.sh` fail-closed at `migrations_backup_and_recovery`.
+- MM-045 `pass_record` stays null pending independent Grok verification.
+
+
+
 
 
