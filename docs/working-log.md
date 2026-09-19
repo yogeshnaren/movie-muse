@@ -1840,3 +1840,11 @@ This file records orchestrator actions that the schema cannot store.
   sentinel not printed.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-20T02:50:00Z
+
+- MM-047 returned to IN_PROGRESS. `unit_and_property.sh` now runs the unit
+  packages that other named gates omitted (excluding `tests/release`).
+  Completion preflight now fail-closes on unpinned ruff/mypy/pytest/jsonschema/
+  ruamel.yaml and missing/unsupported Node. Did not mock live providers.
+  Did not `invalidate --apply`. Product PASS still requires genuine live EXT.

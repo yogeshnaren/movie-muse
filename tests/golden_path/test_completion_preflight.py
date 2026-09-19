@@ -21,5 +21,9 @@ def test_completion_preflight_is_wired_into_golden_path_gate() -> None:
     script = root / "scripts" / "gates" / "golden_path_41_steps.sh"
     assert "_completion_preflight.py" in script.read_text(encoding="utf-8")
     assert (root / "scripts" / "gates" / "_completion_preflight.py").is_file()
-    problems = _load_preflight().completion_problems()
+    module = _load_preflight()
+    problems = module.completion_problems()
     assert isinstance(problems, list)
+    assert ("ruff", "0.12.12") in module.PINNED_PACKAGES
+    assert ("mypy", "1.17.1") in module.PINNED_PACKAGES
+    assert ("pytest", "8.4.1") in module.PINNED_PACKAGES

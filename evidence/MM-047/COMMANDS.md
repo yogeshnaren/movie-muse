@@ -222,6 +222,13 @@ unset. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
 
 UTC: `2026-09-20T02:20:00Z`
 
+## Continuation (2026-09-20T02:50:00Z)
+
+`unit_and_property.sh` now covers unit packages omitted by other named gates
+(excluding `tests/release`). Completion preflight fail-closes on unpinned
+ruff/mypy/pytest/jsonschema/ruamel.yaml and missing/unsupported Node. This
+revision is not a self-PASS. Live EXT remains the required external blocker.
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

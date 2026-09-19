@@ -138,4 +138,12 @@ PYTHONPATH=src python3 -m pytest -q
 # fingerprint: 11a6933bbf751a7c48d935a168ed3588e0aeccaef4a6beb39ecabe8c5b7f5418
 # Did not invalidate --apply
 
+# --- 2026-09-20T02:50:00Z expanded unit gate and pinned-tool preflight ---
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# ./scripts/gates/unit_and_property.sh: passed
+# full pytest: 1081 collected / all passed
+# Did not invalidate --apply
+
 
