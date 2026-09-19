@@ -1639,3 +1639,15 @@ This file records orchestrator actions that the schema cannot store.
   `pass_record` remains null. `overall_status` remains IN_PROGRESS. Did not mock
   live providers. Product success still requires genuine sandbox/live EXT
   evidence and a later `verify_all` PASS.
+
+## 2026-09-19T16:00:00Z
+
+- MM-047 returned to IN_PROGRESS. Added fail-closed live probes in
+  `scripts/gates/_live_probes.py`. `external_live_providers.sh` now runs those
+  probes before accepting ledger EXT PASS, so a YAML stamp plus dummy env
+  cannot print the product sentinel.
+- Delivery/insurance probes use `MOVIE_MUSE_DELIVERY_CHANNEL_BASE_URL` and
+  `MOVIE_MUSE_INSURANCE_PARTNER_BASE_URL`. Remote probe uses the real
+  `RemoteProviderAdapter.invoke` round-trip. Did not mock providers.
+- `pass_record` remains null. Product PASS still requires genuine reachable
+  sandbox/live endpoints and ledger EXT PASS.

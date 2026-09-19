@@ -15,7 +15,10 @@ export PYTHONPATH="${REPO_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}"
   tests/storyboard/test_storyboard_boundaries.py \
   tests/video_previs/test_video_previs_boundaries.py \
   tests/insurance_readiness/test_insurance_readiness_boundaries.py \
-  tests/correspondence
+  tests/correspondence \
+  tests/golden_path/test_live_probes.py
+
+python3 "${SCRIPT_DIR}/_live_probes.py"
 
 python3 - <<'PY'
 from __future__ import annotations
