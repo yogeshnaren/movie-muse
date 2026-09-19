@@ -532,6 +532,12 @@ scopes:
     shared:
       - src/movie_muse/director/**
       - src/movie_muse/rights/**
+      - src/movie_muse/shot_ir/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
   capability.video_previs:
     owned:
       - src/movie_muse/video_previs/**
