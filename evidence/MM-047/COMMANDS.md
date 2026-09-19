@@ -159,6 +159,14 @@ Product-acceptance FAIL because live/sandbox providers are unset. Ledger stamped
 
 UTC: `2026-09-19T22:30:00Z`
 
+## Continuation (2026-09-19T23:00:00Z)
+
+Golden-path steps 10, 11, 17, 28, 32, 33, and 40 now run public APIs for
+entity-candidate review, character-state query, dependent staleness,
+annotated storyboard compare, schedule constraints, budget sensitivity, and
+MCP propose-without-commit. This revision is not a self-PASS. Live EXT
+remains the required external blocker.
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

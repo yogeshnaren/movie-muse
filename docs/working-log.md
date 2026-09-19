@@ -1770,3 +1770,12 @@ This file records orchestrator actions that the schema cannot store.
   with all eight required EXT ids. PASS sentinel not printed.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-19T23:00:00Z
+
+- MM-047 returned to IN_PROGRESS. Golden-path steps 10, 11, 17, 28, 32, 33,
+  and 40 now execute public APIs for candidate extraction, character-state
+  query, dependent invalidation, annotated storyboard compare, schedule
+  pin/block, budget sensitivity, and MCP propose-without-commit.
+- Did not mock live providers. Did not `invalidate --apply`. `pass_record`
+  remains null. Product PASS still requires genuine live EXT evidence.

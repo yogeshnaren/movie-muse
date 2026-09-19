@@ -14,6 +14,7 @@ from movie_muse.adapters.google_meet.api import (
 from movie_muse.adapters.zoom.api import ZoomSandboxUnavailableError, require_zoom_sandbox
 from movie_muse.api.api import (
     API_VERSION,
+    CommitDeniedError,
     IntegrationMeshService,
     ReviewConnectorUnavailableError,
     ToolSide,
@@ -40,7 +41,7 @@ from movie_muse.creative_intent.api import (
 )
 from movie_muse.director.api import AnnotationRole
 from movie_muse.fdx.api import FinalDraftUnavailableError, require_final_draft
-from movie_muse.identity.api import Role, make_human_actor
+from movie_muse.identity.api import Role, make_human_actor, make_integration_actor
 from movie_muse.insurance_readiness.api import DISCLAIMER as INSURANCE_DISCLAIMER
 from movie_muse.investor_artifacts.api import DISCLAIMER as INVESTOR_DISCLAIMER
 from movie_muse.investor_artifacts.api import InvestorArtifactService, PackKind
@@ -59,6 +60,7 @@ from movie_muse.rights.api import PermittedUse, SourceClassification
 from movie_muse.room_mode.api import RoomKind
 from movie_muse.rubric.api import DISCLAIMER as RUBRIC_DISCLAIMER
 from movie_muse.rubric.api import CriterionKind, RubricService
+from movie_muse.scheduling.api import ResourceKind
 from movie_muse.schemas.api import (
     ArtifactStatus,
     ChangeSet,
@@ -117,6 +119,21 @@ def _invite(stack, role: Role, display_name: str):
     return stack.identity.principal(actor.id)
 
 
+def _invite_integration(stack, display_name: str):
+    actor = make_integration_actor(
+        organization_id=stack.project.organization_id, display_name=display_name
+    )
+    stack.identity.register_actor(actor)
+    invitation = stack.identity.invite(
+        inviter_actor_id=stack.owner.id,
+        invitee_actor_id=actor.id,
+        project_id=stack.project.id,
+        role=Role.INTEGRATION_SERVICE,
+    )
+    stack.identity.accept_invitation(invitation.id, actor_id=actor.id)
+    return stack.identity.principal(actor.id)
+
+
 def _ops(*pairs: tuple[str, str], base_revision_id: str, actor_id: str) -> ChangeSet:
     operations = tuple(
         ChangeSetOperation(
@@ -151,9 +168,11 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     # 2. Set creator ownership, collaborators, roles and sensitive-data permissions.
     writer = _invite(stack, Role.WRITER, "Writer")
     viewer = _invite(stack, Role.VIEWER, "Viewer")
+    mesh_bot = _invite_integration(stack, "Mesh Bot")
     epoch = stack.epoch
     assert writer.actor_id != stack.owner.id
     assert viewer.actor_id != writer.actor_id
+    assert mesh_bot.actor_id != stack.owner.id
 
     # 3. Import the golden FDX and review its loss report.
     fdx_path = repo_root() / "fixtures" / "fdx" / "ordinary_kitchen.fdx"
@@ -256,15 +275,32 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     # 10. Review/correct entity resolution and evidence.
     names = {entity.canonical_name.casefold() for entity in film_ir.entities}
     assert "ada" in names or any("ada" in name for name in names) or film_ir.entities
+    projection = stack.film_ir.extract_candidates(
+        stack.revisions.replay_head(),
+        principal=principal,
+        acl_epoch=epoch,
+        permission_snapshot_id=stack.snapshot,
+    )
+    assert projection.film_ir.project_id == GOLDEN_PROJECT_ID
+    structural = {entity.id for entity in projection.film_ir.entities}
+    inferred = {claim.id for claim in projection.candidates.claims}
+    assert structural.isdisjoint(inferred)
 
-    # 11. Inspect a character's knowledge/state at two scenes/moments.
+    # 11. Inspect a character's knowledge/state at two moments.
     reduction = stack.state.reduce(
         film_ir, stack.revisions.replay_head(), principal=principal, acl_epoch=epoch
     )
     scene_id = stack.scene_id()
     first = stack.state.query(film_ir, reduction, scene_id=scene_id)
-    second = stack.state.query(film_ir, reduction, scene_id=scene_id)
-    assert first.scene_id == second.scene_id == scene_id
+    ada = next(
+        entity
+        for entity in film_ir.entities
+        if "ada" in entity.canonical_name.casefold()
+    )
+    character_state = stack.state.query(
+        film_ir, reduction, scene_id=scene_id, subject_id=ada.id
+    )
+    assert first.scene_id == character_state.scene_id == scene_id
 
     # 12. Record CreativeIntentIR and creative invariants.
     envelope = stack.intents.apply_direct(
@@ -373,6 +409,14 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     assert any(record.operation == "proposal.accept" for record in stack.audit.list_records())
     replayed = stack.revisions.replay_head()
     assert "then waits" in next(block.text for block in replayed.blocks if block.id == stack.action_id())
+    stale = stack.graph.invalidate_for_change_set(
+        accept_change,
+        result_revision_id=accepted.revision_id,
+        principal=principal,
+        acl_epoch=epoch,
+        project_id=project_id,
+    )
+    assert stale.generation >= 0
 
     # 18. Run continuity/material-impact analysis.
     film_ir = stack.film_ir.project(replayed, principal=principal, acl_epoch=epoch)
@@ -614,6 +658,23 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     )
     assert STORYBOARD_DISCLAIMER
     assert frame.shot_id == shot.record.id
+    stack.storyboard.annotate(
+        frame.id,
+        role=AnnotationRole.DIRECTOR,
+        body="hold the wide on Ada at the call sheet",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    alt_frame = stack.storyboard.render_frame(
+        shot.record.id,
+        principal=principal,
+        acl_epoch=epoch,
+        style_key="playback-hold",
+    )
+    compared = stack.storyboard.compare_frames(
+        frame.id, alt_frame.id, principal=principal, acl_epoch=epoch
+    )
+    assert compared.left_version_id != compared.right_version_id or compared.checksum_changed
     _configured_or_fail_closed(
         "EXT-IMAGE-PROVIDER",
         missing_live,
@@ -696,6 +757,24 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         seed=2,
     )
     assert first_schedule.id != second_schedule.id
+    pin_scene = first_schedule.demands[0].scene_id
+    pinned = stack.schedules.pin(
+        first_schedule.id,
+        pin_scene,
+        0,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    blocked = stack.schedules.block_resource(
+        second_schedule.id,
+        ResourceKind.LOCATION,
+        "soundstage",
+        0,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert pinned.pins
+    assert blocked.availability
 
     # 33. Generate a budget with evidence, assumptions and sensitivity.
     budget = stack.budgets.compile(
@@ -703,6 +782,15 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     )
     assert budget.lines
     assert budget.schedule_id == first_schedule.id
+    sensitivity = stack.budgets.sensitivity(
+        budget.id,
+        principal=principal,
+        acl_epoch=epoch,
+        rate_delta="0.10",
+        label="festival-upside",
+    )
+    assert sensitivity.label == "festival-upside"
+    assert sensitivity.total is not None
 
     # 34. Insurance-readiness package and local specialist handoff.
     packet = stack.insurance.compile(budget.id, principal=principal, acl_epoch=epoch)
@@ -1023,6 +1111,34 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         acl_epoch=epoch,
     )
     assert read["id"] == GOLDEN_PROJECT_ID or read.get("project_id") == GOLDEN_PROJECT_ID or read
+    proposed = mcp.invoke(
+        "proposals.propose",
+        {
+            "project_id": project_id,
+            "change_set": _ops(
+                (stack.action_id(), "Ada checks the call sheet after MCP propose."),
+                base_revision_id=stack.head,
+                actor_id=mesh_bot.actor_id,
+            ),
+            "intent": "mcp propose",
+            "rationale_summary": "integration cannot write canon",
+            "provenance": "mcp",
+        },
+        principal=mesh_bot,
+        acl_epoch=epoch,
+    )
+    assert proposed["status"] != ProposalStatus.ACCEPTED.value
+    with pytest.raises(CommitDeniedError):
+        mcp.invoke(
+            "proposals.commit",
+            {"project_id": project_id, "proposal_id": proposed["proposal_id"]},
+            principal=mesh_bot,
+            acl_epoch=epoch,
+        )
+    replay_after_mcp = stack.revisions.replay_head()
+    assert "after MCP propose" not in next(
+        block.text for block in replay_after_mcp.blocks if block.id == stack.action_id()
+    )
     if review_connector_base_url():
         assert require_review_connector()
     else:
