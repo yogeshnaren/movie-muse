@@ -1131,4 +1131,11 @@ This file records orchestrator actions that the schema cannot store.
   staleness. Did not import tests.scheduling.
 - Next runnable: MM-029, MM-032, MM-033, MM-038, MM-040, MM-041, MM-044
 
+## 2026-09-19T01:20:00Z
+
+- Implementer: MM-038 Budget Evidence Ledger on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-037 PASS unblocked MM-038 (depends on MM-010/MM-035/MM-037).
+  Moved MM-038 to IN_PROGRESS. `pass_record` remains null.
+
 

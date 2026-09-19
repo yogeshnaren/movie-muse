@@ -594,6 +594,14 @@ scopes:
     shared:
       - src/movie_muse/scheduling/**
       - src/movie_muse/rights/**
+      - src/movie_muse/breakdown/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/dependencies/**
   capability.insurance_readiness:
     owned:
       - src/movie_muse/insurance_readiness/**
