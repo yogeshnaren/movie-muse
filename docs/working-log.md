@@ -1272,4 +1272,16 @@ This file records orchestrator actions that the schema cannot store.
 - `verify_all.sh` remains fail-closed at `migrations_backup_and_recovery`.
 - Did not mark PASS.
 
+## 2026-09-19T03:10:00Z
+
+- Independent Grok verification PASS for MM-032 at
+  `ef86d6036c208b9fd227ce94856be068ed6a9ee3`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T03:04:40Z`.
+- Fingerprint `fec1769da555429aab717e3ded2147292ea7b107d7038aafcfa91fc7de2b487e`.
+- Independent probes confirmed ShotIR/source-revision linkage, locked-attribute
+  drift fail-closed, accepted-asset reuse, regeneration/compare/correction
+  metrics, stale labeling, distinct director/producer/writer annotations,
+  and EXT-IMAGE-PROVIDER NOT_RUN. Did not import tests.storyboard.
+- Next runnable: MM-034, MM-040, MM-041, MM-044
+
 
