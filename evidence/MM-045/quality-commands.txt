@@ -1,0 +1,74 @@
+# MM-045 implementer quality commands
+# UTC 2026-09-19T09:00:00Z
+# SHA ce67f4e091ffaa055a58dd153ed3fa039f10841f
+
+$ python3 scripts/validate_handoff.py
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+STATUS_VALIDATE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+SCOPE_COVERAGE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py runnable
+{
+  "count": 1,
+  "runnable": [
+    "MM-045"
+  ]
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-045
+input_fingerprint=6f4e6367cb85719d75b85dd7393868fc2cc6966df9e29a60e48c15c144ff66ab
+item_id=MM-045
+verification_commit=ce67f4e091ffaa055a58dd153ed3fa039f10841f
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{
+  "count": 0,
+  "violations": []
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{
+  "count": 0,
+  "hits": []
+}
+exit 0
+
+$ python3 -m ruff check src/movie_muse/platforms tests/platforms tests/apps apps/web apps/macos apps/windows apps/ios apps/android
+All checks passed!
+exit 0
+
+$ python3 -m mypy src/movie_muse/platforms
+Success: no issues found in 8 source files
+exit 0
+
+$ python3 -m pytest tests/platforms tests/apps -q --tb=short
+....................
+20 passed
+exit 0
+
+$ python3 -m ruff check src tests scripts backend apps
+All checks passed!
+exit 0
+
+$ python3 -m mypy src
+Success: no issues found in 434 source files
+exit 0
+
+$ python3 -m pytest --tb=no
+1042 passed, 3 warnings in 125.59s
+exit 0
+
+$ ./scripts/verify_all.sh
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit 1
+# expected: fail-closed at later migrations_backup_and_recovery; no PASS sentinel
