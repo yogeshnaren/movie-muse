@@ -1535,6 +1535,19 @@ This file records orchestrator actions that the schema cannot store.
   Did not import tests.platforms, tests.hosts, or tests.apps.
 - Next runnable: MM-046
 
+## 2026-09-19T10:00:00Z
+
+- Implementer: MM-046 Security, privacy, observability, evaluation, and
+  operations on `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-008/MM-009/MM-010/MM-027/MM-029/MM-034/MM-039/MM-042/MM-044/MM-045 PASS
+  unblocked MM-046. Moved MM-046 to IN_PROGRESS. `pass_record` remains null.
+- Control plane covers threat findings, encryption/BYOK, ACL probes, privacy
+  deletion/export/retention, no-training defaults, redacted telemetry, bench
+  registry, backup/restore drills, SBOM, cost caps, and incident runbooks.
+- Implementation uses `ControlPlane` in `movie_muse.security.api`. Security
+  tests live under `tests/control_plane/**` so `tests/security/**` remains
+  toolchain-owned. Did not mark PASS. Did not add `fixtures/**`.
+
 
 
 

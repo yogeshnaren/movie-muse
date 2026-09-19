@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T09:45:00Z"
+last_updated_utc: "2026-09-19T10:20:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -2841,7 +2841,7 @@ items:
     title: Security, privacy, observability, evaluation, and operations
     milestone: H
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-008, MM-009, MM-010, MM-027, MM-029, MM-034, MM-039, MM-042, MM-044, MM-045]
     scope_keys: [global.security, global.privacy, global.observability, global.evaluation, global.operations]
     pass_record: null

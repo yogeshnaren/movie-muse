@@ -811,11 +811,15 @@ scopes:
   global.security:
     owned:
       - src/movie_muse/security/**
-      - tests/security/**
+      - tests/control_plane/**
       - docs/security/**
-      - config/secrets-policy.yaml
     shared:
       - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/retrieval/**
+      - config/secrets-policy.yaml
   global.privacy:
     owned:
       - src/movie_muse/privacy/**
@@ -823,12 +827,15 @@ scopes:
       - docs/privacy/**
     shared:
       - src/movie_muse/security/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/rights/**
   global.observability:
     owned:
       - src/movie_muse/observability/**
       - tests/observability/**
     shared:
       - src/movie_muse/jobs/**
+      - src/movie_muse/security/**
   global.evaluation:
     owned:
       - src/movie_muse/evaluation/**
@@ -836,14 +843,19 @@ scopes:
       - bench/**
     shared:
       - src/movie_muse/model_router/**
+      - src/movie_muse/testkit/**
       - fixtures/**
+      - fixtures/bench/**
   global.operations:
     owned:
+      - src/movie_muse/operations/**
       - docs/operations/**
       - tests/operations/**
     shared:
       - .github/workflows/**
       - scripts/verify_all.sh
+      - src/movie_muse/persistence/**
+      - src/movie_muse/security/**
   test.golden_path:
     owned:
       - tests/golden_path/**
