@@ -701,6 +701,14 @@ scopes:
     shared:
       - src/movie_muse/artifacts/**
       - src/movie_muse/commercial_forecast/**
+      - src/movie_muse/budget/**
+      - src/movie_muse/rights/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
   module.api:
     owned:
       - src/movie_muse/api/**

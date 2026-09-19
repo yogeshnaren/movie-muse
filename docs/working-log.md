@@ -1414,4 +1414,16 @@ This file records orchestrator actions that the schema cannot store.
   as-of exclusion of future comparables. Did not import tests.commercial_forecast.
 - Next runnable: MM-043, MM-044
 
+## 2026-09-19T05:35:00Z
+
+- Implementer: MM-043 Investor deck and evidence-backed generated artifacts on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-007/MM-010/MM-038/MM-042 PASS unblocked MM-043. Moved MM-043 to
+  IN_PROGRESS. `pass_record` remains null.
+- Decks, one-pagers, and data rooms cite current budget and commercial
+  scenarios, lock reviewed artifact versions, and require human approve
+  before delivery. Stale or unsupported claims block export.
+- Tests duplicate commercial_forecast+artifacts+rights boot and never
+  import tests.commercial_forecast, tests.budget, or tests.insurance_readiness.
+
 
