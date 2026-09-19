@@ -84,6 +84,19 @@ class SyncProtocol:
     def drain_inbox(self) -> str:
         return self._apply_ready()
 
+    def reconnect(self) -> dict[str, object]:
+        """Drain inbox and flush outbox after an outage. Local work is preserved."""
+
+        inbox = self.drain_inbox()
+        flushed: list[str] = []
+        if self.workspace.store.sync_upload_allowed():
+            flushed = self.flush_outbox()
+        return {
+            "inbox": inbox,
+            "flushed": tuple(flushed),
+            "last_synced": self.workspace.store.get_meta("last_synced_operation_id"),
+        }
+
     def _apply_ready(self) -> str:
         last = "buffered"
         progressed = True

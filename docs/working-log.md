@@ -1703,3 +1703,13 @@ This file records orchestrator actions that the schema cannot store.
   `tests/release/test_verify_all_fail_closed.py` (later scopes and named
   gates must remain). Live EXT remains the required external blocker.
 - `pass_record` remains null. Did not mock live providers.
+
+## 2026-09-19T19:15:00Z
+
+- Kept `SyncProtocol.reconnect` on `module.sync` because MM-027 also owns that
+  scope; moving it had restored MM-004 only by drifting MM-027. Web parity
+  shell remains under `frontend/web` so MM-015 fingerprints match.
+- Completion preflight remaining drift: MM-001 (verification-scopes and
+  fail-closed release test), MM-004 (reconnect added after its PASS), MM-045
+  (web shell path after MM-015 restore). Did not `invalidate --apply`.
+- `pass_record` remains null. Did not mock live providers.

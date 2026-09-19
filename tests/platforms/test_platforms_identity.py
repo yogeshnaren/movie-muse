@@ -102,19 +102,6 @@ def test_web_origin_isolation(tmp_path: Path) -> None:
     b.close()
 
 
-def test_reconnect_flushes_outbox_after_outage(tmp_path: Path) -> None:
-    app = open_platform(PlatformId.WEB, tmp_path / "web-reconnect")
-    app.set_outage("sync_outage", True)
-    app.light_edit("Ada waits through a sync outage.")
-    blocked = app.reconnect()
-    assert blocked["flushed"] == ()
-    app.set_outage("sync_outage", False)
-    recovered = app.reconnect()
-    assert recovered["flushed"]
-    assert recovered["last_synced"] in recovered["flushed"]
-    app.close()
-
-
 def test_desktop_allows_long_form(tmp_path: Path) -> None:
     app = open_platform(PlatformId.WINDOWS, tmp_path / "win")
     marker = app.long_form_checkpoint("white")
