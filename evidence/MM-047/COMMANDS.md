@@ -63,6 +63,19 @@ gates. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
 
 UTC: `2026-09-19T15:00:00Z`
 
+## Independent verification (Grok 4.6) — live probes
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T08:46:38Z`
+verified a detached worktree at
+`a1cb3fd0fc309018b45a5bf117ac8dacbfc7d3b6`
+(fingerprint `4f40ab309aff0c4b884e7ee2b6ac357652959cc8f6cb73e7cf22e6599a50ed1a`).
+Implementation quality PASS (8 golden_path, 1080 full pytest, fail-closed
+live probes A–H). Product-acceptance FAIL because live/sandbox providers are
+unset. Dummy unreachable URLs also fail closed. Ledger stamped
+`BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-19T16:45:00Z`
+
 ## Continuation (2026-09-19T14:00:00Z)
 
 Golden path no longer forbids an all-EXT-PASS world. Live `require_*` calls

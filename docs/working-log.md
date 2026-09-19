@@ -1651,3 +1651,16 @@ This file records orchestrator actions that the schema cannot store.
   `RemoteProviderAdapter.invoke` round-trip. Did not mock providers.
 - `pass_record` remains null. Product PASS still requires genuine reachable
   sandbox/live endpoints and ledger EXT PASS.
+
+## 2026-09-19T16:45:00Z
+
+- Independent Grok verification of MM-047 live probes at
+  `a1cb3fd0fc309018b45a5bf117ac8dacbfc7d3b6`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T08:46:38Z`.
+- Fingerprint `4f40ab309aff0c4b884e7ee2b6ac357652959cc8f6cb73e7cf22e6599a50ed1a`.
+- Implementation quality PASS: ruff `--no-cache`, mypy, 8 golden_path, 1080
+  full pytest, probes A–H. Product-acceptance FAIL: `_live_probes.py` and
+  `verify_all` exit 1 with all eight required EXT ids. Dummy unreachable URLs
+  also fail closed. PASS sentinel not printed.
+- Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
+  `overall_status` remains IN_PROGRESS. Did not mock live providers.
