@@ -1253,4 +1253,14 @@ This file records orchestrator actions that the schema cannot store.
   accept. Did not import tests.visual_language.
 - Next runnable: MM-032, MM-040, MM-041, MM-044
 
+## 2026-09-19T03:05:00Z
+
+- Implementer: MM-032 Storyboard generation and annotation on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-009/MM-010/MM-031 PASS unblocked MM-032. Moved MM-032 to IN_PROGRESS.
+  `pass_record` remains null.
+- Diagrammatic ShotIR storyboards via ModelRouter `generate_text` and generic
+  media artifacts. `EXT-IMAGE-PROVIDER` stays NOT_RUN; live render is
+  fail-closed and is not claimed as sandbox smoke.
+
 

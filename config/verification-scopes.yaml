@@ -525,6 +525,15 @@ scopes:
       - src/movie_muse/shot_ir/**
       - src/movie_muse/model_router/**
       - src/movie_muse/artifacts/**
+      - src/movie_muse/director/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/dependencies/**
+      - src/movie_muse/jobs/**
   capability.visual_language:
     owned:
       - src/movie_muse/visual_language/**
