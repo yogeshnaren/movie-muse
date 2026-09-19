@@ -147,6 +147,18 @@ P10/P50/P90 with out-of-distribution fail-closed, and reviewed investor-deck
 export. This revision is not a self-PASS. Live EXT remains the required
 external blocker.
 
+## Independent verification (Grok 4.6) — golden-path steps 35–39
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:47:59Z`
+verified a detached worktree at
+`a5150d734b9b2b39469b187e44ab35e7821ee224`
+(fingerprint `c703a0e485d4f20eaeb145a4bcbaa8b4604f8efefce342986175505b66aac9c5`).
+Implementation quality PASS (9 golden_path, 1081 full pytest, preflight EXIT 0).
+Product-acceptance FAIL because live/sandbox providers are unset. Ledger stamped
+`BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-19T22:30:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

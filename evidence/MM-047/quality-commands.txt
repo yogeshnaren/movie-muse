@@ -84,4 +84,18 @@ PYTHONPATH=src python3 -m pytest -q
 # live probes: exit 1 missing_live_gates= all eight required EXT ids
 # Did not invalidate --apply
 
+# --- 2026-09-19T22:00:00Z golden-path steps 35-39 ---
+# SHA: a5150d734b9b2b39469b187e44ab35e7821ee224
+# fingerprint at a5150d7: c703a0e485d4f20eaeb145a4bcbaa8b4604f8efefce342986175505b66aac9c5
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed (warnings: starlette BlockingPortal, httpx app shortcut)
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# python3 scripts/gates/_completion_preflight.py: exit 0 (empty stdout/stderr)
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T10:47:59Z
+# Did not invalidate --apply
+
 
