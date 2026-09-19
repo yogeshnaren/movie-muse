@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T00:06:09Z"
+last_updated_utc: "2026-09-19T00:27:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -1973,10 +1973,59 @@ items:
     title: Production breakdown
     milestone: F
     priority: critical
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-018, MM-024]
     scope_keys: [module.breakdown]
-    pass_record: null
+    pass_record:
+      verification_commit: 3935938f6f488ad04c23643de81f0b03da840c6b
+      input_fingerprint: 38c7ad72a6373e32a8ff4830417282e65dd1bab8194a4254dafc4ce6dc19b4da
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-035
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/breakdown -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-035/COMMANDS.md
+        - evidence/MM-035/quality-commands.txt
+        - src/movie_muse/breakdown/
+        - tests/breakdown/
+      completed_at_utc: "2026-09-19T00:27:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T00:26:04Z
+        independence_basis: Did not implement MM-035; independently verified a fresh detached worktree at 3935938. Did not rely on implementer summaries or evidence/MM-035. Wrote independent probes under /tmp using public breakdown APIs without importing tests.breakdown.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-035-independent-verify
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-035
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/breakdown -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-035/COMMANDS.md
+          - evidence/MM-035/quality-commands.txt
+          - src/movie_muse/breakdown/
+          - tests/breakdown/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 761 tests with two unrelated deprecation warnings.
+          - Existing repo fixtures predate MM-035; this package added none.
+          - No required MM-035 check was skipped.
     blocker: null
   - id: MM-036
     title: Department handoffs, ChangeSets, and production correspondence
