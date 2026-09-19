@@ -1091,4 +1091,17 @@ This file records orchestrator actions that the schema cannot store.
 - `verify_all.sh` remains fail-closed at `migrations_backup_and_recovery`.
 - Did not mark PASS.
 
+## 2026-09-19T00:53:26Z
+
+- Independent Grok verification PASS for MM-036 at
+  `e616cc118d484fc8cb14636917424bf0f49c120d`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T00:51:52Z`.
+- Fingerprint `e2e5a701f5cde78add026db127b05117626fbe246ced45a4b1d0fccfd0eb4074`.
+- Independent probes confirmed role-filtered department packets,
+  craft-owner ProjectEvents, targeted notices, and preview-gated
+  correspondence with network_sent=False. Did not import
+  tests.department_handoff or tests.correspondence.
+- EXT-DELIVERY-CHANNEL remains NOT_RUN. Next runnable: MM-029, MM-032,
+  MM-033, MM-037, MM-040, MM-041, MM-044
+
 
