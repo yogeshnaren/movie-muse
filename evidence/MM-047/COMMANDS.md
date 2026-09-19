@@ -229,6 +229,19 @@ UTC: `2026-09-20T02:20:00Z`
 ruff/mypy/pytest/jsonschema/ruamel.yaml and missing/unsupported Node. This
 revision is not a self-PASS. Live EXT remains the required external blocker.
 
+## Independent verification (Grok 4.6) — unit-gate coverage and pin preflight
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T12:47:22Z`
+verified a detached worktree at
+`23532e3b892dbd13ee648090ac2415548cf60855`
+(fingerprint `414189d271b4cba15d2fd8e381edaaa9c9b27b5c573e2a76a19139462b039c0c`).
+Implementation quality PASS (9 golden_path, 717 unit_and_property, 1081 full
+pytest, vitest 11, completion preflight EXIT 0). Product-acceptance FAIL
+because live/sandbox providers are unset. Ledger stamped `BLOCKED_EXTERNAL`,
+not PASS.
+
+UTC: `2026-09-20T03:20:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:
