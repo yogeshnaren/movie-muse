@@ -1370,4 +1370,17 @@ This file records orchestrator actions that the schema cannot store.
 - `verify_all.sh` remains fail-closed at `migrations_backup_and_recovery`.
 - Did not mark PASS.
 
+## 2026-09-19T04:50:00Z
+
+- Independent Grok verification PASS for MM-041 at
+  `d9489bd347823791b1a88e53b555811e92d7a584`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T04:25:30Z`.
+- Fingerprint `bc75b88ff3e09b5f28a3bade7171f78b730d8d01913d279279011ed3ce60a85e`.
+- Independent probes confirmed unexplained-scalar fail-closed, score-change
+  trace to rubric version and model, multi-rater disagreement, counter-evidence,
+  human-only creator override that keeps prior ratings, adversarial fingerprint
+  change, advisory calibration residual, and FilmIR/CreativeIntentIR unchanged.
+  Did not import tests.rubric.
+- Next runnable: MM-042, MM-044
+
 

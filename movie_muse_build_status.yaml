@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T04:40:00Z"
+last_updated_utc: "2026-09-19T04:50:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -2525,10 +2525,59 @@ items:
     title: Rubric and scene/script analysis
     milestone: G
     priority: high
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-009, MM-010, MM-018, MM-020, MM-024]
     scope_keys: [capability.rubric]
-    pass_record: null
+    pass_record:
+      verification_commit: d9489bd347823791b1a88e53b555811e92d7a584
+      input_fingerprint: bc75b88ff3e09b5f28a3bade7171f78b730d8d01913d279279011ed3ce60a85e
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-041
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/rubric -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-041/COMMANDS.md
+        - evidence/MM-041/quality-commands.txt
+        - src/movie_muse/rubric/
+        - tests/rubric/
+      completed_at_utc: "2026-09-19T04:50:00Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T04:25:30Z
+        independence_basis: Did not implement MM-041; independently verified a fresh detached worktree at d9489bd. Did not rely on implementer summaries or evidence/MM-041. Wrote independent probes under /tmp using public rubric APIs without importing tests.rubric.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm041-independent-verify
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-041
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/rubric -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-041/COMMANDS.md
+          - evidence/MM-041/quality-commands.txt
+          - src/movie_muse/rubric/
+          - tests/rubric/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 953 tests with two unrelated deprecation warnings.
+          - Model ratings used the in-repo ModelRouter generate_text fixture adapter, not a live remote expert provider.
+          - No required MM-041 check was skipped.
     blocker: null
   - id: MM-042
     title: Commercial scenario forecasting
