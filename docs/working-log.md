@@ -1073,4 +1073,13 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-029, MM-032,
   MM-033, MM-040, MM-041
 
+## 2026-09-19T00:32:00Z
+
+- Implementer: MM-036 department handoffs and correspondence on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-035 PASS unblocked MM-036 (depends on MM-007/MM-021/MM-035).
+  Moved MM-036 to IN_PROGRESS. `pass_record` remains null.
+- EXT-DELIVERY-CHANNEL stays NOT_RUN; package uses preview/confirm
+  contract tests and does not treat mocks as live delivery.
+
 

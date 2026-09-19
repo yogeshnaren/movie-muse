@@ -553,6 +553,12 @@ scopes:
     shared:
       - src/movie_muse/breakdown/**
       - src/movie_muse/proposals/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
   capability.correspondence:
     owned:
       - src/movie_muse/correspondence/**
@@ -560,6 +566,12 @@ scopes:
     shared:
       - src/movie_muse/artifacts/**
       - src/movie_muse/department_handoff/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
   module.scheduling:
     owned:
       - src/movie_muse/scheduling/**
