@@ -1,8 +1,7 @@
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from movie_muse.api.api import IntegrationMeshService
-from movie_muse.api.errors import CommitDeniedError, CredentialError
+from movie_muse.api.api import CommitDeniedError, CredentialError, IntegrationMeshService
 from movie_muse.authorization.api import AuthorizationError
 from movie_muse.identity.api import IdentityService
 from movie_muse.webhooks.api import (
