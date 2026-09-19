@@ -1728,3 +1728,16 @@ This file records orchestrator actions that the schema cannot store.
   `invalidate --apply`.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-19T21:00:00Z
+
+- Independent Grok restamp of all 46 PASS fingerprints at
+  `5ff0ffdf80be40d968ae390868ab09053a31dac1`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:15:42Z`.
+- File-level drift was only MM-001, MM-004, and MM-045. Descendants were
+  bookkeeping-updated from new dependency fingerprints. Did not
+  `invalidate --apply`.
+- Dirty-tree completion preflight reports only `dirty_worktree` (no stale
+  fingerprints). Live EXT remains the required external blocker.
+- MM-047 stays `BLOCKED_EXTERNAL`. `pass_record` remains null.
+  `overall_status` remains IN_PROGRESS. Did not mock live providers.

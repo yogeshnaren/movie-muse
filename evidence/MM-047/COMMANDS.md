@@ -119,6 +119,16 @@ MM-001/MM-004/MM-045 drift. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
 
 UTC: `2026-09-19T20:00:00Z`
 
+## Independent verification (Grok 4.6) — PASS fingerprint restamp
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:15:42Z`
+independently recomputed all 46 PASS fingerprints at
+`5ff0ffdf80be40d968ae390868ab09053a31dac1`. RESTAMP_QUALITY PASS. File-level
+drift was only MM-001/MM-004/MM-045. Did not `invalidate --apply`. Product
+FAIL remains live EXT. Ledger stays `BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-19T21:00:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

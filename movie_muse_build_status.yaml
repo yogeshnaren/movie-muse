@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T20:00:00Z"
+last_updated_utc: "2026-09-19T21:00:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -95,8 +95,8 @@ items:
     depends_on: []
     scope_keys: [global.toolchain, global.ci]
     pass_record:
-      verification_commit: 14644008c60e9eb7bb4e3fef7e77b05c9289fbd2
-      input_fingerprint: 24fd1172bafd04b485910c63b1b220759093c52fb065595f3b4632be2e4cd7f8
+      verification_commit: 5ff0ffdf80be40d968ae390868ab09053a31dac1
+      input_fingerprint: b4b5a5bab1e8ffe2f28c2a9fb450cb30cb180dbe67b55f7035e54167649be029
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -123,8 +123,8 @@ items:
         - evidence/secret-scan.txt
       completed_at_utc: "2026-09-01T11:22:57Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T11:21:51Z
-        independence_basis: Separate verifier agent/model; did not implement MM-001 and independently reproduced committed verification instructions from a fresh detached worktree.
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T10:15:42Z
+        independence_basis: Separate Grok 4.6 verifier; did not implement the fingerprint restamp. Independently confirmed file-level drift, recomputed DAG fingerprints at 5ff0ffd, and reran toolchain/pytest from a detached worktree. Original MM-001 implementation verify remains gpt-5.6-sol/2026-09-01T11:21:51Z.
         environment: Linux 6.12.94+ x86_64; python 3.12.3; node 20.20.2; repository /workspace; branch cursor/mm-001-toolchain-baseline-04ec
         commands:
           - python3 scripts/validate_handoff.py
@@ -156,7 +156,7 @@ items:
     scope_keys: [domain.schemas]
     pass_record:
       verification_commit: 168f85631e2ecb9ec2a9419a13fad8e43e722653
-      input_fingerprint: 6b3874c4972b8429e258473d3ec618cfb97e39a32261f6d0d08f989224771080
+      input_fingerprint: d90e6f36b187522c22590d0a01b4b69aad231358778b112e2271a45009f6a161
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -217,7 +217,7 @@ items:
     scope_keys: [module.document]
     pass_record:
       verification_commit: 71f93c2c51e795a300dc6c35278d588e541e80d0
-      input_fingerprint: 0794d7a86e40c8055877cc8c5833b3fa47c66bda94fed9d4f498e6b37940fc9c
+      input_fingerprint: 56c001aa2c7335280d5436356f35dabbac02b27b540dbd9d57f8e8fb9ebea921
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -273,8 +273,8 @@ items:
     depends_on: [MM-001, MM-002]
     scope_keys: [module.persistence, module.sync]
     pass_record:
-      verification_commit: 0c63261ab84243d079a53dc9b7c90b8dce5575b6
-      input_fingerprint: f28434b6d7c1c640435f1ef1365dc6e2f0b02cc8d93109b94c75d8ce8fc8b188
+      verification_commit: 5ff0ffdf80be40d968ae390868ab09053a31dac1
+      input_fingerprint: 76f02ebacf3ce2be9e081fa1560456bb2b0332f51a5f9340f9655b0e05341b0b
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -297,8 +297,8 @@ items:
         - tests/sync/
       completed_at_utc: "2026-09-01T12:37:00Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/gpt-5.6-sol/2026-09-01T12:37:00Z
-        independence_basis: Separate verifier agent; did not implement MM-004. Used a fresh detached worktree and independently reran all commands and probes without relying on MM-004 evidence or summaries. Re-probed prior failures at 1c8c6e9 (interrupted v2 migration), 7b5a0c0 (forged resulting_revision_id), and 6766409 (forged actor_id).
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T10:15:42Z
+        independence_basis: Separate Grok 4.6 verifier; did not implement the fingerprint restamp. Independently confirmed MM-004 file-level drift (reconnect on shared module.sync), recomputed DAG fingerprints at 5ff0ffd, and reran persistence/sync pytest from a detached worktree. Original MM-004 implementation verify remains gpt-5.6-sol/2026-09-01T12:37:00Z.
         environment: Linux 6.12.94+ x86_64; Python 3.12.3; SQLite 3.45.1; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm004-independent-verify-0c63261
         commands:
           - python3 scripts/validate_handoff.py
@@ -336,7 +336,7 @@ items:
     scope_keys: [module.revisions]
     pass_record:
       verification_commit: 16c3334ce69591f8711187bd5e468b62d4cc2557
-      input_fingerprint: c3b9b41c7837ee935f8e76de624d0d0de48dc2fa56383906f10cab33b405e7b1
+      input_fingerprint: 4522f2566528722156dc57971f4dd8b766771d06e020d4cd26c5ac28cb411fa0
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -394,7 +394,7 @@ items:
     scope_keys: [module.identity, module.authorization, module.audit]
     pass_record:
       verification_commit: f1f1ba0cac06ed27c3caba72862666c7b29f960a
-      input_fingerprint: 7a8c6c43f6b35f6fc79a2fa660298278483f56f82c429b491d7444f418766cfe
+      input_fingerprint: 349f89c38ee53b8885a53ad9f9bc74b81f7dea505f07dc1aff516c4cc960e17b
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -463,7 +463,7 @@ items:
     scope_keys: [module.artifacts]
     pass_record:
       verification_commit: e64a549da495c251cecec27c2c22b7b4e85fb59c
-      input_fingerprint: a53bc2333b8b37bda47b59d8897cc36109be546d61d118809f08850180bd0dd8
+      input_fingerprint: 9c0fbf143f49861fa08fe6ee550aa604b52902f084fd2f9973671ec613652e73
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -523,7 +523,7 @@ items:
     scope_keys: [module.jobs, runtime.worker]
     pass_record:
       verification_commit: 6dfb6be6476987cfef3fcf11d7f55bf48ce927a8
-      input_fingerprint: 2cea51a5d51bcc4f6f6ba2c62c92008c6d3d72a9299cfaa8868fc1f4670a5242
+      input_fingerprint: 9c5d275bf067e50f01b669dbb2d8a9e116a77706ccad868a87a4b9c06d12fc95
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -587,7 +587,7 @@ items:
     scope_keys: [module.model_router, policy.models]
     pass_record:
       verification_commit: 4c2ffd9a44c86e6f9cfe51df3b62603385d91212
-      input_fingerprint: baf2e69d463ccbd9613ddfe1048ddbaa77f77952b4ed80c850f78e95558ff793
+      input_fingerprint: 1c0109b590466d85604c1468b2a0942a16b1eb48a593bdf66ff38bcbe1a9b8c0
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -651,7 +651,7 @@ items:
     scope_keys: [module.rights, module.provenance]
     pass_record:
       verification_commit: 59ad9d60108f9be70c91803fa4225bdd9b243665
-      input_fingerprint: 97d6c140a1224c0cb4f25cd7d4cd6dcff999906bd77e7c6b7cbe97ea15a78997
+      input_fingerprint: dc4b554d5e46e61843e7c13f6bcffe3916646a71e72176a488d94c006ded5ff5
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -714,7 +714,7 @@ items:
     scope_keys: [module.dependencies]
     pass_record:
       verification_commit: e361b1f80584feeee826986f3058528dfb4a3797
-      input_fingerprint: 2c6c8a7da82d57b6adb884859246ed6c1448983ee3913779e759f0a660e2d6fb
+      input_fingerprint: f280ca26ddf39cc9034821b9ceed34ed617e59cb0853aa947a589ace43150187
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -773,7 +773,7 @@ items:
     scope_keys: [test.fixtures, test.harness]
     pass_record:
       verification_commit: cc018b4e3b510d8450d6a0c4f4661a3b3df17527
-      input_fingerprint: 43e357a84b2bd20264a4737f60303f5b8efb5028166c2f550b729e58ab7f97a9
+      input_fingerprint: b061ebc04bc1343d4f876e4c98011b083d80b09133d8e468a7fe1ef3e88def5e
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -839,7 +839,7 @@ items:
     scope_keys: [module.fdx, test.fdx]
     pass_record:
       verification_commit: cb38e04d2b497a9a8975219ccfe949829cb8d762
-      input_fingerprint: 7c898f1512b2a6799cc1b3e38825bc8fe3e204aebde5ca77d941837cf3de534a
+      input_fingerprint: 1f06ba95393f334478e92c104e981b4cf3fa0503ad69b36df9322eda4167a06d
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -903,7 +903,7 @@ items:
     scope_keys: [module.layout, module.production_revisions, test.render]
     pass_record:
       verification_commit: 52ce9fd7cf061d19d7294d5d108b31ba8461dae7
-      input_fingerprint: 3966694bf538080b1f19a41267402e16eea6cefae3ac91c49d7cdaf8b0ee1767
+      input_fingerprint: 32a66508cc77fe13b933ba10a87b538c6309092003d7ed3206ab153826e39d1c
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -971,7 +971,7 @@ items:
     scope_keys: [app.editor, ux.authoring]
     pass_record:
       verification_commit: 706fc79e0d4fa6019da95db03bf795e455f2ce87
-      input_fingerprint: 9961c1eda45e3f194151442823e3ffac2137f9208ab002f723dcd63ce29cb0c6
+      input_fingerprint: 6ad595e4535e76b97c03c148933ca0acbe8a7de914d1da9e139164e619a9f1b6
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1039,7 +1039,7 @@ items:
     scope_keys: [test.competitive]
     pass_record:
       verification_commit: e80a6bf4c9889de121572fa712149a97f62f2987
-      input_fingerprint: 668307e04e58992c508ba7f7845344b836ec59dfbd5a09d622bb2735b8407837
+      input_fingerprint: 44b1727a3079e0688546663b242a0d8400445abda5b44c4f6ce4e7aa26f797c6
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1100,7 +1100,7 @@ items:
     scope_keys: [module.context, module.retrieval]
     pass_record:
       verification_commit: 9b5d625e6015050c93e773351802233136aa50c0
-      input_fingerprint: 74e61a384f71ddfb03b7d5ba053baae5bc18cb4a9ad92aca71c25b0feb1f4a4a
+      input_fingerprint: 2738bd638c09aab87de2bf3dcc4a918807d4255d03a8b76fed9b92d390cba08d
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1165,7 +1165,7 @@ items:
     scope_keys: [module.compiler, module.film_ir]
     pass_record:
       verification_commit: 85f11d0b08023e96cdf62732415f767864878077
-      input_fingerprint: 2922220a9d657723b41dbb83c9c77ee2c305be18d8a3c2a2d8f39083657ebfe4
+      input_fingerprint: 8936fd1a82e797108fdee5c1aa3f0a842511f87f37d83d5d451739dc2767c1b3
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1230,7 +1230,7 @@ items:
     scope_keys: [module.state_engine]
     pass_record:
       verification_commit: 459fd27770425ea4133dfaa5228f9f51fb2db264
-      input_fingerprint: 47864bbdee1711d474595c42fa810ae221c4a2f5755fe3f3611d849a3308ff5e
+      input_fingerprint: da0b4d20a5275866715ce1847cb65a6bf97c1888cc16af65807c2e024a57bc84
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1288,7 +1288,7 @@ items:
     scope_keys: [module.creative_intent]
     pass_record:
       verification_commit: cc956dc4064637df4f0c136ca89d6db5cdfa8465
-      input_fingerprint: 4b99e7b5f617918372280ad41b8dae633efef402363cc15f89b27abd7dcbc9d4
+      input_fingerprint: 31ce8838dcdb0f05bafb2004b3dd7d8b69618ed03f7007088ff9d38cac7c9f99
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1346,7 +1346,7 @@ items:
     scope_keys: [module.proposals]
     pass_record:
       verification_commit: 43d682c2e22c1a52cf13335815a03635517e5c49
-      input_fingerprint: 81cb24aacf74087aada47143a6fa084061441db3c39f6860eb81c8b44091d2e9
+      input_fingerprint: d5fc7bf4391bcd430280407bfde770f7b5b43839defe7706f1cd1bcfca55b093
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1404,7 +1404,7 @@ items:
     scope_keys: [capability.writer_unblock]
     pass_record:
       verification_commit: 2b636b5c9ce3b090f991c804761f5c1814891bcb
-      input_fingerprint: 71dc37055285e2b92e399b36b167cc9e3b8c3a88abb0991923a6c1152e8f6cd0
+      input_fingerprint: c439c7f8b4e83e568534a91ae4e732296d545b14f60494493a647996fc69fcd0
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1463,7 +1463,7 @@ items:
     scope_keys: [capability.reference_lens]
     pass_record:
       verification_commit: 0025e0a4ca965dc837d17cd48063cf5d791287bf
-      input_fingerprint: ebd06b50f6ccb67bac8f81ec31a6b91b0a2806e77bcc4b4d49cccee187a58532
+      input_fingerprint: 80472c511fa7ec8895302d1a7b4525a4aa1972876f50063f6c8815657cb78e28
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1522,7 +1522,7 @@ items:
     scope_keys: [capability.continuity, capability.impact]
     pass_record:
       verification_commit: e0fe90fd714781e9c2a6e79cfd79d9fc5d6b189a
-      input_fingerprint: 4f0a06c2396de14e88f435e3b7b06831692362058f9f2862082297207d845c93
+      input_fingerprint: d93bfe79a8a6959ae591d6d7449af14bbb012df62052318720ac2ee60bb1c449
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1585,7 +1585,7 @@ items:
     scope_keys: [module.project_memory]
     pass_record:
       verification_commit: a0d5a2ae49dd5ba861dc6ded1ee680a97084be08
-      input_fingerprint: ecc35a882c8a9a10af06909d3045b0ae046fb7724945369f3cae1ea5dee58dd2
+      input_fingerprint: 77fad937d11237784e29557a30562de79685a25aec6c10ec39a1da560ebb6dd9
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1643,7 +1643,7 @@ items:
     scope_keys: [capability.room_mode]
     pass_record:
       verification_commit: 8d7d465ec007818db68856fa5d405bfb85f7c884
-      input_fingerprint: 8c2ada3d12c96e860ee30c0b8c2368c37dcdaf98d1fb38e414bdf22238a5b9a5
+      input_fingerprint: 3359845474ef16db79dcadab87fbeabc402de4edc38b577b192c3ab964ac76cc
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1701,7 +1701,7 @@ items:
     scope_keys: [module.collaboration, module.sync]
     pass_record:
       verification_commit: 17274d794e27da7dc8bf05038bd6fa372b5eb4ff
-      input_fingerprint: 16ec4fa8b9faf3f25f8c3ff399c6650c5c28e3be3a63c6ba373091e9d0b55b72
+      input_fingerprint: b8528661db04a1161765f691f9ee074494ce23cf065a95a5916812058c79ad24
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1764,7 +1764,7 @@ items:
     scope_keys: [capability.meeting_capture]
     pass_record:
       verification_commit: 0a4f2df67617c80be7d869f8c0e43f37efc08e91
-      input_fingerprint: b103edbbf535c58ff5b834d537017d03a8b5bd9c258b3c849792da1cbc28406a
+      input_fingerprint: a006b7e81c274b7cb2aa925812baa50170c07e94bcbcebe6e01db262f0f4d7b5
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1822,7 +1822,7 @@ items:
     scope_keys: [adapter.zoom, adapter.google_meet]
     pass_record:
       verification_commit: 83b55f704e69f5e43e82bee3d687a5e0040ee3d7
-      input_fingerprint: aac2c03f0ba1f0b79777d48b8dc6f8ec6e19f2885c97017f200e5296b03f06f5
+      input_fingerprint: cba1ea48ddb8c41aecd09879ec7229d18fb564add51c989e5c4004cc20a3018f
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1884,7 +1884,7 @@ items:
     scope_keys: [capability.beats]
     pass_record:
       verification_commit: 5100889ea74d4d20b382509918e9815f795a3c9d
-      input_fingerprint: c9b8fae1189a833cb03110bf17af8d1614755db187b9d0d5981574316a5bf412
+      input_fingerprint: d491490d5c1afd5c7c3b4b1b00c662ff526b6c04471cd74a9adf1daa80abcb4f
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -1942,7 +1942,7 @@ items:
     scope_keys: [module.director, module.shot_ir]
     pass_record:
       verification_commit: d079675c3038a5ab81bb842e258c67177391aae0
-      input_fingerprint: 6f76b14c3a8bd43246262e70144d80285db336e3b4a0893d8e310251ddaca49a
+      input_fingerprint: d3cf95f98fce405ba30e17e5a484c866503b9b623604a5ae89b595fa0c581423
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2004,7 +2004,7 @@ items:
     scope_keys: [capability.storyboard]
     pass_record:
       verification_commit: ef86d6036c208b9fd227ce94856be068ed6a9ee3
-      input_fingerprint: fec1769da555429aab717e3ded2147292ea7b107d7038aafcfa91fc7de2b487e
+      input_fingerprint: df39b695922f865baaf9e58acffd9ec0c7a80570d4fba244c5174027682a2bab
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2062,7 +2062,7 @@ items:
     scope_keys: [capability.visual_language]
     pass_record:
       verification_commit: 783030745c9026b18f4122d0e8af1dca8352e723
-      input_fingerprint: a1ce777b2d45a8b6cd80574710664a7632c514cae1ac591d8f43b4e92d04f0c8
+      input_fingerprint: f196ccb81a47ded752eaeeca20c1e2fbd36c0eb461a13d5d334a653137061092
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2120,7 +2120,7 @@ items:
     scope_keys: [capability.video_previs]
     pass_record:
       verification_commit: 9dafc85f621275979206baf3a9ff8060460d4d62
-      input_fingerprint: b735fad12b6baecb88101b509f7f2b86a5efe7144e85f76171d4af4fac7130e3
+      input_fingerprint: f1830c03091317db35e78995aa36780d1994472388d0d6448d5370bc2533d53f
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2178,7 +2178,7 @@ items:
     scope_keys: [module.breakdown]
     pass_record:
       verification_commit: 3935938f6f488ad04c23643de81f0b03da840c6b
-      input_fingerprint: 38c7ad72a6373e32a8ff4830417282e65dd1bab8194a4254dafc4ce6dc19b4da
+      input_fingerprint: d002832b3d81a14d4336f33917f18cca2a7754dd21a4d7ccc6a67ae945e2d2dd
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2236,7 +2236,7 @@ items:
     scope_keys: [module.department_handoff, capability.correspondence]
     pass_record:
       verification_commit: e616cc118d484fc8cb14636917424bf0f49c120d
-      input_fingerprint: e2e5a701f5cde78add026db127b05117626fbe246ced45a4b1d0fccfd0eb4074
+      input_fingerprint: de07302b679bdbbb7856f4cbc6cc1cf574f5c1fb0fa0a6befdc60eac61845ab9
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2298,7 +2298,7 @@ items:
     scope_keys: [module.scheduling]
     pass_record:
       verification_commit: f1123d63e37343ccd1da3d7208449ffd81fe0794
-      input_fingerprint: eefeda63bc3a32a55ddc223c5fb14990bf440dce4ffd8c5e3e15d504d70a4281
+      input_fingerprint: c1d663bbb274a62e6a1fb9b1d26afc62c5b2c54b8cf57426a1b3bb762155f8b1
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2356,7 +2356,7 @@ items:
     scope_keys: [module.budget]
     pass_record:
       verification_commit: cfc1d3cba7755a40ed2c2d7e5f94a95bdfaa003c
-      input_fingerprint: 4954e248967e33937f02659ed9cb92006e81e4f2380c52ef18e577fd69cbb764
+      input_fingerprint: b706af2f5290b489131c89dd6ea2c5d73b0839094a76036f95d991fba894d54f
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2414,7 +2414,7 @@ items:
     scope_keys: [capability.insurance_readiness]
     pass_record:
       verification_commit: 1b4fcb49157c83375d36e2cab276fc913bc0f705
-      input_fingerprint: 09e0bc5169797e0f336b44754c0ab6d411c9009f136ba8873854390856dae804
+      input_fingerprint: 573973c266057deda97f13b29f457c79ad276969760b4943c2d6b69370d2d3b9
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2472,7 +2472,7 @@ items:
     scope_keys: [module.audience_lab]
     pass_record:
       verification_commit: 63c62010a50ceabc679b1d1f66d28c6ab473f8bd
-      input_fingerprint: c53f16595fbfc6870af449db88b6215268b92c450b26acbc94bcf18a5a0a4a2f
+      input_fingerprint: fcaef1ea0be84e95aba42dab0cacbf73a6a26d9db639aca23728e61087014629
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2530,7 +2530,7 @@ items:
     scope_keys: [capability.rubric]
     pass_record:
       verification_commit: d9489bd347823791b1a88e53b555811e92d7a584
-      input_fingerprint: bc75b88ff3e09b5f28a3bade7171f78b730d8d01913d279279011ed3ce60a85e
+      input_fingerprint: 4ed579d2abe917a3e1c769058899db12c448c91010560405c3085f7bf4133d47
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2588,7 +2588,7 @@ items:
     scope_keys: [module.commercial_forecast]
     pass_record:
       verification_commit: 50445dad6085f4f5fa8e986adec172f1c21f6c5a
-      input_fingerprint: cd24ba996db58ab24ab4e0e866912a24a73bf25f80bd28fd2d8707f86b067cc3
+      input_fingerprint: ebc9cbb9c728ce72e302d0519053774f871f0074cfde1ecd70309e6d7043ed5c
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2646,7 +2646,7 @@ items:
     scope_keys: [capability.investor_artifacts]
     pass_record:
       verification_commit: c4831436fe4de18c0cabf18089c3643258a62f85
-      input_fingerprint: bf35157faea272ae1f5a01bc0db16c05c6b955206ca4adce79dbf8fea66668dc
+      input_fingerprint: 149c7d911ee70812ef07b6837594d0247b38fecb723ca122e22086f3204e7762
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2704,7 +2704,7 @@ items:
     scope_keys: [module.api, module.mcp, module.webhooks]
     pass_record:
       verification_commit: 380f370ab7e03085d17fb75a0b68fb814e78e5fb
-      input_fingerprint: 34629c0ef956ab17ca2a6321feed8f8a72ec01110a0551acb675d5aa39362bf2
+      input_fingerprint: 87edc43ab79c764502a8900ca2aec6167390ef7c5835c8aba14d0f651ca23ffc
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2772,8 +2772,8 @@ items:
     depends_on: [MM-004, MM-006, MM-015, MM-025, MM-027, MM-044]
     scope_keys: [app.web, app.macos, app.windows, app.ios, app.android]
     pass_record:
-      verification_commit: 7003211db596de633e338ef59fc7ccb79f7a64c7
-      input_fingerprint: ba7ac6cac282a671be42edf5222bc3324113e8bb2a789f2cf1db390211d8312a
+      verification_commit: 5ff0ffdf80be40d968ae390868ab09053a31dac1
+      input_fingerprint: e9039c6db07bcca05aa3b2d35aa83b503ef1eb257a9043895fdd2aafd573779c
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2801,8 +2801,8 @@ items:
         - frontend/web/
       completed_at_utc: "2026-09-19T09:45:00Z"
       independent_verifier:
-        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T06:27:12Z
-        independence_basis: Did not implement MM-045; independently verified a fresh detached worktree at 7003211. Did not rely on implementer summaries or evidence/MM-045. Wrote independent probes under /tmp using public platforms APIs and thin apps.*.host wrappers without importing tests.platforms, tests.hosts, or tests.apps.
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T10:15:42Z
+        independence_basis: Separate Grok 4.6 verifier; did not implement the fingerprint restamp. Independently confirmed MM-045 file-level drift (frontend/web shell), recomputed DAG fingerprints at 5ff0ffd, and reran platforms/hosts pytest from a detached worktree. Original MM-045 implementation verify remains grok-4.6/2026-09-19T06:27:12Z.
         environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm045-verify-2
         commands:
           - python3 scripts/validate_handoff.py
@@ -2846,7 +2846,7 @@ items:
     scope_keys: [global.security, global.privacy, global.observability, global.evaluation, global.operations]
     pass_record:
       verification_commit: 68a8f94e87e942a27747130d4197152440fd414e
-      input_fingerprint: eba1bf2dc65f14c4f7e7f68b021c07b14ad2567e5406e848afe252f261c03d57
+      input_fingerprint: ffa8dc5e6d1d316eb334db5c458030a46edab48bc16e8656b598e13cf9b88126
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2938,16 +2938,16 @@ items:
         - EXT-VIDEO-PROVIDER
         - EXT-DELIVERY-CHANNEL
         - EXT-INSURANCE-PARTNER
-      safe_summary: Independent Grok verified MM-015 fingerprint restore and golden path green at d4ca41e (1081 pytest, 9 golden_path, probes A-J). MM-015 and MM-027 PASS fingerprints match. ./scripts/verify_all.sh and _live_probes.py exit 1 with missing_live_gates listing all eight required EXT ids because live/sandbox providers are unset. Completion preflight also reports drifted PASS fingerprints for MM-001, MM-004, and MM-045; did not invalidate --apply. Product PASS is blocked until genuine reachable EXT evidence exists and those fingerprints are current.
+      safe_summary: Independent Grok restamped all 46 PASS fingerprints at 5ff0ffd (verifier 2026-09-19T10:15:42Z, 1081 pytest). Completion preflight no longer reports stale PASS fingerprints. ./scripts/verify_all.sh and _live_probes.py still exit 1 with missing_live_gates listing all eight required EXT ids because live/sandbox providers are unset. Product PASS is blocked until genuine reachable EXT evidence exists. Did not invalidate --apply. Did not mock live providers.
       attempted_commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
         - python3 -m ruff check --no-cache src tests scripts backend apps
         - python3 -m mypy
-        - PYTHONPATH=src python3 -m pytest tests/golden_path tests/platforms tests/sync tests/hosts
+        - PYTHONPATH=src python3 -m pytest tests/toolchain tests/architecture tests/security tests/release tests/persistence tests/sync tests/platforms tests/hosts tests/golden_path
         - PYTHONPATH=src python3 -m pytest
         - PYTHONPATH=src python3 scripts/gates/_live_probes.py
         - PYTHONPATH=src python3 scripts/gates/_completion_preflight.py
         - ./scripts/verify_all.sh
-      required_action: Set genuine sandbox/live environment variables MOVIE_MUSE_FINAL_DRAFT_BIN, MOVIE_MUSE_REMOTE_MODEL_BASE_URL, MOVIE_MUSE_ZOOM_SANDBOX_BASE_URL, MOVIE_MUSE_GOOGLE_MEET_SANDBOX_BASE_URL, MOVIE_MUSE_IMAGE_PROVIDER_BASE_URL, MOVIE_MUSE_VIDEO_PROVIDER_BASE_URL, MOVIE_MUSE_DELIVERY_CHANNEL_BASE_URL, MOVIE_MUSE_INSURANCE_PARTNER_BASE_URL; confirm the live probes reach those endpoints; record EXT PASS evidence; restore current PASS fingerprints for MM-001, MM-004, and MM-045 without invalidate --apply of the full DAG unless a later package owns that repair; re-run ./scripts/verify_all.sh. Do not substitute mocks or dummy URLs.
-      recorded_at_utc: "2026-09-19T20:00:00Z"
+      required_action: Set genuine sandbox/live environment variables MOVIE_MUSE_FINAL_DRAFT_BIN, MOVIE_MUSE_REMOTE_MODEL_BASE_URL, MOVIE_MUSE_ZOOM_SANDBOX_BASE_URL, MOVIE_MUSE_GOOGLE_MEET_SANDBOX_BASE_URL, MOVIE_MUSE_IMAGE_PROVIDER_BASE_URL, MOVIE_MUSE_VIDEO_PROVIDER_BASE_URL, MOVIE_MUSE_DELIVERY_CHANNEL_BASE_URL, MOVIE_MUSE_INSURANCE_PARTNER_BASE_URL; confirm the live probes reach those endpoints; record EXT PASS evidence; re-run ./scripts/verify_all.sh. Do not substitute mocks or dummy URLs.
+      recorded_at_utc: "2026-09-19T21:00:00Z"
