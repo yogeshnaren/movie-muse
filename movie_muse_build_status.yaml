@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T00:32:00Z"
+last_updated_utc: "2026-09-19T00:53:26Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -2031,10 +2031,63 @@ items:
     title: Department handoffs, ChangeSets, and production correspondence
     milestone: F
     priority: high
-    status: IN_PROGRESS
+    status: PASS
     depends_on: [MM-007, MM-021, MM-035]
     scope_keys: [module.department_handoff, capability.correspondence]
-    pass_record: null
+    pass_record:
+      verification_commit: e616cc118d484fc8cb14636917424bf0f49c120d
+      input_fingerprint: e2e5a701f5cde78add026db127b05117626fbe246ced45a4b1d0fccfd0eb4074
+      commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+        - PYTHONPATH=src python3 scripts/mm_status.py runnable
+        - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-036
+        - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+        - PYTHONPATH=src python3 scripts/mm_status.py secrets
+        - python3 -m ruff check src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/department_handoff tests/correspondence -q
+        - PYTHONPATH=src python3 -m pytest --tb=no
+        - ./scripts/verify_all.sh
+      evidence:
+        - evidence/MM-036/COMMANDS.md
+        - evidence/MM-036/quality-commands.txt
+        - src/movie_muse/department_handoff/
+        - tests/department_handoff/
+        - src/movie_muse/correspondence/
+        - tests/correspondence/
+      completed_at_utc: "2026-09-19T00:53:26Z"
+      independent_verifier:
+        id: movie-muse-independent-verifier/grok-4.6/2026-09-19T00:51:52Z
+        independence_basis: Did not implement MM-036; independently verified a fresh detached worktree at e616cc1. Did not rely on implementer summaries or evidence/MM-036. Wrote independent probes under /tmp using public department_handoff and correspondence APIs without importing tests.department_handoff or tests.correspondence.
+        environment: Linux 6.12.94+ x86_64; Python 3.12.3; ruff 0.12.12; mypy 1.17.1; pytest 8.4.1; detached worktree /tmp/mm-036-independent-verify
+        commands:
+          - python3 scripts/validate_handoff.py
+          - PYTHONPATH=src python3 scripts/mm_status.py validate
+          - PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+          - PYTHONPATH=src python3 scripts/mm_status.py runnable
+          - PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-036
+          - PYTHONPATH=src python3 scripts/mm_status.py boundaries
+          - PYTHONPATH=src python3 scripts/mm_status.py secrets
+          - python3 -m ruff check src tests scripts backend apps
+          - python3 -m mypy src
+          - PYTHONPATH=src python3 -m pytest tests/department_handoff tests/correspondence -q
+          - PYTHONPATH=src python3 -m pytest --tb=no
+          - ./scripts/verify_all.sh
+        result: PASS
+        evidence:
+          - evidence/MM-036/COMMANDS.md
+          - evidence/MM-036/quality-commands.txt
+          - src/movie_muse/department_handoff/
+          - tests/department_handoff/
+          - src/movie_muse/correspondence/
+          - tests/correspondence/
+        limitations:
+          - verify_all.sh exited 1 as expected at the later migrations_backup_and_recovery gate and emitted NOT_READY with no PASS sentinel.
+          - Full pytest passed 779 tests with two unrelated deprecation warnings.
+          - EXT-DELIVERY-CHANNEL remains NOT_RUN; contract tests proved fail-closed local delivery (network_sent=False) and are not a substitute for the live channel gate.
+          - No required MM-036 check was skipped.
     blocker: null
   - id: MM-037
     title: Scheduling and constraint engine
