@@ -1547,6 +1547,9 @@ This file records orchestrator actions that the schema cannot store.
 - Implementation uses `ControlPlane` in `movie_muse.security.api`. Security
   tests live under `tests/control_plane/**` so `tests/security/**` remains
   toolchain-owned. Did not mark PASS. Did not add `fixtures/**`.
+- Implementer quality at `661b3db`: 30 focused tests; full pytest 1072;
+  ruff `--no-cache` / mypy clean; `verify_all` NOT_READY at
+  `migrations_backup_and_recovery`. `pass_record` stays null.
 
 
 
