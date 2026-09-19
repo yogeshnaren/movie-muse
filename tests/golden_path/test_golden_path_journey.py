@@ -616,11 +616,9 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     clip = stack.previs.enqueue_clip(
         shot.record.id, principal=principal, acl_epoch=epoch
     )
-    completed = stack.previs.complete_local(
-        clip.id, principal=principal, acl_epoch=epoch
-    )
+    assert clip.canon is False
     review = stack.previs.review_intended_effect(
-        completed.id,
+        clip.id,
         notes="hold for playback, do not promote generated video to canon",
         principal=principal,
         acl_epoch=epoch,
