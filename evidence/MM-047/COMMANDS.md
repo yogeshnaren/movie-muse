@@ -37,6 +37,19 @@ UTC: `2026-09-19T12:30:00Z`
 SHA: `9f849f7a5366fc9f89af6f7680f8d7e190a2e1b6`
 fingerprint: `292d0901c1689000622372c3bd79f8fd1493d7f34228e9cd9344988ca4686637`
 
+## Independent verification (Grok 4.6)
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T07:35:00Z`
+verified a detached worktree at
+`7e7b69de7c46e7f5c3e8fb309ffcc138e7b184d8`
+(fingerprint `26f4404c3ace288dc93e642f7a712acfb34c95afaa252254dabc8fdc2fbedef0`).
+Implementation quality (validate, ruff, mypy, golden_path, full pytest,
+probes A–K) was green. Product-acceptance result is FAIL because
+`./scripts/verify_all.sh` cannot print the PASS sentinel without live EXT
+gates. Ledger stamped `BLOCKED_EXTERNAL`, not PASS and not FAIL.
+
+UTC: `2026-09-19T13:00:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:
