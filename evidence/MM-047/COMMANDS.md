@@ -262,6 +262,20 @@ unset. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
 
 UTC: `2026-09-20T04:00:00Z`
 
+## Independent verification (Grok 4.6) — dual-mode EXT ledger tests
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T13:56:13Z`
+verified a detached worktree at
+`b9c256248930194b4c62191df39e2ef374c20648`.
+Implementation quality PASS (11 golden_path, ruff/mypy, five ledger tests
+on NOT_RUN YAML and on simulated PASS YAML with restore). Product-acceptance
+FAIL because live/sandbox providers are unset. FILE_DRIFT fingerprints for
+MM-029/MM-032/MM-034/MM-039 restamped at `b9c2562`; MM-046 descendant
+`input_fingerprint` updated. Did not `invalidate --apply`. Ledger stamped
+`BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-20T04:40:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

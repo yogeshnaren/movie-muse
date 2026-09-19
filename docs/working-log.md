@@ -1895,3 +1895,17 @@ This file records orchestrator actions that the schema cannot store.
   asserts those files allow `NOT_RUN` or recorded `PASS`. Did not stamp EXT
   PASS. Did not mock live providers. Did not `invalidate --apply`.
   `pass_record` remains null pending independent Grok verification.
+
+## 2026-09-20T04:40:00Z
+
+- Independent Grok verification of dual-mode EXT ledger tests at
+  `b9c256248930194b4c62191df39e2ef374c20648`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T13:56:13Z`.
+- Implementation quality PASS: ruff `--no-cache`, mypy, 11 golden_path,
+  five-test NOT_RUN path and YAML-PASS simulation. Product FAIL: live
+  probes still list all eight required EXT ids. PASS sentinel not printed.
+- Restamped FILE_DRIFT pass_records for MM-029, MM-032, MM-034, MM-039 at
+  verification_commit `b9c2562` and MM-046 descendant `input_fingerprint`.
+  Did not `invalidate --apply`. Did not mock live providers.
+- Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
+  `overall_status` remains IN_PROGRESS.

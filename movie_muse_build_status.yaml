@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-20T04:20:00Z"
+last_updated_utc: "2026-09-20T04:40:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -1821,8 +1821,8 @@ items:
     depends_on: [MM-028]
     scope_keys: [adapter.zoom, adapter.google_meet]
     pass_record:
-      verification_commit: 83b55f704e69f5e43e82bee3d687a5e0040ee3d7
-      input_fingerprint: cba1ea48ddb8c41aecd09879ec7229d18fb564add51c989e5c4004cc20a3018f
+      verification_commit: b9c256248930194b4c62191df39e2ef374c20648
+      input_fingerprint: f6b0a7e495d8fd1dbad4708dab0f0bfcccc657d9558b297ec76448a68f2eb2e5
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2003,8 +2003,8 @@ items:
     depends_on: [MM-009, MM-010, MM-031]
     scope_keys: [capability.storyboard]
     pass_record:
-      verification_commit: ef86d6036c208b9fd227ce94856be068ed6a9ee3
-      input_fingerprint: df39b695922f865baaf9e58acffd9ec0c7a80570d4fba244c5174027682a2bab
+      verification_commit: b9c256248930194b4c62191df39e2ef374c20648
+      input_fingerprint: d5fab27206353749f3e22b6ceb8b16c6b4756167a2aad8fc2475abf5f46c81ae
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2119,8 +2119,8 @@ items:
     depends_on: [MM-009, MM-010, MM-031, MM-032, MM-033]
     scope_keys: [capability.video_previs]
     pass_record:
-      verification_commit: 9dafc85f621275979206baf3a9ff8060460d4d62
-      input_fingerprint: f1830c03091317db35e78995aa36780d1994472388d0d6448d5370bc2533d53f
+      verification_commit: b9c256248930194b4c62191df39e2ef374c20648
+      input_fingerprint: 713ede07cce3871ab92efabcf1ceda91167a4aa830cf19c92b472d09db9f64a4
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2413,8 +2413,8 @@ items:
     depends_on: [MM-007, MM-010, MM-035, MM-037, MM-038]
     scope_keys: [capability.insurance_readiness]
     pass_record:
-      verification_commit: 1b4fcb49157c83375d36e2cab276fc913bc0f705
-      input_fingerprint: 573973c266057deda97f13b29f457c79ad276969760b4943c2d6b69370d2d3b9
+      verification_commit: b9c256248930194b4c62191df39e2ef374c20648
+      input_fingerprint: 0ff3c94466f0eb7136e5bfe3c8088bf080a62dba5a8146986d10ed910381cce8
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2846,7 +2846,7 @@ items:
     scope_keys: [global.security, global.privacy, global.observability, global.evaluation, global.operations]
     pass_record:
       verification_commit: 68a8f94e87e942a27747130d4197152440fd414e
-      input_fingerprint: ffa8dc5e6d1d316eb334db5c458030a46edab48bc16e8656b598e13cf9b88126
+      input_fingerprint: 6f87b5adac9a6f1a733e9104a895ef12f4102e512749f666ef15dc3c67052380
       commands:
         - python3 scripts/validate_handoff.py
         - PYTHONPATH=src python3 scripts/mm_status.py validate
@@ -2924,9 +2924,30 @@ items:
     title: Golden-path E2E, independent verification, and release gate
     milestone: H
     priority: critical
-    status: IN_PROGRESS
+    status: BLOCKED_EXTERNAL
     depends_on: [MM-001, MM-002, MM-003, MM-004, MM-005, MM-006, MM-007, MM-008, MM-009, MM-010, MM-011, MM-012, MM-013, MM-014, MM-015, MM-016, MM-017, MM-018, MM-019, MM-020, MM-021, MM-022, MM-023, MM-024, MM-025, MM-026, MM-027, MM-028, MM-029, MM-030, MM-031, MM-032, MM-033, MM-034, MM-035, MM-036, MM-037, MM-038, MM-039, MM-040, MM-041, MM-042, MM-043, MM-044, MM-045, MM-046]
     scope_keys: [test.golden_path, script.verify_all]
     pass_record: null
-    blocker: null
+    blocker:
+      external_gate_ids:
+        - EXT-FDX-FINAL-DRAFT
+        - EXT-REMOTE-MODEL
+        - EXT-ZOOM-SANDBOX
+        - EXT-GOOGLE-MEET-SANDBOX
+        - EXT-IMAGE-PROVIDER
+        - EXT-VIDEO-PROVIDER
+        - EXT-DELIVERY-CHANNEL
+        - EXT-INSURANCE-PARTNER
+      safe_summary: Independent Grok verified dual-mode EXT ledger contract tests at b9c2562 (verifier movie-muse-independent-verifier/grok-4.6/2026-09-19T13:56:13Z). IMPLEMENTATION_QUALITY PASS (11 golden_path, ruff/mypy, five-test NOT_RUN and YAML-PASS simulation). PRODUCT FAIL because live/sandbox providers remain unset and _live_probes.py exits 1 with all eight required EXT ids. Restamped MM-029/032/034/039 FILE_DRIFT fingerprints at b9c2562 and MM-046 descendant input_fingerprint without invalidate --apply. Dual-mode tests are not live evidence. Did not mock live providers. pass_record remains null.
+      attempted_commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - python3 -m ruff check --no-cache src tests scripts backend apps
+        - python3 -m mypy src
+        - PYTHONPATH=src python3 -m pytest tests/golden_path
+        - PYTHONPATH=src python3 scripts/gates/_live_probes.py
+        - PYTHONPATH=src python3 scripts/gates/_completion_preflight.py
+        - ./scripts/verify_all.sh
+      required_action: Set genuine sandbox/live environment variables MOVIE_MUSE_FINAL_DRAFT_BIN, MOVIE_MUSE_REMOTE_MODEL_BASE_URL, MOVIE_MUSE_ZOOM_SANDBOX_BASE_URL, MOVIE_MUSE_GOOGLE_MEET_SANDBOX_BASE_URL, MOVIE_MUSE_IMAGE_PROVIDER_BASE_URL, MOVIE_MUSE_VIDEO_PROVIDER_BASE_URL, MOVIE_MUSE_DELIVERY_CHANNEL_BASE_URL, MOVIE_MUSE_INSURANCE_PARTNER_BASE_URL; confirm the live probes reach those endpoints; record EXT PASS evidence; re-run ./scripts/verify_all.sh. Do not substitute mocks or dummy URLs.
+      recorded_at_utc: "2026-09-20T04:40:00Z"
 
