@@ -64,6 +64,7 @@ from movie_muse.platforms.api import (
     GOLDEN_PROJECT_ID,
     PlatformId,
     open_platform,
+    resume_platform,
 )
 from movie_muse.project_memory.api import AutoPromoteError, MemoryCandidateKind
 from movie_muse.proposals.api import ImpactSummary, ProposalOrigin, ProposalStatus
@@ -204,6 +205,7 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     ]
 
     # 5. Work offline and through simulated auth/subscription/AI outage.
+    pre_offline_revision = stack.head
     action_id = stack.action_id()
     stack.editor.set_airplane(True)
     stack.editor.set_outage("auth_outage", True)
@@ -214,6 +216,22 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     stack.editor.set_airplane(False)
     reopened = stack.revisions.replay_head()
     assert "offline" in next(block.text for block in reopened.blocks if block.id == action_id)
+    assert stack.head != pre_offline_revision
+    offline_home = tmp_path / "offline-macos"
+    offline_app = open_platform(PlatformId.MACOS, offline_home)
+    offline_app.set_outage("auth_outage", True)
+    offline_app.set_outage("subscription_outage", True)
+    offline_app.set_outage("ai_outage", True)
+    offline_app.light_edit("Ada checks the call sheet through an outage.")
+    offline_app.close()
+    resumed_offline = resume_platform(PlatformId.MACOS, offline_home)
+    resumed_offline_doc = resumed_offline.editor.document()
+    assert resumed_offline.identity_snapshot().project_id == GOLDEN_PROJECT_ID
+    assert resumed_offline.identity_snapshot().document_id == GOLDEN_DOCUMENT_ID
+    assert "outage" in next(
+        block.text for block in resumed_offline_doc.blocks if block.id == GOLDEN_ACTION_ID
+    )
+    resumed_offline.close()
 
     # 6. Create a checkpoint and alternate branch.
     checkpoint = stack.revisions.create_checkpoint("golden-beat", actor_id=stack.owner.id)
@@ -301,20 +319,37 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     assert structural.isdisjoint(inferred)
 
     # 11. Inspect a character's knowledge/state at two moments.
+    earlier_document = stack.revisions.load_revision(pre_offline_revision)
+    earlier_ir = stack.film_ir.project(
+        earlier_document, principal=principal, acl_epoch=epoch
+    )
+    earlier_reduction = stack.state.reduce(
+        earlier_ir, earlier_document, principal=principal, acl_epoch=epoch
+    )
     reduction = stack.state.reduce(
         film_ir, stack.revisions.replay_head(), principal=principal, acl_epoch=epoch
     )
     scene_id = stack.scene_id()
-    first = stack.state.query(film_ir, reduction, scene_id=scene_id)
+    earlier_ada = next(
+        entity
+        for entity in earlier_ir.entities
+        if "ada" in entity.canonical_name.casefold()
+    )
     ada = next(
         entity
         for entity in film_ir.entities
         if "ada" in entity.canonical_name.casefold()
     )
+    first = stack.state.query(
+        earlier_ir, earlier_reduction, scene_id=scene_id, subject_id=earlier_ada.id
+    )
     character_state = stack.state.query(
         film_ir, reduction, scene_id=scene_id, subject_id=ada.id
     )
     assert first.scene_id == character_state.scene_id == scene_id
+    assert first.revision_id == pre_offline_revision
+    assert character_state.revision_id == stack.head
+    assert first.revision_id != character_state.revision_id
 
     # 12. Record CreativeIntentIR and creative invariants.
     envelope = stack.intents.apply_direct(
@@ -1270,12 +1305,21 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     # 41. Open the same project on all five platforms; identity matches.
     snapshots = []
     for platform in PlatformId:
-        app = open_platform(platform, tmp_path / f"host-{platform.value}")
+        home = tmp_path / f"host-{platform.value}"
+        app = open_platform(platform, home)
         snap = app.identity_snapshot()
         assert snap.project_id == GOLDEN_PROJECT_ID
         assert snap.document_id == GOLDEN_DOCUMENT_ID
+        reconnect = app.reconnect()
+        assert "inbox" in reconnect
         snapshots.append(snap)
         app.close()
+        resumed = resume_platform(platform, home)
+        resumed_snap = resumed.identity_snapshot()
+        assert resumed_snap.project_id == snap.project_id
+        assert resumed_snap.document_id == snap.document_id
+        assert resumed_snap.layout_hash == snap.layout_hash
+        resumed.close()
     assert len({item.layout_hash for item in snapshots}) == 1
     assert len({item.revision_id for item in snapshots}) == 1
     assert GOLDEN_ACTION_ID

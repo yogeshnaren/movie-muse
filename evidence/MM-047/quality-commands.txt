@@ -127,4 +127,11 @@ PYTHONPATH=src python3 -m pytest -q
 # fingerprint: 8078275ab862b4dd844a9c455f4517d0d27614ae09c4acbe6e5dc60ab66581eb
 # Did not invalidate --apply
 
+# --- 2026-09-20T01:40:00Z close/reopen, two-moment state, platform resume ---
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed
+# Did not invalidate --apply
+
 

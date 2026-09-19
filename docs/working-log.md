@@ -1817,3 +1817,13 @@ This file records orchestrator actions that the schema cannot store.
   sentinel not printed.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-20T01:40:00Z
+
+- MM-047 returned to IN_PROGRESS. Golden-path step 5 now close/reopens a
+  macOS host through auth/subscription/AI outage via `resume_platform`.
+  Step 11 queries Ada's state at the pre-offline revision and the current
+  head. Step 41 reconnects and resumes all five platforms with matching
+  layout identity.
+- Did not mock live providers. Did not `invalidate --apply`. `pass_record`
+  remains null. Product PASS still requires genuine live EXT evidence.

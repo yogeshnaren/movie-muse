@@ -202,6 +202,14 @@ unset. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
 
 UTC: `2026-09-20T01:05:00Z`
 
+## Continuation (2026-09-20T01:40:00Z)
+
+Golden-path step 5 now close/reopens a macOS host through outage via
+`resume_platform`. Step 11 queries Ada at the pre-offline revision and the
+current head. Step 41 reconnects and resumes all five platforms with matching
+layout identity. This revision is not a self-PASS. Live EXT remains the
+required external blocker.
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:
