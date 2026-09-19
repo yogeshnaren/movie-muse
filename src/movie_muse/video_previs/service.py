@@ -264,6 +264,7 @@ class VideoPrevisService:
             estimated_cost_low=costs.low,
             estimated_cost_high=costs.high,
             storyboard_frame_id=storyboard_frame_id,
+            artifact_id=parent.artifact_id if parent is not None else "",
             labeled_stale=shot.labeled_stale,
             labeled_previs=True,
             canon=False,
@@ -280,23 +281,26 @@ class VideoPrevisService:
         stored = self.get_clip(clip_id, principal=principal, acl_epoch=acl_epoch)
         self._require(principal, Action.PROPOSE, stored.project_id, acl_epoch)
         self._require_consent(stored.project_id)
-        if stored.artifact_id:
+        if stored.artifact_version_id:
             return stored
         job = self._lease_job(stored.job_id)
         self.jobs.heartbeat(job.id, WORKER_ID, progress=0.5)
         shot = self.shots.get_shot(stored.shot_id, principal=principal, acl_epoch=acl_epoch)
         result = self._route_card(shot.project_id, principal, acl_epoch, stored.prompt)
         self._ensure_template(shot.project_id, principal, acl_epoch)
-        artifact = self.artifacts.create_artifact(
-            project_id=shot.project_id,
-            artifact_type=ArtifactType.MEDIA,
-            title=f"Previs {stored.id}",
-            principal=principal,
-            acl_epoch=acl_epoch,
-        )
+        artifact_id = stored.artifact_id
+        if not artifact_id:
+            artifact = self.artifacts.create_artifact(
+                project_id=shot.project_id,
+                artifact_type=ArtifactType.MEDIA,
+                title=f"Previs {stored.id}",
+                principal=principal,
+                acl_epoch=acl_epoch,
+            )
+            artifact_id = artifact.id
         source_revision_id = self.revisions.canon_head_id()
         version = self.artifacts.create_version(
-            artifact.id,
+            artifact_id,
             inputs={
                 "disclaimer": DISCLAIMER,
                 "continuity_limitations": CONTINUITY_LIMITATIONS,
@@ -328,7 +332,7 @@ class VideoPrevisService:
             WORKER_ID,
             {
                 "clip_id": stored.id,
-                "artifact_id": artifact.id,
+                "artifact_id": artifact_id,
                 "artifact_version_id": version.version.id,
                 "actual_cost": actual_cost,
                 "labeled_previs": True,
@@ -346,7 +350,7 @@ class VideoPrevisService:
             estimated_cost_low=stored.estimated_cost_low,
             estimated_cost_high=stored.estimated_cost_high,
             storyboard_frame_id=stored.storyboard_frame_id,
-            artifact_id=artifact.id,
+            artifact_id=artifact_id,
             artifact_version_id=version.version.id,
             provenance=result.provenance.to_dict(),
             actual_cost=actual_cost,
@@ -508,7 +512,7 @@ class VideoPrevisService:
         for clip in clips:
             if clip.project_id != project_id:
                 raise QueueError("timeline clips must belong to one project")
-            if not clip.artifact_id:
+            if not clip.artifact_version_id:
                 raise QueueError("timeline assembly requires completed previs clips")
             if clip.canon:
                 raise CanonPromotionError("generated video is never canon by itself")
