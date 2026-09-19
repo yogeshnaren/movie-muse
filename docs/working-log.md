@@ -1447,4 +1447,16 @@ This file records orchestrator actions that the schema cannot store.
   financial/export denial. Did not import tests.investor_artifacts.
 - Next runnable: MM-044
 
+## 2026-09-19T07:35:00Z
+
+- Implementer: MM-044 Public API, webhooks, MCP, and interoperability on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-006/MM-007/MM-021/MM-025/MM-035 PASS unblocked MM-044. Moved MM-044 to
+  IN_PROGRESS. `pass_record` remains null.
+- Versioned least-privilege mesh for projects, revisions, proposals, approved
+  artifacts and status. MCP tools distinguish read/propose/commit. Signed
+  idempotent webhooks, adapter SDK, capability registry, sync ledger, OAuth
+  vault, field source-of-truth, and open-file fallback. Integrations cannot
+  bypass creator approval or ACL.
+
 

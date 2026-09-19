@@ -717,18 +717,30 @@ scopes:
     shared:
       - src/movie_muse/authorization/**
       - src/movie_muse/artifacts/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/proposals/**
   module.mcp:
     owned:
       - src/movie_muse/mcp/**
       - tests/mcp/**
     shared:
       - src/movie_muse/api/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
   module.webhooks:
     owned:
       - src/movie_muse/webhooks/**
       - tests/webhooks/**
     shared:
       - src/movie_muse/api/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
   app.web:
     owned:
       - frontend/**
