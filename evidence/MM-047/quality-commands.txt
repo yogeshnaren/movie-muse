@@ -121,6 +121,10 @@ PYTHONPATH=src python3 -m pytest -q
 # ./scripts/gates/web_desktop_and_mobile.sh: pytest platforms/hosts + vitest 11 passed
 # python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
 # verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T11:38:33Z
+# SHA: cc73aed6213d41d6071f402c2105d8d15804406b
+# fingerprint: 8078275ab862b4dd844a9c455f4517d0d27614ae09c4acbe6e5dc60ab66581eb
 # Did not invalidate --apply
 
 
