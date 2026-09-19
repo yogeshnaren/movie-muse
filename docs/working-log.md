@@ -1383,4 +1383,14 @@ This file records orchestrator actions that the schema cannot store.
   Did not import tests.rubric.
 - Next runnable: MM-042, MM-044
 
+## 2026-09-19T05:00:00Z
+
+- Implementer: MM-042 Commercial scenario forecasting on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-010/MM-038/MM-040/MM-041 PASS unblocked MM-042. Moved MM-042 to
+  IN_PROGRESS. `pass_record` remains null.
+- P10/P50/P90 scenarios require comparables rationale, assumption evidence,
+  data dates, and method traces. Leakage, poor coverage, and OOD fail closed
+  to insufficient evidence. Outputs are not a single guaranteed number.
+
 
