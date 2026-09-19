@@ -665,16 +665,13 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         principal=principal,
         acl_epoch=epoch,
     )
-    alt_frame = stack.storyboard.render_frame(
-        shot.record.id,
-        principal=principal,
-        acl_epoch=epoch,
-        style_key="playback-hold",
+    alt_frame = stack.storyboard.regenerate(
+        frame.id, principal=principal, acl_epoch=epoch
     )
     compared = stack.storyboard.compare_frames(
         frame.id, alt_frame.id, principal=principal, acl_epoch=epoch
     )
-    assert compared.left_version_id != compared.right_version_id or compared.checksum_changed
+    assert compared.inputs_changed is True
     _configured_or_fail_closed(
         "EXT-IMAGE-PROVIDER",
         missing_live,
@@ -761,7 +758,7 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     pinned = stack.schedules.pin(
         first_schedule.id,
         pin_scene,
-        0,
+        1,
         principal=principal,
         acl_epoch=epoch,
     )
@@ -769,7 +766,7 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         second_schedule.id,
         ResourceKind.LOCATION,
         "soundstage",
-        0,
+        1,
         principal=principal,
         acl_epoch=epoch,
     )
