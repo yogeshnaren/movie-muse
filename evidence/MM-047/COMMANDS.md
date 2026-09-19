@@ -210,6 +210,18 @@ current head. Step 41 reconnects and resumes all five platforms with matching
 layout identity. This revision is not a self-PASS. Live EXT remains the
 required external blocker.
 
+## Independent verification (Grok 4.6) — offline reopen, two-moment state, platform resume
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T12:14:09Z`
+verified a detached worktree at
+`0cab3eae3ff9e3c488630d29c884d5c8c5effa90`
+(fingerprint `11a6933bbf751a7c48d935a168ed3588e0aeccaef4a6beb39ecabe8c5b7f5418`).
+Implementation quality PASS (9 golden_path, 1081 full pytest, vitest 11,
+preflight EXIT 0). Product-acceptance FAIL because live/sandbox providers are
+unset. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-20T02:20:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:
