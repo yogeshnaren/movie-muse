@@ -9,7 +9,7 @@ Role: implementer. This record is NOT a PASS record.
 - `src/movie_muse/platforms/**`
 - `apps/web/**`, `apps/macos/**`, `apps/windows/**`, `apps/ios/**`, `apps/android/**`
 - `tests/platforms/**`, `tests/hosts/**`
-- `frontend/src/platforms/**`
+- `frontend/web/**`
 
 Did not add `fixtures/**`. Did not mark PASS. Did not edit `module-layout.yaml`.
 Did not edit `tests/editor/**` (host tests live under `tests/hosts/**` so ruff

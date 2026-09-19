@@ -269,7 +269,15 @@ class PlatformApp:
             raise
 
     def reconnect(self) -> dict[str, object]:
-        return self.sync.reconnect()
+        inbox = self.sync.drain_inbox()
+        flushed: list[str] = []
+        if self.workspace.store.sync_upload_allowed():
+            flushed = self.sync.flush_outbox()
+        return {
+            "inbox": inbox,
+            "flushed": tuple(flushed),
+            "last_synced": self.workspace.store.get_meta("last_synced_operation_id"),
+        }
 
     def close(self) -> None:
         self.workspace.close()

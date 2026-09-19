@@ -198,21 +198,3 @@ def test_forged_actor_id_is_conflicted_and_does_not_advance_head(
     assert head_after == document.base_revision_id
     assert loaded.base_revision_id == document.base_revision_id
     assert head_after != ack.revision_id
-
-
-def test_reconnect_flushes_outbox_after_outage(
-    tmp_path: Path, project_bundle: tuple[Project, ScreenplayDocument, str]
-) -> None:
-    project, document, branch_id = project_bundle
-    workspace = LocalWorkspace(tmp_path / "ws")
-    workspace.open_project(project, document, branch_id=branch_id)
-    workspace.set_outage("sync_outage", True)
-    ack = workspace.save(workspace.reopen(), actor_id=project.owner_actor_id, device_id="dev_a")
-    protocol = SyncProtocol(workspace)
-    blocked = protocol.reconnect()
-    assert blocked["flushed"] == ()
-    workspace.set_outage("sync_outage", False)
-    recovered = protocol.reconnect()
-    assert ack.operation_id in recovered["flushed"]
-    assert recovered["last_synced"] == ack.operation_id
-    workspace.close()

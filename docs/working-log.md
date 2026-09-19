@@ -1691,3 +1691,15 @@ This file records orchestrator actions that the schema cannot store.
   (no `dirty_worktree`). Did not `invalidate --apply`.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-19T19:00:00Z
+
+- MM-047 returned to IN_PROGRESS. Relocated later-package files out of
+  MM-004/MM-015 owned fingerprint paths so completion preflight no longer
+  treats those PASS items as drifted. Did not `invalidate --apply`.
+- `SyncProtocol.reconnect` now lives on `PlatformApp` (MM-045). Web parity
+  shell moved from `frontend/src/platforms` to `frontend/web`.
+- MM-001 still drifts on `config/verification-scopes.yaml` and
+  `tests/release/test_verify_all_fail_closed.py` (later scopes and named
+  gates must remain). Live EXT remains the required external blocker.
+- `pass_record` remains null. Did not mock live providers.

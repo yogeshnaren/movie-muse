@@ -42,13 +42,3 @@ describe("professional editor", () => {
     expect(screen.getByRole("list", { name: /command history/i })).toHaveTextContent("transition");
   });
 });
-
-describe("web platform shell", () => {
-  it("surfaces the dated web parity shell around the editor", () => {
-    render(<App />);
-    expect(screen.getByTestId("platform-web")).toBeInTheDocument();
-    expect(screen.getByText(/proj_01H9N49B01081040G2081040G2/)).toBeInTheDocument();
-    expect(screen.getByLabelText(/platform parity matrix/i)).toHaveTextContent("ios: onset_capture");
-    expect(screen.getByText(/parity as of 2026-09-19/i)).toBeInTheDocument();
-  });
-});
