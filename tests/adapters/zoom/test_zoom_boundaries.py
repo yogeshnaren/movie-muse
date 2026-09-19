@@ -58,7 +58,7 @@ def test_zoom_package_imports_only_public_sibling_apis() -> None:
 
 
 def test_ext_zoom_sandbox_gate_stays_not_run() -> None:
-    """EXT-ZOOM-SANDBOX remains NOT_RUN. Contract tests are not live OAuth."""
+    """Contract tests are not live OAuth. Ledger stays NOT_RUN until genuine PASS."""
 
     manifest = yaml.safe_load(
         (repo_root() / "movie_muse_build_status.yaml").read_text(encoding="utf-8")
@@ -66,5 +66,10 @@ def test_ext_zoom_sandbox_gate_stays_not_run() -> None:
     gates = {item["id"]: item for item in manifest["external_gates"]}
     gate = gates["EXT-ZOOM-SANDBOX"]
     assert gate["owner_item"] == "MM-029"
-    assert gate["status"] == "NOT_RUN"
-    assert gate["evidence"] == []
+    status = str(gate["status"])
+    assert status in {"NOT_RUN", "PASS"}
+    evidence = list(gate.get("evidence") or [])
+    if status == "NOT_RUN":
+        assert evidence == []
+    else:
+        assert evidence

@@ -82,3 +82,21 @@ def test_isolated_contract_pytest_preserves_live_env(monkeypatch: pytest.MonkeyP
     assert isolated_zoom.returncode == 0, isolated_zoom.stdout + isolated_zoom.stderr
     assert os.environ.get(zoom_env) == "https://zoom.example.invalid/sandbox"
     assert os.environ.get(fdx_env) == sys.executable
+
+
+@pytest.mark.architecture
+def test_owner_ext_ledger_tests_allow_recorded_pass() -> None:
+    """Contract pytest must not hard-fail after genuine YAML EXT PASS."""
+
+    root = repo_root()
+    paths = (
+        root / "tests" / "adapters" / "zoom" / "test_zoom_boundaries.py",
+        root / "tests" / "adapters" / "google_meet" / "test_google_meet_boundaries.py",
+        root / "tests" / "storyboard" / "test_storyboard_boundaries.py",
+        root / "tests" / "video_previs" / "test_video_previs_boundaries.py",
+        root / "tests" / "insurance_readiness" / "test_insurance_readiness_boundaries.py",
+    )
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        assert 'in {"NOT_RUN", "PASS"}' in text, path
+        assert 'assert gate["status"] == "NOT_RUN"' not in text, path

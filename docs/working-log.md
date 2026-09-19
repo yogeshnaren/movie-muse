@@ -1885,3 +1885,13 @@ This file records orchestrator actions that the schema cannot store.
   printed.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-20T04:20:00Z
+
+- MM-047 returned to IN_PROGRESS. Dual-mode owner EXT ledger contract tests
+  so `unit_and_property` and `external_live_providers` do not hard-assert
+  YAML `NOT_RUN` after genuine EXT PASS: Zoom/Meet (MM-029), storyboard
+  (MM-032), video previs (MM-034), insurance (MM-039). Golden-path guard
+  asserts those files allow `NOT_RUN` or recorded `PASS`. Did not stamp EXT
+  PASS. Did not mock live providers. Did not `invalidate --apply`.
+  `pass_record` remains null pending independent Grok verification.

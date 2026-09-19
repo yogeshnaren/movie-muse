@@ -61,7 +61,7 @@ def test_insurance_readiness_package_imports_only_public_sibling_apis() -> None:
 
 
 def test_ext_insurance_partner_gate_stays_not_run() -> None:
-    """EXT-INSURANCE-PARTNER remains NOT_RUN. Contract tests are not live handoff."""
+    """Contract tests are not live handoff. Ledger stays NOT_RUN until genuine PASS."""
 
     manifest = yaml.safe_load(
         (repo_root() / "movie_muse_build_status.yaml").read_text(encoding="utf-8")
@@ -69,5 +69,10 @@ def test_ext_insurance_partner_gate_stays_not_run() -> None:
     gates = {item["id"]: item for item in manifest["external_gates"]}
     gate = gates["EXT-INSURANCE-PARTNER"]
     assert gate["owner_item"] == "MM-039"
-    assert gate["status"] == "NOT_RUN"
-    assert gate["evidence"] == []
+    status = str(gate["status"])
+    assert status in {"NOT_RUN", "PASS"}
+    evidence = list(gate.get("evidence") or [])
+    if status == "NOT_RUN":
+        assert evidence == []
+    else:
+        assert evidence

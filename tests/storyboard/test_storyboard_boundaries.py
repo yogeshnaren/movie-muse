@@ -62,7 +62,7 @@ def test_storyboard_package_imports_only_public_sibling_apis() -> None:
 
 
 def test_ext_image_provider_gate_stays_not_run() -> None:
-    """EXT-IMAGE-PROVIDER remains NOT_RUN. Contract tests are not live smoke."""
+    """Contract tests are not live smoke. Ledger stays NOT_RUN until genuine PASS."""
 
     manifest = yaml.safe_load(
         (repo_root() / "movie_muse_build_status.yaml").read_text(encoding="utf-8")
@@ -70,5 +70,10 @@ def test_ext_image_provider_gate_stays_not_run() -> None:
     gates = {item["id"]: item for item in manifest["external_gates"]}
     gate = gates["EXT-IMAGE-PROVIDER"]
     assert gate["owner_item"] == "MM-032"
-    assert gate["status"] == "NOT_RUN"
-    assert gate["evidence"] == []
+    status = str(gate["status"])
+    assert status in {"NOT_RUN", "PASS"}
+    evidence = list(gate.get("evidence") or [])
+    if status == "NOT_RUN":
+        assert evidence == []
+    else:
+        assert evidence
