@@ -1104,4 +1104,11 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-DELIVERY-CHANNEL remains NOT_RUN. Next runnable: MM-029, MM-032,
   MM-033, MM-037, MM-040, MM-041, MM-044
 
+## 2026-09-19T01:00:00Z
+
+- Implementer: MM-037 scheduling and constraint engine on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-036 PASS unblocked MM-037 (depends on MM-035/MM-036).
+  Moved MM-037 to IN_PROGRESS. `pass_record` remains null.
+
 
