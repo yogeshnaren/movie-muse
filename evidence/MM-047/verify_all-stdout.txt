@@ -22,7 +22,7 @@ backend/tests/test_health.py::test_health
     warnings.warn(message, DeprecationWarning)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-23 passed, 2 warnings in 15.84s
+23 passed, 2 warnings in 9.91s
 {
   "count": 0,
   "violations": []
@@ -53,4 +53,16 @@ tests/api/test_api_contracts.py::test_http_health_and_unbound_mesh
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ....................                                                     [100%]
+
+ RUN  v1.6.1 /workspace/frontend
+
+ ✓ src/editor/__tests__/commands.test.ts  (5 tests) 3ms
+ ✓ web/WebShell.test.tsx  (1 test) 30ms
+ ✓ src/__tests__/App.test.tsx  (5 tests) 148ms
+
+ Test Files  3 passed (3)
+      Tests  11 passed (11)
+   Start at  11:27:06
+   Duration  846ms (transform 111ms, setup 157ms, collect 363ms, tests 181ms, environment 700ms, prepare 273ms)
+
 .............................................                            [100%]

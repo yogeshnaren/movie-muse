@@ -112,4 +112,15 @@ PYTHONPATH=src python3 -m pytest -q
 # verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T11:08:23Z
 # Did not invalidate --apply
 
+# --- 2026-09-20T00:40:00Z lens/unblock/zoom compare + frontend vitest ---
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed (warnings: starlette BlockingPortal, httpx app shortcut)
+# frontend vitest (from frontend/): 11 passed
+# ./scripts/gates/web_desktop_and_mobile.sh: pytest platforms/hosts + vitest 11 passed
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Did not invalidate --apply
+
 

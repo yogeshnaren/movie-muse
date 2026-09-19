@@ -1791,3 +1791,15 @@ This file records orchestrator actions that the schema cannot store.
   with all eight required EXT ids. PASS sentinel not printed.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-20T00:40:00Z
+
+- MM-047 returned to IN_PROGRESS. Golden-path step 13 now inspects rights,
+  citations, resolve_citation, and a second-source counter-reference. Steps
+  14–15 compare route rationale, changed impacts, proposal evidence, combine
+  two routes, and generate Executor-mode prose. Step 24 constructs Zoom/Meet
+  adapters, prepare_import, and least-scope credentials before fail-closed
+  require_*. `web_desktop_and_mobile.sh` now runs frontend vitest fail-closed
+  (missing node_modules is NOT_READY, not a skip).
+- Did not mock live providers. Did not `invalidate --apply`. `pass_record`
+  remains null. Product PASS still requires genuine live EXT evidence.

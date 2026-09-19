@@ -8,10 +8,21 @@ import pytest
 import yaml
 
 from movie_muse.adapters.google_meet.api import (
+    LEAST_SCOPES as GOOGLE_MEET_LEAST_SCOPES,
+)
+from movie_muse.adapters.google_meet.api import (
+    GoogleMeetAdapter,
     GoogleMeetSandboxUnavailableError,
     require_google_meet_sandbox,
 )
-from movie_muse.adapters.zoom.api import ZoomSandboxUnavailableError, require_zoom_sandbox
+from movie_muse.adapters.zoom.api import (
+    LEAST_SCOPES as ZOOM_LEAST_SCOPES,
+)
+from movie_muse.adapters.zoom.api import (
+    ZoomAdapter,
+    ZoomSandboxUnavailableError,
+    require_zoom_sandbox,
+)
 from movie_muse.api.api import (
     API_VERSION,
     CommitDeniedError,
@@ -76,6 +87,9 @@ from movie_muse.video_previs.api import DISCLAIMER as PREVIS_DISCLAIMER
 from movie_muse.video_previs.api import VideoProviderUnavailableError, require_video_provider
 from movie_muse.visual_language.api import LanguageRule, PaletteSwatch, RuleKind, SafetyReview
 from movie_muse.writer_unblock.api import assert_no_hidden_authority
+
+GOLDEN_ZOOM_SIGNING = "zoom-contract-hmac"
+GOLDEN_MEET_SIGNING = "meet-contract-hmac"
 
 
 def _missing_required_live_gates() -> tuple[str, ...]:
@@ -340,6 +354,23 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         project_id=project_id,
         title="call sheet",
     )
+    counter_source = stack.rights.register_source(
+        project_id=project_id,
+        title="Sides vs call-sheet contrast",
+        classification=SourceClassification.USER_OWNED,
+        principal=principal,
+        acl_epoch=epoch,
+        permitted_uses=(PermittedUse.RETRIEVAL, PermittedUse.CITATION),
+        license_summary="owner contrast notes",
+    )
+    stack.retrieval.index_reference(
+        source_id=counter_source.source_id,
+        text="The sides cut the village hold that the call sheet still lists.",
+        principal=principal,
+        acl_epoch=epoch,
+        project_id=project_id,
+        title="sides contrast",
+    )
     settings = stack.lens.enable(project_id, principal=principal, acl_epoch=epoch)
     assert settings.enabled is True
     hits = stack.lens.query(
@@ -349,8 +380,19 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         acl_epoch=epoch,
     )
     assert hits
+    hit = hits[0]
+    assert hit.rights.classification is SourceClassification.USER_OWNED
+    assert hit.rights.license_summary
+    assert hit.citation.source_id == hit.source_id
+    resolved_citation = stack.lens.resolve_citation(
+        hit.citation, principal=principal, acl_epoch=epoch
+    )
+    assert resolved_citation.id == hit.citation.source_version_id
+    assert hit.counter_reference is not None
+    assert hit.counter_reference.source_id != hit.source_id
+    assert hit.counter_reference.citation.source_id == hit.counter_reference.source_id
 
-    # 14–15. Request writer-unblock alternatives and compare rationale.
+    # 14–15. Request writer-unblock alternatives and compare rationale/impacts/evidence.
     session = stack.unblock.generate_routes(
         principal=principal,
         acl_epoch=epoch,
@@ -358,10 +400,45 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         permission_snapshot_id=stack.snapshot,
         invariants=("Ada remains the investigator",),
     )
-    assert session.routes
+    assert len(session.routes) >= 2
+    first_route, second_route = session.routes[0], session.routes[1]
     for route in session.routes:
         assert_no_hidden_authority(route.rationale)
         assert_no_hidden_authority(route.candidate_text)
+        assert "Ada remains the investigator" in route.preserved
+        assert route.changed
+        assert route.provenance_id
+    assert first_route.kind != second_route.kind
+    assert first_route.rationale != second_route.rationale
+    assert first_route.changed != second_route.changed
+    assert first_route.candidate_text != second_route.candidate_text
+    assert first_route.proposal_id != second_route.proposal_id
+    first_proposal = stack.revisions.get_proposal(first_route.proposal_id)
+    second_proposal = stack.revisions.get_proposal(second_route.proposal_id)
+    assert first_proposal.status is ProposalStatus.PENDING
+    assert second_proposal.status is ProposalStatus.PENDING
+    assert first_proposal.rationale_summary != second_proposal.rationale_summary
+    assert first_proposal.impact is not None
+    assert second_proposal.impact is not None
+    combined = stack.unblock.combine(
+        session.id,
+        (first_route.id, second_route.id),
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert combined.proposal_id not in {first_route.proposal_id, second_route.proposal_id}
+    assert combined.changed == (first_route.kind.value, second_route.kind.value)
+    assert_no_hidden_authority(combined.candidate_text)
+    prose_route = stack.unblock.generate_prose(
+        session.id,
+        first_route.id,
+        principal=principal,
+        acl_epoch=epoch,
+        permission_snapshot_id=stack.snapshot,
+        executor_mode=True,
+    )
+    assert prose_route.prose
+    assert_no_hidden_authority(prose_route.prose)
 
     # 16. Modify and accept one Proposal; reject another.
     accept_change = _ops(
@@ -557,6 +634,54 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
 
     # 24. Exercise configured Zoom/Meet sandbox/live adapter, or fail closed.
     missing_live = _missing_required_live_gates()
+    zoom = ZoomAdapter(
+        stack.workspace,
+        stack.meetings,
+        stack.authorization,
+        stack.audit,
+        webhook_secret=GOLDEN_ZOOM_SIGNING,
+    )
+    meet = GoogleMeetAdapter(
+        stack.workspace,
+        stack.meetings,
+        stack.authorization,
+        stack.audit,
+        webhook_secret=GOLDEN_MEET_SIGNING,
+    )
+    zoom_consent = zoom.prepare_import(
+        project_id=project_id,
+        branch_id=stack.canon_branch_id,
+        revision_id=stack.head,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    meet_consent = meet.prepare_import(
+        project_id=project_id,
+        branch_id=stack.canon_branch_id,
+        revision_id=stack.head,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert zoom_consent.meeting_id
+    assert meet_consent.meeting_id
+    zoom_credential = zoom.register_credential(
+        project_id=project_id,
+        scopes=ZOOM_LEAST_SCOPES,
+        expires_at="2026-12-01T00:00:00Z",
+        token_digest="digest_golden_zoom_not_live",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    meet_credential = meet.register_credential(
+        project_id=project_id,
+        scopes=GOOGLE_MEET_LEAST_SCOPES,
+        expires_at="2026-12-01T00:00:00Z",
+        token_digest="digest_golden_meet_not_live",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert zoom_credential.scopes == tuple(sorted(ZOOM_LEAST_SCOPES))
+    assert meet_credential.scopes == tuple(sorted(GOOGLE_MEET_LEAST_SCOPES))
     _configured_or_fail_closed(
         "EXT-ZOOM-SANDBOX",
         missing_live,
