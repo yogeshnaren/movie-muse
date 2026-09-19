@@ -62,3 +62,12 @@ def test_all_named_verify_all_gates_exist_and_are_executable() -> None:
     helper = gates / "_run_pytest.sh"
     assert helper.is_file()
     assert helper.stat().st_mode & 0o111
+
+
+@pytest.mark.architecture
+def test_golden_path_allows_all_required_ext_gates_to_pass() -> None:
+    text = (repo_root() / "tests" / "golden_path" / "test_golden_path_journey.py").read_text(
+        encoding="utf-8"
+    )
+    assert "must remain visible when not PASS" not in text
+    assert "_configured_or_fail_closed" in text

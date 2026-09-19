@@ -50,6 +50,13 @@ gates. Ledger stamped `BLOCKED_EXTERNAL`, not PASS and not FAIL.
 
 UTC: `2026-09-19T13:00:00Z`
 
+## Continuation (2026-09-19T14:00:00Z)
+
+Golden path no longer forbids an all-EXT-PASS world. Live `require_*` calls
+are dual-mode. Steps 29/31/34 now run local previs review, correspondence
+send, and insurance handoff. Product PASS is still blocked on genuine live
+EXT evidence; this revision is not a self-PASS.
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

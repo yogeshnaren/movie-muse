@@ -18,6 +18,7 @@ from movie_muse.api.api import (
     ReviewConnectorUnavailableError,
     ToolSide,
     require_review_connector,
+    review_connector_base_url,
 )
 from movie_muse.audience_lab.api import DISCLAIMER as AUDIENCE_DISCLAIMER
 from movie_muse.audience_lab.api import AudienceLabService
@@ -25,7 +26,6 @@ from movie_muse.beats.api import FrameworkKind
 from movie_muse.collaboration.api import CollabOp, CollabOpKind, ForbiddenDomainError
 from movie_muse.commercial_forecast.api import DISCLAIMER as FORECAST_DISCLAIMER
 from movie_muse.commercial_forecast.api import CommercialForecastService
-from movie_muse.correspondence.api import ChannelNotConfiguredError
 from movie_muse.creative_intent.api import (
     IntentAction,
     IntentKind,
@@ -63,6 +63,32 @@ from movie_muse.video_previs.api import DISCLAIMER as PREVIS_DISCLAIMER
 from movie_muse.video_previs.api import VideoProviderUnavailableError, require_video_provider
 from movie_muse.visual_language.api import LanguageRule, PaletteSwatch, RuleKind, SafetyReview
 from movie_muse.writer_unblock.api import assert_no_hidden_authority
+
+
+def _missing_required_live_gates() -> tuple[str, ...]:
+    manifest = yaml.safe_load(
+        (repo_root() / "movie_muse_build_status.yaml").read_text(encoding="utf-8")
+    )
+    return tuple(
+        str(gate["id"])
+        for gate in manifest.get("external_gates", [])
+        if gate.get("required_for_final") and gate.get("status") != "PASS"
+    )
+
+
+def _configured_or_fail_closed(
+    gate_id: str,
+    missing: tuple[str, ...],
+    require_fn,
+    error_type: type[BaseException],
+):
+    if gate_id in missing:
+        with pytest.raises(error_type):
+            require_fn()
+        return None
+    value = require_fn()
+    assert value
+    return value
 
 
 def _invite(stack, role: Role, display_name: str):
@@ -474,11 +500,20 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     assert promoted.summary
     assert stack.head == head_before_memory
 
-    # 24. Exercise configured Zoom/Meet sandbox/live adapter — fail closed here.
-    with pytest.raises(ZoomSandboxUnavailableError):
-        require_zoom_sandbox()
-    with pytest.raises(GoogleMeetSandboxUnavailableError):
-        require_google_meet_sandbox()
+    # 24. Exercise configured Zoom/Meet sandbox/live adapter, or fail closed.
+    missing_live = _missing_required_live_gates()
+    _configured_or_fail_closed(
+        "EXT-ZOOM-SANDBOX",
+        missing_live,
+        require_zoom_sandbox,
+        ZoomSandboxUnavailableError,
+    )
+    _configured_or_fail_closed(
+        "EXT-GOOGLE-MEET-SANDBOX",
+        missing_live,
+        require_google_meet_sandbox,
+        GoogleMeetSandboxUnavailableError,
+    )
 
     # 25. Promote a reviewed decision to Project Memory without silently changing canon.
     memory = stack.memory.promote(candidate.id, principal=principal, acl_epoch=epoch)
@@ -562,19 +597,41 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     )
     assert language.rules
 
-    # 28. Generate/compare annotated storyboard versions — live image fail-closed.
+    # 28. Generate/compare annotated storyboard versions — live image fail-closed unless PASS.
     frame = stack.storyboard.render_frame(
         shot.record.id, principal=principal, acl_epoch=epoch
     )
     assert STORYBOARD_DISCLAIMER
     assert frame.shot_id == shot.record.id
-    with pytest.raises(ImageProviderUnavailableError):
-        require_image_provider()
+    _configured_or_fail_closed(
+        "EXT-IMAGE-PROVIDER",
+        missing_live,
+        require_image_provider,
+        ImageProviderUnavailableError,
+    )
 
-    # 29. Generate a short video previs — live video fail-closed.
+    # 29. Generate a short video previs and record intended-effect review.
     assert "previs" in PREVIS_DISCLAIMER.casefold()
-    with pytest.raises(VideoProviderUnavailableError):
-        require_video_provider()
+    stack.previs.grant_consent(project_id, principal=principal, acl_epoch=epoch)
+    clip = stack.previs.enqueue_clip(
+        shot.record.id, principal=principal, acl_epoch=epoch
+    )
+    completed = stack.previs.complete_local(
+        clip.id, principal=principal, acl_epoch=epoch
+    )
+    review = stack.previs.review_intended_effect(
+        completed.id,
+        notes="hold for playback, do not promote generated video to canon",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert review.promotes_to_canon is False
+    _configured_or_fail_closed(
+        "EXT-VIDEO-PROVIDER",
+        missing_live,
+        require_video_provider,
+        VideoProviderUnavailableError,
+    )
 
     # 30. Generate and human-review production breakdown.
     locked = stack.breakdown.lock_source_revision(
@@ -592,12 +649,29 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     )
     assert stored_breakdown.elements
 
-    # 31. Approved department notice through a test delivery channel — live fail-closed.
-    if not stack.correspondence.live_channel_configured:
-        with pytest.raises(ChannelNotConfiguredError):
-            raise ChannelNotConfiguredError(
-                "EXT-DELIVERY-CHANNEL stays NOT_RUN; live channel is not configured"
-            )
+    # 31. Approved department notice through a test delivery channel.
+    draft = stack.correspondence.draft_message(
+        project_id=project_id,
+        recipients=("wardrobe@golden.test",),
+        subject="Playback wardrobe lock",
+        body="Hero coat stays navy through the soundstage playback.",
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    preview = stack.correspondence.preview(
+        draft.id, principal=principal, acl_epoch=epoch
+    )
+    stack.correspondence.approve(draft.id, principal=principal, acl_epoch=epoch)
+    sent = stack.correspondence.send(
+        draft.id,
+        preview=preview,
+        confirm=True,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert sent.network_sent is False
+    if "EXT-DELIVERY-CHANNEL" in missing_live:
+        assert stack.correspondence.live_channel_configured is False
 
     # 32. Create and constrain two schedule scenarios.
     first_schedule = stack.schedules.compile(
@@ -621,10 +695,26 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     assert budget.lines
     assert budget.schedule_id == first_schedule.id
 
-    # 34. Insurance-readiness package; specialist sandbox stays NOT_RUN.
+    # 34. Insurance-readiness package and local specialist handoff.
     packet = stack.insurance.compile(budget.id, principal=principal, acl_epoch=epoch)
     assert INSURANCE_DISCLAIMER in packet.disclaimer
-    assert stack.insurance.live_partner_configured is False
+    handoff_preview = stack.insurance.preview(
+        packet.id,
+        principal=principal,
+        acl_epoch=epoch,
+        recipient="broker@golden.test",
+    )
+    stack.insurance.approve(packet.id, principal=principal, acl_epoch=epoch)
+    delivery = stack.insurance.handoff(
+        packet.id,
+        preview=handoff_preview,
+        confirm=True,
+        principal=principal,
+        acl_epoch=epoch,
+    )
+    assert delivery.network_sent is False
+    if "EXT-INSURANCE-PARTNER" in missing_live:
+        assert stack.insurance.live_partner_configured is False
 
     # 35–39. Audience, rubric, forecast, investor — public APIs + labeled evidence.
     lab = AudienceLabService(
@@ -719,8 +809,11 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
         acl_epoch=epoch,
     )
     assert read["id"] == GOLDEN_PROJECT_ID or read.get("project_id") == GOLDEN_PROJECT_ID or read
-    with pytest.raises(ReviewConnectorUnavailableError):
-        require_review_connector()
+    if review_connector_base_url():
+        assert require_review_connector()
+    else:
+        with pytest.raises(ReviewConnectorUnavailableError):
+            require_review_connector()
 
     # 41. Open the same project on all five platforms; identity matches.
     snapshots = []
@@ -735,19 +828,12 @@ def test_forty_one_step_same_project_golden_journey(golden_stack, tmp_path: Path
     assert len({item.revision_id for item in snapshots}) == 1
     assert GOLDEN_ACTION_ID
 
-    # Live Final Draft binary stays fail-closed.
-    with pytest.raises(FinalDraftUnavailableError):
-        require_final_draft()
-
-    manifest = yaml.safe_load(
-        (repo_root() / "movie_muse_build_status.yaml").read_text(encoding="utf-8")
+    _configured_or_fail_closed(
+        "EXT-FDX-FINAL-DRAFT",
+        missing_live,
+        require_final_draft,
+        FinalDraftUnavailableError,
     )
-    blocked = [
-        str(gate["id"])
-        for gate in manifest.get("external_gates", [])
-        if gate.get("required_for_final") and gate.get("status") != "PASS"
-    ]
-    assert blocked, "required live gates must remain visible when not PASS"
 
 
 def test_harbor_seed_is_airplane_safe(tmp_path: Path) -> None:

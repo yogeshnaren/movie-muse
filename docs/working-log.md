@@ -1610,3 +1610,16 @@ This file records orchestrator actions that the schema cannot store.
   EXT ids. `pass_record` remains null. `overall_status` remains IN_PROGRESS.
   No alternate meaningful DAG work remains. Product success still requires
   genuine sandbox/live EXT evidence and a later `verify_all` PASS.
+
+## 2026-09-19T14:00:00Z
+
+- MM-047 returned to IN_PROGRESS. Golden path no longer asserts that required
+  EXT gates must stay non-PASS, which made `verify_all` PASS impossible.
+- Live `require_*` helpers are dual-mode: fail-closed while the ledger gate is
+  not PASS, and must succeed once that gate is PASS.
+- Step 29 now grants previs consent, enqueues a local clip, and records an
+  intended-effect review that cannot promote to canon.
+- Steps 31 and 34 now perform preview-gated local correspondence send and
+  insurance handoff (`network_sent` remains false). Did not mock live EXT.
+- `pass_record` remains null. Product PASS still requires genuine sandbox/live
+  EXT evidence.

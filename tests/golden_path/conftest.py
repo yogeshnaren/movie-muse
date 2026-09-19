@@ -52,6 +52,7 @@ from movie_muse.security.api import ControlPlane
 from movie_muse.shot_ir.api import ShotIRService
 from movie_muse.state_engine.api import StateEngine
 from movie_muse.storyboard.api import StoryboardService
+from movie_muse.video_previs.api import VideoPrevisService
 from movie_muse.visual_language.api import VisualLanguageService
 from movie_muse.writer_unblock.api import WriterUnblockService
 
@@ -93,6 +94,7 @@ class GoldenStack:
     shots: ShotIRService
     visual: VisualLanguageService
     storyboard: StoryboardService
+    previs: VideoPrevisService
     breakdown: BreakdownService
     schedules: ScheduleService
     budgets: BudgetService
@@ -220,6 +222,18 @@ def boot_golden_stack(root: Path) -> GoldenStack:
         router,
         revisions,
     )
+    previs = VideoPrevisService(
+        workspace,
+        authorization,
+        identity,
+        audit,
+        shots,
+        storyboard,
+        artifacts,
+        router,
+        revisions,
+        jobs,
+    )
     breakdown = BreakdownService(
         workspace,
         authorization,
@@ -295,6 +309,7 @@ def boot_golden_stack(root: Path) -> GoldenStack:
         shots=shots,
         visual=visual,
         storyboard=storyboard,
+        previs=previs,
         breakdown=breakdown,
         schedules=schedules,
         budgets=budgets,
