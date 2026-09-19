@@ -83,6 +83,15 @@ are dual-mode. Steps 29/31/34 now run local previs review, correspondence
 send, and insurance handoff. Product PASS is still blocked on genuine live
 EXT evidence; this revision is not a self-PASS.
 
+## Continuation (2026-09-19T17:00:00Z)
+
+`scripts/gates/golden_path_41_steps.sh` now runs `_completion_preflight.py`
+after golden-path pytest. The preflight fails closed on a dirty worktree,
+unsupported Python, drifted PASS fingerprints, or missing evidence files.
+It does not print the product sentinel. Live EXT remains the required
+external blocker; fingerprint drift on MM-001/MM-004/MM-015 is recorded but
+not `invalidate --apply`. This revision is not a self-PASS.
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

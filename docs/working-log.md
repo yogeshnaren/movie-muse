@@ -1664,3 +1664,14 @@ This file records orchestrator actions that the schema cannot store.
   also fail closed. PASS sentinel not printed.
 - Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-19T17:00:00Z
+
+- MM-047 returned to IN_PROGRESS. Added `scripts/gates/_completion_preflight.py`
+  to the golden-path named gate so `verify_all` cannot print PASS when PASS
+  fingerprints have drifted or evidence files are missing.
+- Recomputed fingerprints currently drift for MM-001 (`tests/release` and
+  `config/verification-scopes.yaml`), MM-004 (`sync/protocol`), and MM-015
+  (frontend platform shells). Did not `invalidate --apply` (that closure is
+  MM-001 through MM-047). Live EXT remains the required external blocker.
+- `pass_record` remains null. Did not mock live providers.
