@@ -167,6 +167,18 @@ annotated storyboard compare, schedule constraints, budget sensitivity, and
 MCP propose-without-commit. This revision is not a self-PASS. Live EXT
 remains the required external blocker.
 
+## Independent verification (Grok 4.6) — remaining golden-path public APIs
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T11:08:23Z`
+verified a detached worktree at
+`9e510376bc4437f0a5a956b1dae45354b69542e2`
+(fingerprint `736b8fad4f766a661a0e754691e1733e0818b1c729e4e0d77c8f32a625e6c3b7`).
+Implementation quality PASS (9 golden_path, 1081 full pytest, preflight EXIT 0).
+Product-acceptance FAIL because live/sandbox providers are unset. Ledger stamped
+`BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-19T23:15:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:
