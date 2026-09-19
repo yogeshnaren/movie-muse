@@ -1190,4 +1190,14 @@ This file records orchestrator actions that the schema cannot store.
   tests.insurance_readiness.
 - Next runnable: MM-029, MM-032, MM-033, MM-040, MM-041, MM-044
 
+## 2026-09-19T02:05:00Z
+
+- Implementer: MM-029 Zoom and Google Meet adapters on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-028 PASS unblocked MM-029. Moved MM-029 to IN_PROGRESS. `pass_record`
+  remains null.
+- EXT-ZOOM-SANDBOX and EXT-GOOGLE-MEET-SANDBOX stay NOT_RUN; package uses
+  signed-webhook/OAuth contract tests and does not treat mocks as live
+  sandbox evidence.
+
 

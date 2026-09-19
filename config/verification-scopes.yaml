@@ -461,12 +461,22 @@ scopes:
       - tests/adapters/zoom/**
     shared:
       - src/movie_muse/meeting_capture/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
   adapter.google_meet:
     owned:
       - src/movie_muse/adapters/google_meet/**
       - tests/adapters/google_meet/**
     shared:
       - src/movie_muse/meeting_capture/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
   capability.beats:
     owned:
       - src/movie_muse/beats/**
