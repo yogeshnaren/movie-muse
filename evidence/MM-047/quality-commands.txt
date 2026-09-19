@@ -60,4 +60,16 @@ PYTHONPATH=src python3 -m pytest -q
 # full pytest: green (warnings: starlette BlockingPortal, httpx app shortcut)
 # python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
 
+# --- 2026-09-19T09:10:00Z completion preflight ---
+# SHA: 3690ce08e1376bad58c67fc7331993b1314bd76f
+# fingerprint at 3690ce0: a059fb7e16e5a4450a79071d7ea18cf8e333fb05b934cfc62c4debededc8f9f2
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed (warnings: starlette BlockingPortal, httpx app shortcut)
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# python3 scripts/gates/_completion_preflight.py: exit 1 completion_preflight=stale_fingerprint:MM-001,stale_fingerprint:MM-004,stale_fingerprint:MM-015
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Did not invalidate --apply
+
 

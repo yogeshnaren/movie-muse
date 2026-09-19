@@ -22,7 +22,7 @@ backend/tests/test_health.py::test_health
     warnings.warn(message, DeprecationWarning)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-23 passed, 2 warnings in 9.81s
+23 passed, 2 warnings in 15.84s
 {
   "count": 0,
   "violations": []
@@ -53,4 +53,4 @@ tests/api/test_api_contracts.py::test_http_health_and_unbound_mesh
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ....................                                                     [100%]
-...........................................                              [100%]
+.............................................                            [100%]
