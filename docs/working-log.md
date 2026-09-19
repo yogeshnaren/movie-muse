@@ -1350,4 +1350,15 @@ This file records orchestrator actions that the schema cannot store.
   tests.audience_lab.
 - Next runnable: MM-041, MM-044
 
+## 2026-09-19T04:25:00Z
+
+- Implementer: MM-041 Rubric and scene/script analysis on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-009/MM-010/MM-018/MM-020/MM-024 PASS unblocked MM-041. Moved MM-041 to
+  IN_PROGRESS. `pass_record` remains null.
+- Configurable evidence-linked rubrics cover clarity, character, pacing,
+  theme, emotion, producibility, and intended effect. Scores require
+  evidence refs and rationale. Analysis is advisory and does not write
+  FilmIR, CreativeIntentIR, or ChangeSets.
+
 
