@@ -129,6 +129,16 @@ FAIL remains live EXT. Ledger stays `BLOCKED_EXTERNAL`, not PASS.
 
 UTC: `2026-09-19T21:00:00Z`
 
+## Independent verification (Grok 4.6) — restamp confirm
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:26:22Z`
+confirmed RESTAMP_CONFIRM PASS at
+`26cf9f2cb1d657d19613c1ca530946d596293969`. Completion preflight exits 0.
+Product-acceptance FAIL: eight required EXT ids still missing. Ledger stays
+`BLOCKED_EXTERNAL`.
+
+UTC: `2026-09-19T21:15:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

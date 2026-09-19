@@ -1741,3 +1741,11 @@ This file records orchestrator actions that the schema cannot store.
   fingerprints). Live EXT remains the required external blocker.
 - MM-047 stays `BLOCKED_EXTERNAL`. `pass_record` remains null.
   `overall_status` remains IN_PROGRESS. Did not mock live providers.
+
+## 2026-09-19T21:15:00Z
+
+- Independent Grok confirmed the restamp commit
+  `26cf9f2cb1d657d19613c1ca530946d596293969`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:26:22Z`.
+- `_completion_preflight.py` exits 0 on the clean tree. 1081 pytest green.
+  Product FAIL: live probes still list all eight required EXT ids.
