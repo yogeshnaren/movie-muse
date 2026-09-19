@@ -166,4 +166,21 @@ PYTHONPATH=src python3 -m pytest -q
 # Did not invalidate --apply
 # Did not mock live providers
 
+# --- 2026-09-20T04:00:00Z independent Grok live-env isolation ---
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T13:11:33Z
+# SHA: e138b2d797685831d25d4152e0fcff20da05e436
+# fingerprint: fc0507f28cf8d061b155c7c28f8a368a3addc079af3785b8ad0a7eff781a99a2
+# pytest tests/golden_path: 10 passed
+# ./scripts/gates/unit_and_property.sh: 717 passed
+# full pytest: 1082 collected / all passed
+# frontend vitest: 11 passed
+# isolation probe: unisolated FDX fail, isolated FDX/Zoom pass, parent env preserved
+# python3 scripts/gates/_completion_preflight.py: exit 0
+# YAML sha256 unchanged after probes
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Did not invalidate --apply
+# Did not mock live providers
+
 

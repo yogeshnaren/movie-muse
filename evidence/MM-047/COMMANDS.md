@@ -249,6 +249,19 @@ runs with live/sandbox env vars unset in the child process. `_live_probes.py`
 and golden-path pytest still see the parent environment. This revision is
 not a self-PASS. Live EXT remains the required external blocker.
 
+## Independent verification (Grok 4.6) — live-env contract pytest isolation
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T13:11:33Z`
+verified a detached worktree at
+`e138b2d797685831d25d4152e0fcff20da05e436`
+(fingerprint `fc0507f28cf8d061b155c7c28f8a368a3addc079af3785b8ad0a7eff781a99a2`).
+Implementation quality PASS (10 golden_path, 717 unit_and_property, 1082
+full pytest, vitest 11, isolation probe, completion preflight EXIT 0, YAML
+hash unchanged). Product-acceptance FAIL because live/sandbox providers are
+unset. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-20T04:00:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:
