@@ -537,6 +537,15 @@ scopes:
     shared:
       - src/movie_muse/film_ir/**
       - src/movie_muse/continuity/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/compiler/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/proposals/**
+      - src/movie_muse/dependencies/**
   module.department_handoff:
     owned:
       - src/movie_muse/department_handoff/**

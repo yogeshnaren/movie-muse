@@ -1039,4 +1039,17 @@ This file records orchestrator actions that the schema cannot store.
 - EXT-FDX-FINAL-DRAFT remains NOT_RUN. Next runnable: MM-029, MM-032,
   MM-033, MM-035, MM-040, MM-041
 
+## 2026-09-19T00:06:09Z
+
+- Implementer: MM-035 production breakdown on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- Confirmed MM-001–MM-031 are current PASS; MM-035 is DAG-runnable
+  (depends on MM-018/MM-024). Moved MM-035 to IN_PROGRESS.
+  `pass_record` remains null.
+- BreakdownService derives cast/locations/props and reviewed production
+  categories from a locked source revision, links every element to
+  screenplay evidence, requires human verification, and turns edits into
+  ChangeSets. Completeness/accuracy thresholds are declared in-module
+  (no `fixtures/**`). Staleness propagates. Did not mark PASS.
+
 
