@@ -1284,4 +1284,16 @@ This file records orchestrator actions that the schema cannot store.
   and EXT-IMAGE-PROVIDER NOT_RUN. Did not import tests.storyboard.
 - Next runnable: MM-034, MM-040, MM-041, MM-044
 
+## 2026-09-19T03:20:00Z
+
+- Implementer: MM-034 Video previs provider workflow on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-009/MM-010/MM-031/MM-032/MM-033 PASS unblocked MM-034. Moved MM-034 to
+  IN_PROGRESS. `pass_record` remains null.
+- ShotIR/storyboard sequences queue through JobService with consent, cost
+  preflight, durable retry, cancel, local ModelRouter `generate_text` complete,
+  and timeline/animatic assembly. Generated video is labeled previs and is
+  never canon. `EXT-VIDEO-PROVIDER` stays NOT_RUN; live render is fail-closed
+  and is not claimed as sandbox smoke.
+
 
