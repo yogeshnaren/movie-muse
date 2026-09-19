@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T11:00:00Z"
+last_updated_utc: "2026-09-19T11:15:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -2924,7 +2924,7 @@ items:
     title: Golden-path E2E, independent verification, and release gate
     milestone: H
     priority: critical
-    status: NOT_STARTED
+    status: IN_PROGRESS
     depends_on: [MM-001, MM-002, MM-003, MM-004, MM-005, MM-006, MM-007, MM-008, MM-009, MM-010, MM-011, MM-012, MM-013, MM-014, MM-015, MM-016, MM-017, MM-018, MM-019, MM-020, MM-021, MM-022, MM-023, MM-024, MM-025, MM-026, MM-027, MM-028, MM-029, MM-030, MM-031, MM-032, MM-033, MM-034, MM-035, MM-036, MM-037, MM-038, MM-039, MM-040, MM-041, MM-042, MM-043, MM-044, MM-045, MM-046]
     scope_keys: [test.golden_path, script.verify_all]
     pass_record: null

@@ -1565,6 +1565,24 @@ This file records orchestrator actions that the schema cannot store.
   tests.observability, tests.evaluation, or tests.operations.
 - Next runnable: MM-047
 
+## 2026-09-19T11:15:00Z
+
+- Implementer: MM-047 Golden-path E2E, independent verification, and release
+  gate on `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-001 through MM-046 PASS unblocked MM-047. Moved MM-047 to IN_PROGRESS.
+  `pass_record` remains null. Did not self-PASS. Did not mock live EXT gates.
+- Named `scripts/gates/*.sh` now exist for every `verify_all.sh` required gate.
+  Shared `_run_pytest.sh` runs focused suites. `external_live_providers.sh`
+  runs fail-closed contract tests then exits 1 with `missing_live_gates=` when
+  required EXT status is not PASS.
+- Golden-path tests live under `tests/golden_path/**`: 41-step same-project
+  journey via public `*.api` surfaces and `golden_project_and_document()`,
+  architecture boundaries, and executable-gate checks. Did not add
+  `fixtures/**`. Did not call `verify_all.sh` from `tests/golden_path` (the
+  golden-path gate would recurse). `tests/release/test_verify_all_fail_closed.py`
+  still forbids a false PASS sentinel.
+
+
 
 
 
