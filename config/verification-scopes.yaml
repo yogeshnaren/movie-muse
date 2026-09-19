@@ -610,6 +610,14 @@ scopes:
       - src/movie_muse/artifacts/**
       - src/movie_muse/budget/**
       - src/movie_muse/scheduling/**
+      - src/movie_muse/breakdown/**
+      - src/movie_muse/authorization/**
+      - src/movie_muse/identity/**
+      - src/movie_muse/audit/**
+      - src/movie_muse/persistence/**
+      - src/movie_muse/schemas/**
+      - src/movie_muse/revisions/**
+      - src/movie_muse/dependencies/**
   module.audience_lab:
     owned:
       - src/movie_muse/audience_lab/**

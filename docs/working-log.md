@@ -1158,4 +1158,13 @@ This file records orchestrator actions that the schema cannot store.
   staleness. Did not import tests.budget.
 - Next runnable: MM-029, MM-032, MM-033, MM-039, MM-040, MM-041, MM-044
 
+## 2026-09-19T01:40:00Z
+
+- Implementer: MM-039 insurance readiness package on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-038 PASS unblocked MM-039 (depends on MM-007/MM-010/MM-035/MM-037/MM-038).
+  Moved MM-039 to IN_PROGRESS. `pass_record` remains null.
+- EXT-INSURANCE-PARTNER stays NOT_RUN; package uses preview/confirm
+  contract tests and does not treat mocks as live broker handoff.
+
 
