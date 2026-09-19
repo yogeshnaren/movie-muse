@@ -92,6 +92,20 @@ It does not print the product sentinel. Live EXT remains the required
 external blocker; fingerprint drift on MM-001/MM-004/MM-015 is recorded but
 not `invalidate --apply`. This revision is not a self-PASS.
 
+## Independent verification (Grok 4.6) — completion preflight
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T09:20:19Z`
+verified a detached worktree at
+`d9a025b22ca195d99be774a87e065bcbf8b00e41`
+(fingerprint `ac8d2cab71e4810207d1d99fe9ed9fa91317908170418ab07d04204c4e3b8a52`).
+Implementation quality PASS (9 golden_path, 1081 full pytest, probes A–K).
+Product-acceptance FAIL because live/sandbox providers are unset. Dummy
+unreachable URLs also fail closed. Completion preflight reports drifted
+fingerprints for MM-001/MM-004/MM-015. Ledger stamped `BLOCKED_EXTERNAL`,
+not PASS.
+
+UTC: `2026-09-19T18:00:00Z`
+
 ## Known limitations
 
 - Required live/sandbox gates remain `NOT_RUN` in this environment:

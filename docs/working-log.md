@@ -1675,3 +1675,19 @@ This file records orchestrator actions that the schema cannot store.
   (frontend platform shells). Did not `invalidate --apply` (that closure is
   MM-001 through MM-047). Live EXT remains the required external blocker.
 - `pass_record` remains null. Did not mock live providers.
+
+## 2026-09-19T18:00:00Z
+
+- Independent Grok verification of MM-047 completion preflight at
+  `d9a025b22ca195d99be774a87e065bcbf8b00e41`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T09:20:19Z`.
+- Fingerprint `ac8d2cab71e4810207d1d99fe9ed9fa91317908170418ab07d04204c4e3b8a52`.
+- Implementation quality PASS: ruff `--no-cache`, mypy, 9 golden_path, 1081
+  full pytest, probes A–K. Product-acceptance FAIL: `verify_all` exits 1 with
+  all eight required EXT ids in `missing_live_gates`. Dummy unreachable URLs
+  also fail closed. PASS sentinel not printed.
+- Completion preflight on the clean verifier worktree exits 1 with
+  `stale_fingerprint:MM-001,stale_fingerprint:MM-004,stale_fingerprint:MM-015`
+  (no `dirty_worktree`). Did not `invalidate --apply`.
+- Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
+  `overall_status` remains IN_PROGRESS. Did not mock live providers.
