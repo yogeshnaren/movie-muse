@@ -41,3 +41,13 @@ PYTHONPATH=src python3 -m pytest -q
 # exit 1
 # stderr: MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_live_gates=EXT-FDX-FINAL-DRAFT,EXT-REMOTE-MODEL,EXT-ZOOM-SANDBOX,EXT-GOOGLE-MEET-SANDBOX,EXT-IMAGE-PROVIDER,EXT-VIDEO-PROVIDER,EXT-DELIVERY-CHANNEL,EXT-INSURANCE-PARTNER
 # stdout does not contain MOVIE_MUSE_PROTOTYPE_VERIFICATION=PASS
+
+# --- 2026-09-19T14:30:00Z dual-mode golden path ---
+# SHA: a5b632b7178052adb34a3a7c883e8f513876b06b
+# fingerprint at a5b632b: e5d4d9dd0ea737e7a40052d8f48b42e3c41bff5f27d680013e44e0cdcecf2250
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 6 passed
+# full pytest: collected suite green (warnings: starlette BlockingPortal, httpx app shortcut)
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+

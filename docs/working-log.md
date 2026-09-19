@@ -1618,7 +1618,9 @@ This file records orchestrator actions that the schema cannot store.
 - Live `require_*` helpers are dual-mode: fail-closed while the ledger gate is
   not PASS, and must succeed once that gate is PASS.
 - Step 29 now grants previs consent, enqueues a local clip, and records an
-  intended-effect review that cannot promote to canon.
+  intended-effect review that cannot promote to canon. Local `complete_local`
+  is not used on the golden stack because other queued jobs would steal the
+  worker lease.
 - Steps 31 and 34 now perform preview-gated local correspondence send and
   insurance handoff (`network_sent` remains false). Did not mock live EXT.
 - `pass_record` remains null. Product PASS still requires genuine sandbox/live
