@@ -104,7 +104,20 @@ unreachable URLs also fail closed. Completion preflight reports drifted
 fingerprints for MM-001/MM-004/MM-015. Ledger stamped `BLOCKED_EXTERNAL`,
 not PASS.
 
-UTC: `2026-09-19T18:00:00Z`
+UTC: `2026-09-19T20:00:00Z`
+
+## Independent verification (Grok 4.6) — fingerprint restore
+
+Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:03:09Z`
+verified a detached worktree at
+`d4ca41ec21334f95dae1e7ce576ac8fea9b27d79`
+(fingerprint `e80c0c239eb93cc334f54f4be44932281ada043b39faa0d1301de7734d14e85a`).
+Implementation quality PASS (41 focused, 1081 full pytest, probes A–J).
+MM-015 and MM-027 fingerprints match recorded PASS. Product-acceptance FAIL
+because live/sandbox providers are unset. Completion preflight reports
+MM-001/MM-004/MM-045 drift. Ledger stamped `BLOCKED_EXTERNAL`, not PASS.
+
+UTC: `2026-09-19T20:00:00Z`
 
 ## Known limitations
 

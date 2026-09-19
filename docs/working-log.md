@@ -1713,3 +1713,18 @@ This file records orchestrator actions that the schema cannot store.
   fail-closed release test), MM-004 (reconnect added after its PASS), MM-045
   (web shell path after MM-015 restore). Did not `invalidate --apply`.
 - `pass_record` remains null. Did not mock live providers.
+
+## 2026-09-19T20:00:00Z
+
+- Independent Grok verification of MM-047 fingerprint restore at
+  `d4ca41ec21334f95dae1e7ce576ac8fea9b27d79`.
+- Verifier `movie-muse-independent-verifier/grok-4.6/2026-09-19T10:03:09Z`.
+- Fingerprint `e80c0c239eb93cc334f54f4be44932281ada043b39faa0d1301de7734d14e85a`.
+- Implementation quality PASS: ruff `--no-cache`, mypy, 41 focused, 1081
+  full pytest, probes A–J. MM-015 and MM-027 fingerprints match. Product
+  FAIL: `verify_all` exits 1 with all eight required EXT ids. PASS sentinel
+  not printed.
+- Completion preflight: `stale_fingerprint:MM-001,MM-004,MM-045`. Did not
+  `invalidate --apply`.
+- Recorded MM-047 `BLOCKED_EXTERNAL`. `pass_record` remains null.
+  `overall_status` remains IN_PROGRESS. Did not mock live providers.

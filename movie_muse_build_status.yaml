@@ -6,7 +6,7 @@ overall_status: IN_PROGRESS
 baseline_commit: 96cefa152fb28067c4ee87140bc2cae812419af9
 dag_file: dependency_dag.yaml
 dag_sha256: 5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
-last_updated_utc: "2026-09-19T19:00:00Z"
+last_updated_utc: "2026-09-19T20:00:00Z"
 allowed_statuses:
   - NOT_STARTED
   - IN_PROGRESS
@@ -2924,8 +2924,30 @@ items:
     title: Golden-path E2E, independent verification, and release gate
     milestone: H
     priority: critical
-    status: IN_PROGRESS
+    status: BLOCKED_EXTERNAL
     depends_on: [MM-001, MM-002, MM-003, MM-004, MM-005, MM-006, MM-007, MM-008, MM-009, MM-010, MM-011, MM-012, MM-013, MM-014, MM-015, MM-016, MM-017, MM-018, MM-019, MM-020, MM-021, MM-022, MM-023, MM-024, MM-025, MM-026, MM-027, MM-028, MM-029, MM-030, MM-031, MM-032, MM-033, MM-034, MM-035, MM-036, MM-037, MM-038, MM-039, MM-040, MM-041, MM-042, MM-043, MM-044, MM-045, MM-046]
     scope_keys: [test.golden_path, script.verify_all]
     pass_record: null
-    blocker: null
+    blocker:
+      external_gate_ids:
+        - EXT-FDX-FINAL-DRAFT
+        - EXT-REMOTE-MODEL
+        - EXT-ZOOM-SANDBOX
+        - EXT-GOOGLE-MEET-SANDBOX
+        - EXT-IMAGE-PROVIDER
+        - EXT-VIDEO-PROVIDER
+        - EXT-DELIVERY-CHANNEL
+        - EXT-INSURANCE-PARTNER
+      safe_summary: Independent Grok verified MM-015 fingerprint restore and golden path green at d4ca41e (1081 pytest, 9 golden_path, probes A-J). MM-015 and MM-027 PASS fingerprints match. ./scripts/verify_all.sh and _live_probes.py exit 1 with missing_live_gates listing all eight required EXT ids because live/sandbox providers are unset. Completion preflight also reports drifted PASS fingerprints for MM-001, MM-004, and MM-045; did not invalidate --apply. Product PASS is blocked until genuine reachable EXT evidence exists and those fingerprints are current.
+      attempted_commands:
+        - python3 scripts/validate_handoff.py
+        - PYTHONPATH=src python3 scripts/mm_status.py validate
+        - python3 -m ruff check --no-cache src tests scripts backend apps
+        - python3 -m mypy
+        - PYTHONPATH=src python3 -m pytest tests/golden_path tests/platforms tests/sync tests/hosts
+        - PYTHONPATH=src python3 -m pytest
+        - PYTHONPATH=src python3 scripts/gates/_live_probes.py
+        - PYTHONPATH=src python3 scripts/gates/_completion_preflight.py
+        - ./scripts/verify_all.sh
+      required_action: Set genuine sandbox/live environment variables MOVIE_MUSE_FINAL_DRAFT_BIN, MOVIE_MUSE_REMOTE_MODEL_BASE_URL, MOVIE_MUSE_ZOOM_SANDBOX_BASE_URL, MOVIE_MUSE_GOOGLE_MEET_SANDBOX_BASE_URL, MOVIE_MUSE_IMAGE_PROVIDER_BASE_URL, MOVIE_MUSE_VIDEO_PROVIDER_BASE_URL, MOVIE_MUSE_DELIVERY_CHANNEL_BASE_URL, MOVIE_MUSE_INSURANCE_PARTNER_BASE_URL; confirm the live probes reach those endpoints; record EXT PASS evidence; restore current PASS fingerprints for MM-001, MM-004, and MM-045 without invalidate --apply of the full DAG unless a later package owns that repair; re-run ./scripts/verify_all.sh. Do not substitute mocks or dummy URLs.
+      recorded_at_utc: "2026-09-19T20:00:00Z"
