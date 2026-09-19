@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/project-v1.json",
+  "title": "Project",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "organization_id", "title", "owner_actor_id", "created_at", "status", "ai_off", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "organization_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "owner_actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "status": {"enum": ["active", "archived", "deleted"]},
+    "ai_off": {"type": "boolean"},
+    "canonical_branch_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/branchId"}]},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

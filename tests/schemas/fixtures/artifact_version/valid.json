@@ -1,0 +1,13 @@
+{
+  "artifact_id": "art_01M1E62D7AHH1H86H8KBFJK4JQ",
+  "checksum": "sha256:deadbeef",
+  "created_at": "2026-09-01T12:00:00Z",
+  "creator_actor_id": "act_01M1E62D76BMKXW2Q4NM6BD84F",
+  "id": "avr_01M1E62D7AHH17VFMSDV1HN9TQ",
+  "renderer_version": "1.0.0",
+  "schema_version": "1.0",
+  "source_revision_id": "rev_01M1E62D76RATSCXCXASR9GKGC",
+  "status": "draft",
+  "template_id": "deck-template-1",
+  "template_version": "1.0.0"
+}

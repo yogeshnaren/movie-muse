@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/shot-ir-v1.json",
+  "title": "ShotIR",
+  "$defs": {
+    "cameraSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["position_x", "position_y", "height_m", "orientation_degrees", "sensor", "lens_mm"],
+      "properties": {
+        "position_x": {"type": "number"},
+        "position_y": {"type": "number"},
+        "height_m": {"type": "number"},
+        "orientation_degrees": {"type": "number", "minimum": 0, "exclusiveMaximum": 360},
+        "sensor": {"type": "string", "minLength": 1},
+        "lens_mm": {"type": "number", "exclusiveMinimum": 0},
+        "movement": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "scene_space_id", "camera", "composition_notes", "light_direction",
+    "performance_intent", "created_at", "schema_version"
+  ],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/shotId"},
+    "scene_space_id": {"$ref": "common-v1.json#/$defs/sceneSpaceId"},
+    "camera": {"$ref": "#/$defs/cameraSpec"},
+    "composition_notes": {"type": "string", "minLength": 1},
+    "light_direction": {"type": "string", "minLength": 1},
+    "performance_intent": {"type": "string", "minLength": 1},
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "eyeline_subject_ids": {"type": "array", "items": {"type": "string"}},
+    "locked_attributes": {"type": "array", "items": {"type": "string"}},
+    "annotations": {"type": "array", "items": {"type": "string"}},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

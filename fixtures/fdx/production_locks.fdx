@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FinalDraft DocumentType="Script" Template="MovieMuse" Version="1" xmlns:mm="https://movie-muse.dev/fdx">
+  <Content>
+    <Paragraph Locked="true" Number="10" Type="Scene Heading" mm:block-id="blk_01J6NE39CY00000000000000CY" mm:production-tag-ids="ptg_01J6NE39CX00000000000000CX" mm:scene-id="scn_01J6NE39CP00000000000000CP" mm:scene-number="10" mm:schema-version="1.0" mm:unknown-extensions='{"lock_revision_color":"blue","locked_scene":true}'>
+      <Text>INT. SOUNDSTAGE - DAY</Text>
+    </Paragraph>
+    <Paragraph LockedPage="true" Type="Action" mm:block-id="blk_01J6NE39CZ00000000000000CZ" mm:revision-mark-ids="rvm_01J6NE39CW00000000000000CW" mm:scene-id="scn_01J6NE39CP00000000000000CP" mm:schema-version="1.0" mm:unknown-extensions='{"locked_page":true,"page_lock":"10"}'>
+      <Text>The set is frozen. No one moves a mark.</Text>
+    </Paragraph>
+    <Paragraph LockedPage="true" Type="Page Break" mm:block-id="blk_01J6NE39D000000000000000D0" mm:is-forced="true" mm:schema-version="1.0" mm:unknown-extensions='{"locked_page":true,"page_number":"10"}'/>
+    <Paragraph Number="11" Omitted="true" Type="Scene Heading" mm:block-id="blk_01J6NE39D100000000000000D1" mm:is-boneyard="true" mm:scene-id="scn_01J6NE39CQ00000000000000CQ" mm:scene-number="11" mm:schema-version="1.0" mm:unknown-extensions='{"omitted_reason":"production_cut","omitted_scene":true}'>
+      <Text>INT. CUT SCENE - NIGHT</Text>
+    </Paragraph>
+    <Paragraph Omitted="true" Type="Action" mm:block-id="blk_01J6NE39D200000000000000D2" mm:is-boneyard="true" mm:scene-id="scn_01J6NE39CQ00000000000000CQ" mm:schema-version="1.0" mm:unknown-extensions='{"omitted_scene":true}'>
+      <Text>OMITTED.</Text>
+    </Paragraph>
+    <Paragraph Alignment="A" Number="12A" Type="Scene Heading" mm:block-id="blk_01J6NE39D300000000000000D3" mm:scene-id="scn_01J6NE39CR00000000000000CR" mm:scene-number="12A" mm:schema-version="1.0" mm:unknown-extensions='{"ab_scene":"A"}'>
+      <Text>EXT. BACKLOT - DAY</Text>
+    </Paragraph>
+    <Paragraph Type="Action" mm:block-id="blk_01J6NE39D400000000000000D4" mm:scene-id="scn_01J6NE39CR00000000000000CR" mm:schema-version="1.0">
+      <Text>A second unit covers the insert.</Text>
+    </Paragraph>
+    <Paragraph Alignment="B" Number="12B" Type="Scene Heading" mm:block-id="blk_01J6NE39D500000000000000D5" mm:scene-id="scn_01J6NE39CS00000000000000CS" mm:scene-number="12B" mm:schema-version="1.0" mm:unknown-extensions='{"ab_scene":"B"}'>
+      <Text>EXT. BACKLOT - DUSK</Text>
+    </Paragraph>
+    <Paragraph Type="Character" mm:block-id="blk_01J6NE39D600000000000000D6" mm:character-cue-id="cue_01J6NE39CT00000000000000CT" mm:dialogue-pair-id="dlg_01J6NE39CV00000000000000CV" mm:scene-id="scn_01J6NE39CS00000000000000CS" mm:schema-version="1.0">
+      <Text>AD</Text>
+    </Paragraph>
+    <Paragraph Type="Dialogue" mm:block-id="blk_01J6NE39D700000000000000D7" mm:dialogue-pair-id="dlg_01J6NE39CV00000000000000CV" mm:scene-id="scn_01J6NE39CS00000000000000CS" mm:schema-version="1.0">
+      <Text>Scene 12B is the holdover.</Text>
+    </Paragraph>
+  </Content>
+  <TitlePage/>
+  <mm:Document base-revision-id="rev_01J6NE39CM00000000000000CM" id="doc_01J6NE39CK00000000000000CK" paper-size="us_letter" profile="movie_muse_fdx" profile-version="1.0.0" project-id="proj_01J6NE39CJ00000000000000CJ" schema-version="1.0" style="standard_screenplay" title="Locked Sides"/>
+  <mm:Sequences>
+    <mm:Sequence id="seq_01J6NE39CN00000000000000CN" order="0" schema-version="1.0" title="Production Pages">
+      <mm:SceneRef id="scn_01J6NE39CP00000000000000CP"/>
+      <mm:SceneRef id="scn_01J6NE39CQ00000000000000CQ"/>
+      <mm:SceneRef id="scn_01J6NE39CR00000000000000CR"/>
+      <mm:SceneRef id="scn_01J6NE39CS00000000000000CS"/>
+    </mm:Sequence>
+  </mm:Sequences>
+  <mm:Notes>
+    <mm:Note author-actor-id="act_01J6NE39CH00000000000000CH" block-id="blk_01J6NE39CY00000000000000CY" created-at="2026-09-01T00:00:00Z" id="note_01J6NE39D800000000000000D8" resolved="false" schema-version="1.0">Do not unlock without production.</mm:Note>
+  </mm:Notes>
+  <mm:RevisionMarks>
+    <mm:RevisionMark block-id="blk_01J6NE39CZ00000000000000CZ" created-at="2026-09-01T00:00:00Z" id="rvm_01J6NE39CW00000000000000CW" revision-color="blue" revision-label="Blue" schema-version="1.0"/>
+  </mm:RevisionMarks>
+  <mm:ProductionTags>
+    <mm:ProductionTag block-id="blk_01J6NE39CY00000000000000CY" department="ad" id="ptg_01J6NE39CX00000000000000CX" schema-version="1.0" tag-type="lock" value="scene 10 locked"/>
+  </mm:ProductionTags>
+  <mm:Attachments/>
+</FinalDraft>

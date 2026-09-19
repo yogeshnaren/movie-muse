@@ -1,0 +1,12 @@
+classification: user_owned
+license: CC0-1.0
+consent: explicit_fixture_dedication
+origin: original_authored_for_movie_muse
+copied_from_final_draft: false
+allow_training: false
+permitted_uses:
+- retrieval
+- citation
+- generation
+- export_disclosure
+- fdx_round_trip

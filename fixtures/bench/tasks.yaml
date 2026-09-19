@@ -1,0 +1,32 @@
+tasks:
+- id: extract_scenes_small
+  family: objective_ground_truth
+  fixture_id: small_kitchen
+  configuration: &id001
+    model: local-extract-v1
+    prompt: extract_scenes.v1
+    context_strategy: current_revision_only
+    tools:
+    - schema_validate
+    decoding:
+      temperature: 0.0
+      top_p: 1.0
+      seed: 0
+    schema: structural_fact
+- id: blinded_rewrite_preference
+  family: blinded_human_preference
+  fixture_id: feature_complete_harbor
+  configuration: *id001
+  labels:
+  - rater_id: rater_blind_001
+    winner_configuration_id: c07d9f12f01889900d67bc1262f3e9391647bbf091fbcbdaa0fd1f0e3beade34
+    loser_configuration_id: 406a7a975fcc9a2d89e9b1ffe5c735cb700e2ae980cf8d10ce6fd47e1e015833
+    blinded: true
+    notes: Labels are configuration identities, not model brands.
+- id: observed_scene_authoring_utility
+  family: observed_workflow_utility
+  fixture_id: feature_complete_harbor
+  configuration: *id001
+  utility_metric: scenes_authored_per_correction_minute
+  disclaimer: Observed editor workflow utility. Synthetic audiences are hypotheses,
+    not human samples.

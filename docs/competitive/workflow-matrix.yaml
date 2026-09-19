@@ -1,0 +1,224 @@
+schema_version: "1.0"
+dated: "2026-09-05"
+owner_item: MM-016
+disclaimer: >
+  Benchmark names identify representative professional products. Each row
+  measures an observable Movie Muse task. supported means the task runs
+  here with an automated or documented protocol. It does not mean UI,
+  feature, or product equivalence with the named benchmark.
+release_blocking: true
+rows:
+  - id: FD-AUTHOR-KEYBOARD
+    benchmark: final_draft
+    task: Keyboard-first scene authoring with Enter/Tab element transitions
+    criteria:
+      - Tab from action inserts a character cue with character_cue_id
+      - Enter from that cue inserts dialogue with dialogue_pair_id
+      - Enter on an existing speaking character does not split the pair
+    fixture: small_kitchen
+    protocol: automated
+    owner_item: MM-015
+    result: supported
+    automation: tests/competitive/test_competitive_authoring.py::test_fd_author_keyboard
+    external_gate: null
+    awaiting: null
+  - id: FD-FDX-PROFILE
+    benchmark: final_draft
+    task: In-process FDX export/import under the pinned Movie Muse profile
+    criteria:
+      - Export then import of MM-012 fixtures is lossless for typed fields
+      - Repeated export is deterministic
+    fixture: feature_complete_harbor
+    protocol: automated
+    owner_item: MM-013
+    result: supported
+    automation: tests/competitive/test_competitive_fdx.py::test_fd_fdx_profile
+    external_gate: null
+    awaiting: null
+  - id: FD-FDX-LICENSED
+    benchmark: final_draft
+    task: Licensed Final Draft binary corpus round-trip
+    criteria:
+      - Human review in Final Draft on the release corpus
+      - No silent text or scene loss
+    fixture: feature_complete_harbor
+    protocol: manual
+    owner_item: MM-013
+    result: external
+    automation: null
+    external_gate: EXT-FDX-FINAL-DRAFT
+    awaiting: null
+  - id: FD-PAGINATION
+    benchmark: final_draft
+    task: Deterministic pagination from document plus lock state
+    criteria:
+      - Identical inputs produce identical layout_hash
+      - Layout is not a silent rewrite of ScreenplayDocument
+    fixture: small_kitchen
+    protocol: automated
+    owner_item: MM-014
+    result: supported
+    automation: tests/competitive/test_competitive_production.py::test_fd_pagination
+    external_gate: null
+    awaiting: null
+  - id: FD-LOCKS-REVISIONS
+    benchmark: final_draft
+    task: Locked scenes, revision marks, A/B and omitted overlays
+    criteria:
+      - Revision marks survive FDX profile export/import
+      - A/B labels and omitted scene ids are overlays, not canon rewrites
+    fixture: production_locked_sides
+    protocol: automated
+    owner_item: MM-014
+    result: supported
+    automation: tests/competitive/test_competitive_production.py::test_fd_locks_revisions
+    external_gate: null
+    awaiting: null
+  - id: CX-BREAKDOWN-LINK
+    benchmark: celtx
+    task: Script-to-breakdown catalog linkage
+    criteria:
+      - Changing an authored scene updates a department catalog
+    fixture: feature_complete_harbor
+    protocol: documented
+    owner_item: MM-035
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-035
+  - id: CX-SCHEDULE-BUDGET
+    benchmark: celtx
+    task: Schedule and budget propagation from breakdown
+    criteria:
+      - A breakdown change invalidates schedule and budget artifacts
+    fixture: feature_complete_harbor
+    protocol: documented
+    owner_item: MM-038
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-038
+  - id: CX-TEAM-HANDOFF
+    benchmark: celtx
+    task: Department handoff packet from the current revision
+    criteria:
+      - Handoff artifacts cite a revision and rights
+    fixture: feature_complete_harbor
+    protocol: documented
+    owner_item: MM-036
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-036
+  - id: ARC-OUTLINE-CARDS
+    benchmark: arc_studio
+    task: Outline and scene cards derived from the typed document
+    criteria:
+      - Outline headings match scene_heading blocks
+      - Cards expose the same scene ids as the document
+    fixture: small_kitchen
+    protocol: automated
+    owner_item: MM-015
+    result: supported
+    automation: tests/competitive/test_competitive_authoring.py::test_arc_outline_cards
+    external_gate: null
+    awaiting: null
+  - id: ARC-HISTORY-BRANCH-MERGE
+    benchmark: arc_studio
+    task: Branch alternative, non-overlapping merge, conflict fail-closed
+    criteria:
+      - Non-overlapping edits merge both texts
+      - Overlapping edits raise MergeConflictError and do not move head
+    fixture: small_kitchen
+    protocol: automated
+    owner_item: MM-005
+    result: supported
+    automation: tests/competitive/test_competitive_revisions.py::test_arc_history_branch_merge
+    external_gate: null
+    awaiting: null
+  - id: ARC-LIVE-COLLAB
+    benchmark: arc_studio
+    task: Multi-writer live collaboration
+    criteria:
+      - Presence, comments, and offline convergence across clients
+    fixture: small_kitchen
+    protocol: documented
+    owner_item: MM-027
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-027
+  - id: FS-BREAKDOWN-EVIDENCE
+    benchmark: filmustage
+    task: Evidence-linked breakdown extraction
+    criteria:
+      - Breakdown items cite source block ids and rights
+    fixture: feature_complete_harbor
+    protocol: documented
+    owner_item: MM-035
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-035
+  - id: FS-IMPACT-APPROVAL
+    benchmark: filmustage
+    task: Change-impact review and human approval
+    criteria:
+      - Downstream production impact is inspectable before accept
+    fixture: feature_complete_harbor
+    protocol: documented
+    owner_item: MM-024
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-024
+  - id: SC-PDF-INGEST
+    benchmark: scriptation
+    task: Production PDF/revision ingestion
+    criteria:
+      - Importing a production PDF fails closed or transfers semantic anchors
+    fixture: production_locked_sides
+    protocol: documented
+    owner_item: MM-013
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-013
+  - id: SC-ANNOTATION-TRANSFER
+    benchmark: scriptation
+    task: Semantic annotation transfer across page changes
+    criteria:
+      - Moved and orphaned annotations produce a transfer report
+    fixture: production_locked_sides
+    protocol: documented
+    owner_item: MM-031
+    result: gap
+    automation: null
+    external_gate: null
+    awaiting: MM-031
+  - id: SC-SIDES
+    benchmark: scriptation
+    task: Scene sides packet from the current layout
+    criteria:
+      - Sides include only requested scenes
+      - Sides id is a typed artifact id
+    fixture: production_locked_sides
+    protocol: automated
+    owner_item: MM-014
+    result: supported
+    automation: tests/competitive/test_competitive_production.py::test_sc_sides
+    external_gate: null
+    awaiting: null
+  - id: SC-OFFLINE
+    benchmark: scriptation
+    task: Airplane-mode local authoring without keystroke loss
+    criteria:
+      - update_text acknowledges a revision while connectivity_offline
+      - Unacked journal recovers once
+    fixture: small_kitchen
+    protocol: automated
+    owner_item: MM-015
+    result: supported
+    automation: tests/competitive/test_competitive_offline.py::test_sc_offline
+    external_gate: null
+    awaiting: null

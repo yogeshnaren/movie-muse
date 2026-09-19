@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/epistemic-operational-assumption-v1.json",
+  "title": "OperationalAssumption",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subject_id", "attribute", "value", "assumed_by_actor_id", "kind", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/operationalAssumptionId"},
+    "subject_id": {"type": "string", "minLength": 1},
+    "attribute": {"type": "string", "minLength": 1},
+    "value": true,
+    "assumed_by_actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "valid_until_revision_id": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/revisionId"}]},
+    "kind": {"const": "operational"},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

@@ -1,0 +1,74 @@
+# MM-044 implementer quality commands
+# UTC 2026-09-19T08:10:00Z
+# SHA 03ea91bc260c2c0c56ed066bfb4143fddbdd6542
+
+$ python3 scripts/validate_handoff.py
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+STATUS_VALIDATE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+SCOPE_COVERAGE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py runnable
+{
+  "count": 1,
+  "runnable": [
+    "MM-044"
+  ]
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-044
+input_fingerprint=d1c86af9829f2c933b8fab5fc98b9e0d844e98cd32463dbc95ae83ac46d8ba4e
+item_id=MM-044
+verification_commit=03ea91bc260c2c0c56ed066bfb4143fddbdd6542
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{
+  "count": 0,
+  "violations": []
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{
+  "count": 0,
+  "hits": []
+}
+exit 0
+
+$ python3 -m ruff check src/movie_muse/api tests/api src/movie_muse/mcp tests/mcp src/movie_muse/webhooks tests/webhooks backend
+All checks passed!
+exit 0
+
+$ python3 -m mypy src/movie_muse/api src/movie_muse/mcp src/movie_muse/webhooks
+Success: no issues found in 20 source files
+exit 0
+
+$ python3 -m pytest tests/api tests/mcp tests/webhooks -q --tb=short
+...........................
+27 passed
+exit 0
+
+$ python3 -m ruff check src tests scripts backend apps
+All checks passed!
+exit 0
+
+$ python3 -m mypy src
+Success: no issues found in 426 source files
+exit 0
+
+$ python3 -m pytest --tb=no
+1022 passed, 3 warnings in 135.16s
+exit 0
+
+$ ./scripts/verify_all.sh
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit 1
+# expected: fail-closed at later migrations_backup_and_recovery; no PASS sentinel

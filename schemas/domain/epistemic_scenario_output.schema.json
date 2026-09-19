@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/epistemic-scenario-output-v1.json",
+  "title": "ScenarioOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "subject_id", "attribute", "value", "scenario_model_id", "kind", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/scenarioOutputId"},
+    "subject_id": {"type": "string", "minLength": 1},
+    "attribute": {"type": "string", "minLength": 1},
+    "value": true,
+    "scenario_model_id": {"$ref": "common-v1.json#/$defs/scenarioModelId"},
+    "percentile": {"oneOf": [{"type": "null"}, {"$ref": "common-v1.json#/$defs/percentile"}]},
+    "kind": {"const": "scenario"},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

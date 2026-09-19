@@ -1,0 +1,14 @@
+source_id: src_01J6NE3AYH00000000000001YH
+title: Licensed golden-path corpus
+classification: licensed
+license: CC0-1.0
+license_summary: CC0-1.0 original Movie Muse fixture
+license_expiry: '2099-01-01T00:00:00Z'
+consent: explicit_fixture_dedication
+origin: original_authored_for_movie_muse
+allow_training: false
+permitted_uses:
+- retrieval
+- citation
+- generation
+- export_disclosure

@@ -1,0 +1,186 @@
+# MM-047 implementer quality commands
+# UTC: 2026-09-19T12:30:00Z
+# SHA: 9f849f7a5366fc9f89af6f7680f8d7e190a2e1b6
+# fingerprint: 292d0901c1689000622372c3bd79f8fd1493d7f34228e9cd9344988ca4686637
+
+python3 scripts/validate_handoff.py
+# HANDOFF_VALIDATION=PASS packages=47
+
+PYTHONPATH=src python3 scripts/mm_status.py validate
+# STATUS_VALIDATE=PASS
+
+PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+# SCOPE_COVERAGE=PASS
+
+PYTHONPATH=src python3 scripts/mm_status.py runnable
+# {"count": 1, "runnable": ["MM-047"]}
+
+PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-047
+# input_fingerprint=292d0901c1689000622372c3bd79f8fd1493d7f34228e9cd9344988ca4686637
+# verification_commit=9f849f7a5366fc9f89af6f7680f8d7e190a2e1b6
+
+PYTHONPATH=src python3 scripts/mm_status.py boundaries
+# {"count": 0, "violations": []}
+
+PYTHONPATH=src python3 scripts/mm_status.py secrets
+# {"count": 0, "hits": []}
+
+python3 -m ruff check --no-cache src tests scripts backend
+# All checks passed!
+
+python3 -m mypy
+# Success: no issues found in 466 source files
+
+PYTHONPATH=src python3 -m pytest tests/golden_path -q
+# 5 passed
+
+PYTHONPATH=src python3 -m pytest -q
+# 1077 passed (warnings: starlette BlockingPortal, httpx app shortcut)
+
+./scripts/verify_all.sh
+# exit 1
+# stderr: MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_live_gates=EXT-FDX-FINAL-DRAFT,EXT-REMOTE-MODEL,EXT-ZOOM-SANDBOX,EXT-GOOGLE-MEET-SANDBOX,EXT-IMAGE-PROVIDER,EXT-VIDEO-PROVIDER,EXT-DELIVERY-CHANNEL,EXT-INSURANCE-PARTNER
+# stdout does not contain MOVIE_MUSE_PROTOTYPE_VERIFICATION=PASS
+
+# --- 2026-09-19T14:30:00Z dual-mode golden path ---
+# SHA: a5b632b7178052adb34a3a7c883e8f513876b06b
+# fingerprint at a5b632b: e5d4d9dd0ea737e7a40052d8f48b42e3c41bff5f27d680013e44e0cdcecf2250
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 6 passed
+# full pytest: collected suite green (warnings: starlette BlockingPortal, httpx app shortcut)
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+
+# --- 2026-09-19T16:15:00Z live probes ---
+# SHA: 96eaee3ce15dbdb624d7ea83fd3415d2fd083b39
+# fingerprint at 96eaee3: acce3a847ce6f6d114554f9013dba4578ae61f03a881fec4d56911307fddd880
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 8 passed
+# full pytest: green (warnings: starlette BlockingPortal, httpx app shortcut)
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+
+# --- 2026-09-19T09:10:00Z completion preflight ---
+# SHA: 3690ce08e1376bad58c67fc7331993b1314bd76f
+# fingerprint at 3690ce0: a059fb7e16e5a4450a79071d7ea18cf8e333fb05b934cfc62c4debededc8f9f2
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed (warnings: starlette BlockingPortal, httpx app shortcut)
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# python3 scripts/gates/_completion_preflight.py: exit 1 completion_preflight=stale_fingerprint:MM-001,stale_fingerprint:MM-004,stale_fingerprint:MM-015
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Did not invalidate --apply
+
+# --- 2026-09-19T09:40:00Z fingerprint restore ---
+# SHA: 6918273
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path + tests/platforms + tests/sync: green
+# frontend vitest: 11 passed
+# full pytest: 1081 collected / all passed
+# completion_preflight: exit 1 stale_fingerprint:MM-001,stale_fingerprint:MM-004,stale_fingerprint:MM-045
+# MM-015 and MM-027 fingerprints match recorded PASS
+# live probes: exit 1 missing_live_gates= all eight required EXT ids
+# Did not invalidate --apply
+
+# --- 2026-09-19T22:00:00Z golden-path steps 35-39 ---
+# SHA: a5150d734b9b2b39469b187e44ab35e7821ee224
+# fingerprint at a5150d7: c703a0e485d4f20eaeb145a4bcbaa8b4604f8efefce342986175505b66aac9c5
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed (warnings: starlette BlockingPortal, httpx app shortcut)
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# python3 scripts/gates/_completion_preflight.py: exit 0 (empty stdout/stderr)
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T10:47:59Z
+# Did not invalidate --apply
+
+# --- 2026-09-19T23:00:00Z remaining golden-path public APIs ---
+# SHA: 9e510376bc4437f0a5a956b1dae45354b69542e2
+# fingerprint at 9e51037: 736b8fad4f766a661a0e754691e1733e0818b1c729e4e0d77c8f32a625e6c3b7
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed (warnings: starlette BlockingPortal, httpx app shortcut)
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# python3 scripts/gates/_completion_preflight.py: exit 0 (empty stdout/stderr)
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T11:08:23Z
+# Did not invalidate --apply
+
+# --- 2026-09-20T00:40:00Z lens/unblock/zoom compare + frontend vitest ---
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed (warnings: starlette BlockingPortal, httpx app shortcut)
+# frontend vitest (from frontend/): 11 passed
+# ./scripts/gates/web_desktop_and_mobile.sh: pytest platforms/hosts + vitest 11 passed
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T11:38:33Z
+# SHA: cc73aed6213d41d6071f402c2105d8d15804406b
+# fingerprint: 8078275ab862b4dd844a9c455f4517d0d27614ae09c4acbe6e5dc60ab66581eb
+# Did not invalidate --apply
+
+# --- 2026-09-20T01:40:00Z close/reopen, two-moment state, platform resume ---
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# full pytest: 1081 collected / all passed
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T12:14:09Z
+# SHA: 0cab3eae3ff9e3c488630d29c884d5c8c5effa90
+# fingerprint: 11a6933bbf751a7c48d935a168ed3588e0aeccaef4a6beb39ecabe8c5b7f5418
+# Did not invalidate --apply
+
+# --- 2026-09-20T02:50:00Z expanded unit gate and pinned-tool preflight ---
+# ruff --no-cache: All checks passed
+# mypy: Success: no issues found in 466 source files
+# pytest tests/golden_path: 9 passed
+# ./scripts/gates/unit_and_property.sh: passed
+# full pytest: 1081 collected / all passed
+# Did not invalidate --apply
+
+# --- 2026-09-20T03:20:00Z independent Grok unit-gate and pin preflight ---
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T12:47:22Z
+# SHA: 23532e3b892dbd13ee648090ac2415548cf60855
+# fingerprint: 414189d271b4cba15d2fd8e381edaaa9c9b27b5c573e2a76a19139462b039c0c
+# pytest tests/golden_path: 9 passed
+# ./scripts/gates/unit_and_property.sh: 717 passed
+# full pytest: 1081 collected / all passed
+# frontend vitest: 11 passed
+# python3 scripts/gates/_completion_preflight.py: exit 0
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Did not invalidate --apply
+# Did not mock live providers
+
+# --- 2026-09-20T03:40:00Z isolate contract pytest from live env ---
+# unit/layout/competitive/external-live pytest now use _run_pytest_isolated_live.sh
+# Did not invalidate --apply
+# Did not mock live providers
+
+# --- 2026-09-20T04:00:00Z independent Grok live-env isolation ---
+# Independent Grok IMPLEMENTATION_QUALITY PASS / PRODUCT FAIL
+# verifier: movie-muse-independent-verifier/grok-4.6/2026-09-19T13:11:33Z
+# SHA: e138b2d797685831d25d4152e0fcff20da05e436
+# fingerprint: fc0507f28cf8d061b155c7c28f8a368a3addc079af3785b8ad0a7eff781a99a2
+# pytest tests/golden_path: 10 passed
+# ./scripts/gates/unit_and_property.sh: 717 passed
+# full pytest: 1082 collected / all passed
+# frontend vitest: 11 passed
+# isolation probe: unisolated FDX fail, isolated FDX/Zoom pass, parent env preserved
+# python3 scripts/gates/_completion_preflight.py: exit 0
+# YAML sha256 unchanged after probes
+# python3 scripts/gates/_live_probes.py: exit 1 missing_live_gates= all eight required EXT ids
+# verify_all.sh: exit 1 missing_live_gates= all eight required EXT ids; PASS sentinel not printed
+# Did not invalidate --apply
+# Did not mock live providers
+
+

@@ -1,0 +1,28 @@
+=== validate_handoff ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+=== ruff ===
+All checks passed!
+=== mypy ===
+Success: no issues found in 91 source files
+=== mm_status validate ===
+STATUS_VALIDATE=PASS
+=== mm_status check-scopes ===
+SCOPE_COVERAGE=PASS
+=== mm_status runnable ===
+MM-006 only
+=== mm_status fingerprint MM-006 ===
+implementation commit 294c3500b00779eb20a8647ec39b686ad31dad0c
+input_fingerprint dc97d4f44a66a4a6a46214a692dd83a9dcbbd46188fb971684d0e4c3a92098fc
+=== mm_status boundaries ===
+0 violations
+=== mm_status secrets ===
+0 hits
+=== pytest focused ===
+46 passed (tests/identity tests/authorization tests/audit)
+=== pytest affected ===
+91 passed (plus tests/revisions tests/persistence tests/sync)
+=== pytest full ===
+324 passed, 1 warning (httpx app shortcut DeprecationWarning)
+=== verify_all ===
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+verify_all_exit=1

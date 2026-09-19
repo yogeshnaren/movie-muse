@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FinalDraft DocumentType="Script" Template="MovieMuse" Version="1" xmlns:mm="https://movie-muse.dev/fdx">
+  <Content>
+    <Paragraph Type="Scene Heading" Number="1">
+      <Text>INT. WORKROOM - DAY</Text>
+    </Paragraph>
+    <Paragraph Type="Action">
+      <Text>Ada keeps a spare key in the drawer.</Text>
+      <CustomMarkup Foo="bar">kept</CustomMarkup>
+    </Paragraph>
+    <Paragraph Type="Cast List">
+      <Text>ADA</Text>
+    </Paragraph>
+    <Paragraph Alignment="Center" Type="Action">
+      <Text>Custom alignment is preserved as an unknown extension.</Text>
+    </Paragraph>
+  </Content>
+  <TitlePage>
+    <Paragraph Type="Title">
+      <Text>UNKNOWN EXTENSION SAMPLE</Text>
+    </Paragraph>
+  </TitlePage>
+</FinalDraft>

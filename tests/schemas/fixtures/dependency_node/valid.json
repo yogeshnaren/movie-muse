@@ -1,0 +1,15 @@
+{
+  "code_version": "1.0.0",
+  "id": "dep_01M1E62D7AQ5DNEEXKS28ZKYRA",
+  "input_hashes": [
+    "sha256:aaa"
+  ],
+  "input_ids": [
+    "rev_01M1E62D76RATSCXCXASR9GKGC"
+  ],
+  "is_stale": false,
+  "node_type": "breakdown_projection",
+  "produced_at": "2026-09-01T12:00:00Z",
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "schema_version": "1.0"
+}

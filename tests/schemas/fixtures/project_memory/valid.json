@@ -1,0 +1,10 @@
+{
+  "id": "mem_01M1E62D79H7BTTEKJKSX2ARRQ",
+  "kind": "decision",
+  "project_id": "proj_01M1E62D76FNNBXXTGBQRJKN0D",
+  "reviewed_at": "2026-09-01T12:00:00Z",
+  "reviewed_by_actor_id": "act_01M1E62D76BMKXW2Q4NM6BD84F",
+  "schema_version": "1.0",
+  "source_collaboration_event_id": "cev_01M1E62D79D7SJBN660Q6ZBKJM",
+  "summary": "moved scene 4 earlier"
+}

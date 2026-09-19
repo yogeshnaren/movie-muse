@@ -1,0 +1,36 @@
+# MM-023 implementer quality commands
+# UTC 2026-09-18T21:20:44Z
+
+$ python3 scripts/validate_handoff.py
+HANDOFF_VALIDATION=PASS packages=47
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+STATUS_VALIDATE=PASS
+
+$ PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+SCOPE_COVERAGE=PASS
+
+$ PYTHONPATH=src python3 scripts/mm_status.py runnable
+MM-023, MM-024, MM-025, MM-027, MM-031
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{"count": 0, "violations": []}
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{"count": 0, "hits": []}
+
+$ python3 -m ruff check src tests scripts backend apps
+All checks passed!
+
+$ python3 -m mypy src
+Success: no issues found in 254 source files
+
+$ PYTHONPATH=src python3 -m pytest tests/reference_lens -q
+7 passed
+
+$ PYTHONPATH=src python3 -m pytest --tb=no
+652 passed, 2 warnings
+
+$ ./scripts/verify_all.sh
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit 1

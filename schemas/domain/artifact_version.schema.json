@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/artifact-version-v1.json",
+  "title": "ArtifactVersion",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "artifact_id", "source_revision_id", "template_id", "template_version",
+    "renderer_version", "checksum", "created_at", "creator_actor_id", "status", "schema_version"
+  ],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/artifactVersionId"},
+    "artifact_id": {"$ref": "common-v1.json#/$defs/artifactId"},
+    "source_revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+    "template_id": {"type": "string", "minLength": 1},
+    "template_version": {"type": "string", "minLength": 1},
+    "renderer_version": {"type": "string", "minLength": 1},
+    "checksum": {"type": "string", "minLength": 1},
+    "created_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "creator_actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "status": {"enum": ["draft", "in_review", "approved", "archived"]},
+    "evidence_bundle_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/evidenceBundleId"}},
+    "rights_record_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/rightsRecordId"}},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

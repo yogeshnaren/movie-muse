@@ -1,0 +1,49 @@
+# Provider catalog. Classification allow-list is fail-closed: a fallback MUST
+# still satisfy max_classification. Remote is paid. Doubles and local stubs are not.
+providers:
+  deterministic_double:
+    kind: double
+    model: double-fixture-v1
+    model_version: "1.0.0"
+    paid: false
+    offline: true
+    max_classification: restricted
+    estimated_cost: 0.0
+    latency_ms: 5
+    quality_tiers: [fast, standard]
+    max_context_tokens: 128000
+  local_stub:
+    kind: local
+    model: local-stub-v1
+    model_version: stub-1.0.0
+    paid: false
+    offline: true
+    max_classification: restricted
+    estimated_cost: 0.01
+    latency_ms: 200
+    quality_tiers: [fast, standard, premium]
+    max_context_tokens: 8192
+  remote_http:
+    kind: remote
+    model: remote-generic-v1
+    model_version: remote-1.0.0
+    paid: true
+    offline: false
+    max_classification: internal
+    estimated_cost: 1.5
+    latency_ms: 1500
+    quality_tiers: [standard, premium]
+    max_context_tokens: 128000
+  finetune_script_adapter:
+    kind: fine_tuned
+    adapter_id: script_suggestions_v1
+    base_provider: deterministic_double
+    model: ft-script-v1
+    model_version: ft-1.0.0
+    paid: false
+    offline: true
+    max_classification: confidential
+    estimated_cost: 0.02
+    latency_ms: 50
+    quality_tiers: [standard, premium]
+    max_context_tokens: 8192

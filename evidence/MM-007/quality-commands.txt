@@ -1,0 +1,58 @@
+MM-007 IMPLEMENTER QUALITY EVIDENCE
+Implementation HEAD: 562f80ef9f4c09f9f62e9fd16e72ba20768552ff
+Role: implementer; status remains IN_PROGRESS; this is not independent verification.
+
+=== python3 scripts/validate_handoff.py ===
+exit=0
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+
+=== python3 -m ruff check src tests scripts backend ===
+exit=0
+All checks passed!
+
+=== python3 -m mypy src ===
+exit=0
+Success: no issues found in 97 source files
+
+=== PYTHONPATH=src python3 -m pytest tests/artifacts -q ===
+exit=0
+15 passed
+
+=== PYTHONPATH=src python3 -m pytest tests/artifacts tests/authorization tests/revisions tests/persistence -q ===
+exit=0
+76 passed
+
+=== PYTHONPATH=src python3 -m pytest ===
+exit=0
+339 passed, 1 warning
+warning: backend/tests/test_health.py emits the pre-existing HTTPX `app` shortcut
+DeprecationWarning.
+
+=== PYTHONPATH=src python3 scripts/mm_status.py validate ===
+exit=0
+STATUS_VALIDATE=PASS
+
+=== PYTHONPATH=src python3 scripts/mm_status.py check-scopes ===
+exit=0
+SCOPE_COVERAGE=PASS
+
+=== PYTHONPATH=src python3 scripts/mm_status.py runnable ===
+exit=0
+MM-007 and MM-008
+
+=== PYTHONPATH=src python3 scripts/mm_status.py boundaries ===
+exit=0
+0 violations
+
+=== PYTHONPATH=src python3 scripts/mm_status.py secrets ===
+exit=0
+0 hits
+
+=== PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-007 ===
+exit=0
+input_fingerprint f764825392d8c8cf139641e8216444384e998a88dab164cabdd29ffe557a69fd
+verification_commit 562f80ef9f4c09f9f62e9fd16e72ba20768552ff
+
+=== ./scripts/verify_all.sh ===
+exit=1 (expected fail-closed limitation; not waived)
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery

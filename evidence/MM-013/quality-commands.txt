@@ -1,0 +1,188 @@
+=== python3 scripts/validate_handoff.py ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+exit:0
+
+=== python3 -m ruff check src tests scripts backend ===
+All checks passed!
+exit:0
+
+=== python3 -m mypy src ===
+Success: no issues found in 165 source files
+exit:0
+
+=== PYTHONPATH=src python3 -m pytest tests/fdx -q ===
+..........................                                               [100%]
+exit:0
+
+=== PYTHONPATH=src python3 -m pytest tests/fdx tests/document tests/fixtures tests/harness --tb=no ===
+................................................................         [100%]
+64 passed in 2.05s
+exit:0
+
+=== PYTHONPATH=src python3 -m pytest --tb=no ===
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 43%]
+........................................................................ [ 58%]
+........................................................................ [ 73%]
+........................................................................ [ 87%]
+...........................................................              [100%]
+=============================== warnings summary ===============================
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+491 passed, 1 warning in 43.39s
+exit:0
+
+=== PYTHONPATH=src python3 scripts/mm_status.py validate ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+exit:0
+
+=== PYTHONPATH=src python3 scripts/mm_status.py check-scopes ===
+SCOPE_COVERAGE=PASS
+exit:0
+
+=== PYTHONPATH=src python3 scripts/mm_status.py runnable ===
+{
+  "count": 1,
+  "runnable": [
+    "MM-013"
+  ]
+}
+exit:0
+
+=== PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-013 ===
+{
+  "input_fingerprint": "8706e57d3591c583de0121cc715917748ca9ce0551f88ceec3f2eba07beae348",
+  "item_id": "MM-013",
+  "resolved_paths": [
+    "fixtures/LICENSE.md",
+    "fixtures/bench/tasks.yaml",
+    "fixtures/fdx/LICENSE.md",
+    "fixtures/fdx/MANIFEST.yaml",
+    "fixtures/fdx/adversarial_unicode_rtl.fdx",
+    "fixtures/fdx/feature_complete_harbor.fdx",
+    "fixtures/fdx/ordinary_kitchen.fdx",
+    "fixtures/fdx/production_locks.fdx",
+    "fixtures/fdx/rights.yaml",
+    "fixtures/fdx/unknown_extension.fdx",
+    "fixtures/golden_path/LICENSE.md",
+    "fixtures/golden_path/MANIFEST.yaml",
+    "fixtures/recordings/extract_structure.json",
+    "fixtures/recordings/generate_text.json",
+    "fixtures/recordings/retrieve.json",
+    "fixtures/rights/licensed.yaml",
+    "fixtures/rights/unlicensed.yaml",
+    "fixtures/screenplays/adversarial_unicode_rtl/LICENSE.md",
+    "fixtures/screenplays/adversarial_unicode_rtl/MANIFEST.yaml",
+    "fixtures/screenplays/adversarial_unicode_rtl/document.json",
+    "fixtures/screenplays/adversarial_unicode_rtl/expected/ast.json",
+    "fixtures/screenplays/adversarial_unicode_rtl/expected/film_ir.json",
+    "fixtures/screenplays/adversarial_unicode_rtl/expected/layout.json",
+    "fixtures/screenplays/adversarial_unicode_rtl/rights.yaml",
+    "fixtures/screenplays/feature_complete_harbor/LICENSE.md",
+    "fixtures/screenplays/feature_complete_harbor/MANIFEST.yaml",
+    "fixtures/screenplays/feature_complete_harbor/document.json",
+    "fixtures/screenplays/feature_complete_harbor/expected/ast.json",
+    "fixtures/screenplays/feature_complete_harbor/expected/film_ir.json",
+    "fixtures/screenplays/feature_complete_harbor/expected/layout.json",
+    "fixtures/screenplays/feature_complete_harbor/rights.yaml",
+    "fixtures/screenplays/production_locked_sides/LICENSE.md",
+    "fixtures/screenplays/production_locked_sides/MANIFEST.yaml",
+    "fixtures/screenplays/production_locked_sides/document.json",
+    "fixtures/screenplays/production_locked_sides/expected/ast.json",
+    "fixtures/screenplays/production_locked_sides/expected/film_ir.json",
+    "fixtures/screenplays/production_locked_sides/expected/layout.json",
+    "fixtures/screenplays/production_locked_sides/rights.yaml",
+    "fixtures/screenplays/small_kitchen/LICENSE.md",
+    "fixtures/screenplays/small_kitchen/MANIFEST.yaml",
+    "fixtures/screenplays/small_kitchen/document.json",
+    "fixtures/screenplays/small_kitchen/expected/ast.json",
+    "fixtures/screenplays/small_kitchen/expected/film_ir.json",
+    "fixtures/screenplays/small_kitchen/expected/layout.json",
+    "fixtures/screenplays/small_kitchen/rights.yaml",
+    "src/movie_muse/document/__init__.py",
+    "src/movie_muse/document/api.py",
+    "src/movie_muse/document/diff.py",
+    "src/movie_muse/document/editor_adapter.py",
+    "src/movie_muse/document/errors.py",
+    "src/movie_muse/document/normalize.py",
+    "src/movie_muse/document/operations.py",
+    "src/movie_muse/document/replay.py",
+    "src/movie_muse/document/selection.py",
+    "src/movie_muse/document/validate.py",
+    "src/movie_muse/fdx/__init__.py",
+    "src/movie_muse/fdx/api.py",
+    "src/movie_muse/fdx/convert.py",
+    "src/movie_muse/fdx/errors.py",
+    "src/movie_muse/fdx/final_draft.py",
+    "src/movie_muse/fdx/fountain.py",
+    "src/movie_muse/fdx/serialize.py",
+    "src/movie_muse/fdx/service.py",
+    "src/movie_muse/fdx/types.py",
+    "tests/fdx/conftest.py",
+    "tests/fdx/test_deterministic.py",
+    "tests/fdx/test_fdx_boundaries.py",
+    "tests/fdx/test_final_draft_unavailable.py",
+    "tests/fdx/test_fixture_corpus.py",
+    "tests/fdx/test_lossy_fountain.py",
+    "tests/fdx/test_profile_and_unknown.py",
+    "tests/fdx/test_profile_coverage.py",
+    "tests/fdx/test_round_trip_corpus.py"
+  ],
+  "verification_commit": "65e4947ccf2ee4be0ee753ecdae571b77a83baf4"
+}
+exit:0
+
+=== PYTHONPATH=src python3 scripts/mm_status.py boundaries ===
+{
+  "count": 0,
+  "violations": []
+}
+exit:0
+
+=== PYTHONPATH=src python3 scripts/mm_status.py secrets ===
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+exit:0
+
+=== ./scripts/verify_all.sh ===
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+SCOPE_COVERAGE=PASS
+{
+  "count": 1,
+  "runnable": [
+    "MM-013"
+  ]
+}
+All checks passed!
+Success: no issues found in 165 source files
+.......................                                                  [100%]
+=============================== warnings summary ===============================
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+23 passed, 1 warning in 8.90s
+{
+  "count": 0,
+  "violations": []
+}
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit:1
+

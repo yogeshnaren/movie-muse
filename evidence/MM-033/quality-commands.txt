@@ -1,0 +1,80 @@
+# MM-033 implementer quality commands
+# UTC 2026-09-19T02:36:16Z
+# SHA b74386d8140132f6a72c4c07be8a1a9dd9b73868
+
+$ python3 scripts/validate_handoff.py
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+SCOPE_COVERAGE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py runnable
+{
+  "count": 5,
+  "runnable": [
+    "MM-032",
+    "MM-033",
+    "MM-040",
+    "MM-041",
+    "MM-044"
+  ]
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-033
+input_fingerprint=793c7d81e3e9b3436ab61328d64a89a5da25553052d687c92d4b7ae211b8cb69
+item_id=MM-033
+verification_commit=b74386d8140132f6a72c4c07be8a1a9dd9b73868
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{
+  "count": 0,
+  "violations": []
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+exit 0
+
+$ python3 -m ruff check src/movie_muse/visual_language tests/visual_language
+All checks passed!
+exit 0
+
+$ python3 -m mypy src/movie_muse/visual_language
+Success: no issues found in 6 source files
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest tests/visual_language -q --tb=short
+.....................
+21 passed
+exit 0
+
+$ python3 -m ruff check src tests scripts backend
+All checks passed!
+exit 0
+
+$ python3 -m mypy src
+Success: no issues found in 370 source files
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest --tb=no
+869 passed, 2 warnings in 91.96s
+exit 0
+
+$ ./scripts/verify_all.sh
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit 1
+# expected: fail-closed at later migrations_backup_and_recovery; no PASS sentinel

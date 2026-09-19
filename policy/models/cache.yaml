@@ -1,0 +1,12 @@
+# Cache reusable accepted generation results. Key is capability + input hash +
+# policy version + prompt version + model. Cache never bypasses AI-off, consent,
+# classification, or paid authorization.
+cache:
+  enabled: true
+  reuse_accepted: true
+  key_parts:
+    - capability
+    - input_hash
+    - policy_version
+    - prompt_version
+    - model

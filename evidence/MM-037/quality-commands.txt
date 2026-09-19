@@ -1,0 +1,245 @@
+# MM-037 implementer quality commands
+# UTC 2026-09-19T01:01:20Z
+# SHA fcdff62223ee344545abf7b8eb9f139720ca9d46
+
+$ python3 scripts/validate_handoff.py
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+SCOPE_COVERAGE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py runnable
+{
+  "count": 7,
+  "runnable": [
+    "MM-029",
+    "MM-032",
+    "MM-033",
+    "MM-037",
+    "MM-040",
+    "MM-041",
+    "MM-044"
+  ]
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-037
+{
+  "input_fingerprint": "c1fa7e64fa1fb6a4ba3a42cdbb5dd678ddb70be37b5c898cb2c93753785bd18b",
+  "item_id": "MM-037",
+  "resolved_paths": [
+    "src/movie_muse/audit/__init__.py",
+    "src/movie_muse/audit/api.py",
+    "src/movie_muse/audit/errors.py",
+    "src/movie_muse/audit/index.py",
+    "src/movie_muse/audit/service.py",
+    "src/movie_muse/audit/types.py",
+    "src/movie_muse/authorization/__init__.py",
+    "src/movie_muse/authorization/api.py",
+    "src/movie_muse/authorization/catalog.py",
+    "src/movie_muse/authorization/errors.py",
+    "src/movie_muse/authorization/policy.py",
+    "src/movie_muse/authorization/projections.py",
+    "src/movie_muse/authorization/service.py",
+    "src/movie_muse/authorization/types.py",
+    "src/movie_muse/authorization/wrapper.py",
+    "src/movie_muse/breakdown/__init__.py",
+    "src/movie_muse/breakdown/api.py",
+    "src/movie_muse/breakdown/errors.py",
+    "src/movie_muse/breakdown/extractors.py",
+    "src/movie_muse/breakdown/index.py",
+    "src/movie_muse/breakdown/service.py",
+    "src/movie_muse/breakdown/thresholds.py",
+    "src/movie_muse/breakdown/types.py",
+    "src/movie_muse/compiler/__init__.py",
+    "src/movie_muse/compiler/api.py",
+    "src/movie_muse/compiler/errors.py",
+    "src/movie_muse/compiler/service.py",
+    "src/movie_muse/compiler/syntax.py",
+    "src/movie_muse/compiler/types.py",
+    "src/movie_muse/department_handoff/__init__.py",
+    "src/movie_muse/department_handoff/api.py",
+    "src/movie_muse/department_handoff/errors.py",
+    "src/movie_muse/department_handoff/index.py",
+    "src/movie_muse/department_handoff/mapping.py",
+    "src/movie_muse/department_handoff/service.py",
+    "src/movie_muse/department_handoff/types.py",
+    "src/movie_muse/dependencies/__init__.py",
+    "src/movie_muse/dependencies/api.py",
+    "src/movie_muse/dependencies/errors.py",
+    "src/movie_muse/dependencies/graph.py",
+    "src/movie_muse/dependencies/index.py",
+    "src/movie_muse/dependencies/projection.py",
+    "src/movie_muse/dependencies/service.py",
+    "src/movie_muse/dependencies/types.py",
+    "src/movie_muse/identity/__init__.py",
+    "src/movie_muse/identity/api.py",
+    "src/movie_muse/identity/errors.py",
+    "src/movie_muse/identity/index.py",
+    "src/movie_muse/identity/service.py",
+    "src/movie_muse/identity/types.py",
+    "src/movie_muse/persistence/__init__.py",
+    "src/movie_muse/persistence/api.py",
+    "src/movie_muse/persistence/backup.py",
+    "src/movie_muse/persistence/blobs.py",
+    "src/movie_muse/persistence/canonical.py",
+    "src/movie_muse/persistence/errors.py",
+    "src/movie_muse/persistence/migrations.py",
+    "src/movie_muse/persistence/recovery.py",
+    "src/movie_muse/persistence/status.py",
+    "src/movie_muse/persistence/store.py",
+    "src/movie_muse/persistence/workspace.py",
+    "src/movie_muse/revisions/__init__.py",
+    "src/movie_muse/revisions/api.py",
+    "src/movie_muse/revisions/errors.py",
+    "src/movie_muse/revisions/events.py",
+    "src/movie_muse/revisions/index.py",
+    "src/movie_muse/revisions/merge.py",
+    "src/movie_muse/revisions/projection.py",
+    "src/movie_muse/revisions/service.py",
+    "src/movie_muse/revisions/types.py",
+    "src/movie_muse/scheduling/__init__.py",
+    "src/movie_muse/scheduling/api.py",
+    "src/movie_muse/scheduling/engine.py",
+    "src/movie_muse/scheduling/errors.py",
+    "src/movie_muse/scheduling/index.py",
+    "src/movie_muse/scheduling/service.py",
+    "src/movie_muse/scheduling/types.py",
+    "src/movie_muse/schemas/__init__.py",
+    "src/movie_muse/schemas/api.py",
+    "src/movie_muse/schemas/artifact.py",
+    "src/movie_muse/schemas/change_set.py",
+    "src/movie_muse/schemas/collaboration.py",
+    "src/movie_muse/schemas/compatibility.py",
+    "src/movie_muse/schemas/creative_intent.py",
+    "src/movie_muse/schemas/dependency_node.py",
+    "src/movie_muse/schemas/document.py",
+    "src/movie_muse/schemas/epistemic.py",
+    "src/movie_muse/schemas/events.py",
+    "src/movie_muse/schemas/evidence.py",
+    "src/movie_muse/schemas/film_ir.py",
+    "src/movie_muse/schemas/ids.py",
+    "src/movie_muse/schemas/migrations.py",
+    "src/movie_muse/schemas/production.py",
+    "src/movie_muse/schemas/project.py",
+    "src/movie_muse/schemas/project_memory.py",
+    "src/movie_muse/schemas/proposal.py",
+    "src/movie_muse/schemas/rights.py",
+    "src/movie_muse/schemas/scenario.py",
+    "src/movie_muse/schemas/scene_space.py",
+    "src/movie_muse/schemas/serialization.py",
+    "src/movie_muse/schemas/shot_ir.py",
+    "src/movie_muse/schemas/validators.py",
+    "tests/scheduling/conftest.py",
+    "tests/scheduling/test_scheduling_boundaries.py",
+    "tests/scheduling/test_scheduling_compile.py",
+    "tests/scheduling/test_scheduling_constraints.py",
+    "tests/scheduling/test_scheduling_invalidation.py"
+  ],
+  "verification_commit": "fcdff62223ee344545abf7b8eb9f139720ca9d46"
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{
+  "count": 0,
+  "violations": []
+}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+exit 0
+
+$ python3 -m ruff check src tests scripts backend apps
+All checks passed!
+exit 0
+
+$ python3 -m mypy src
+Success: no issues found in 337 source files
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest tests/scheduling -q
+.............                                                            [100%]
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest --tb=no
+........................................................................ [  9%]
+........................................................................ [ 18%]
+........................................................................ [ 27%]
+........................................................................ [ 36%]
+........................................................................ [ 45%]
+........................................................................ [ 54%]
+........................................................................ [ 63%]
+........................................................................ [ 72%]
+........................................................................ [ 81%]
+........................................................................ [ 90%]
+........................................................................ [100%]
+=============================== warnings summary ===============================
+../home/ubuntu/.local/lib/python3.12/site-packages/starlette/testclient.py:41
+  /home/ubuntu/.local/lib/python3.12/site-packages/starlette/testclient.py:41: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    [], typing.ContextManager[anyio.abc.BlockingPortal]
+
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+792 passed, 2 warnings in 80.38s (0:01:20)
+exit 0
+
+$ ./scripts/verify_all.sh
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+HANDOFF_VALIDATION=PASS packages=47 dag_sha256=5a9b128eba55298a8f8bbc0f9d75fad2e16c0f0fb2963c23e5239983beee14d9
+STATUS_VALIDATE=PASS
+SCOPE_COVERAGE=PASS
+{
+  "count": 7,
+  "runnable": [
+    "MM-029",
+    "MM-032",
+    "MM-033",
+    "MM-037",
+    "MM-040",
+    "MM-041",
+    "MM-044"
+  ]
+}
+All checks passed!
+Success: no issues found in 337 source files
+.......................                                                  [100%]
+=============================== warnings summary ===============================
+../home/ubuntu/.local/lib/python3.12/site-packages/starlette/testclient.py:41
+  /home/ubuntu/.local/lib/python3.12/site-packages/starlette/testclient.py:41: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    [], typing.ContextManager[anyio.abc.BlockingPortal]
+
+backend/tests/test_health.py::test_health
+  /home/ubuntu/.local/lib/python3.12/site-packages/httpx/_client.py:690: DeprecationWarning: The 'app' shortcut is now deprecated. Use the explicit style 'transport=WSGITransport(app=...)' instead.
+    warnings.warn(message, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+23 passed, 2 warnings in 9.03s
+{
+  "count": 0,
+  "violations": []
+}
+{
+  "count": 0,
+  "hits": [],
+  "report": "/workspace/evidence/secret-scan.txt"
+}
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit 1
+

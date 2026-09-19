@@ -1,0 +1,10 @@
+id: golden_path_harbor
+fixture_id: feature_complete_harbor
+organization_id: org_01J6NE393A000000000000003A
+owner_actor_id: act_01J6NE39350000000000000035
+branch_id: brn_01J6NE39390000000000000039
+created_at: '2026-09-01T00:00:00Z'
+project_title: Harbor Night
+owner_display_name: Jordan Hale
+organization_name: Golden Path Studio
+offline: true

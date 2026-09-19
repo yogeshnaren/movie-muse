@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/rights-record-v1.json",
+  "title": "RightsRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "source_id", "basis", "owner_actor_id", "registered_at", "allow_training", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/rightsRecordId"},
+    "source_id": {"type": "string", "minLength": 1},
+    "basis": {"enum": ["user_owned", "public_domain", "licensed", "permitted"]},
+    "owner_actor_id": {"$ref": "common-v1.json#/$defs/actorId"},
+    "registered_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "allow_training": {"type": "boolean"},
+    "license_summary": {"type": ["string", "null"]},
+    "license_expiry": {"type": ["string", "null"]},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

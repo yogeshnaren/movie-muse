@@ -1,0 +1,25 @@
+# Import contracts for the modular monolith.
+# A module may import another module's public api module only.
+# Internal modules (anything not named api.py at the module root) are private.
+schema_version: "2.0"
+public_module_suffix: ".api"
+forbidden:
+  - cross_module_internal_imports
+  - cross_module_table_imports
+internal_path_markers:
+  - internal
+  - _internal
+  - tables
+  - models
+  - repository
+allowed_shared_packages:
+  - movie_muse.toolchain
+  - movie_muse.schemas
+host_packages:
+  - backend.app
+  - movie_muse.toolchain
+rules:
+  - name: modules_must_not_import_sibling_internals
+    description: >
+      movie_muse.<module> may import movie_muse.<other>.api (and its public
+      re-exports) but must not import movie_muse.<other>.<internal>.

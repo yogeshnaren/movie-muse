@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moviemuse.local/schemas/domain/film-ir-v1.json",
+  "title": "FilmIR",
+  "$defs": {
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "canonical_name"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["character", "location", "prop", "scene", "event"]},
+        "canonical_name": {"type": "string", "minLength": 1},
+        "scene_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/sceneId"}},
+        "mention_block_ids": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/blockId"}}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "project_id", "source_revision_id", "extractor_version", "computed_at", "schema_version"],
+  "properties": {
+    "id": {"$ref": "common-v1.json#/$defs/filmIrId"},
+    "project_id": {"$ref": "common-v1.json#/$defs/projectId"},
+    "source_revision_id": {"$ref": "common-v1.json#/$defs/revisionId"},
+    "extractor_version": {"type": "string", "minLength": 1},
+    "computed_at": {"$ref": "common-v1.json#/$defs/timestamp"},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+    "scene_order": {"type": "array", "items": {"$ref": "common-v1.json#/$defs/sceneId"}},
+    "schema_version": {"$ref": "common-v1.json#/$defs/schemaVersion"}
+  }
+}

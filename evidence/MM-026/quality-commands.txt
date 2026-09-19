@@ -1,0 +1,51 @@
+# MM-026 implementer quality commands
+# UTC 2026-09-18T22:44:43Z
+
+$ python3 scripts/validate_handoff.py
+HANDOFF_VALIDATION=PASS packages=47
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py validate
+STATUS_VALIDATE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py check-scopes
+SCOPE_COVERAGE=PASS
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py runnable
+MM-026, MM-030, MM-031, MM-035, MM-040, MM-041
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py fingerprint MM-026
+input_fingerprint=4ad07c818a7a97978abfc51af293a1c84315b59e57327baeae52b8924419a4dc
+verification_commit=71640a70962cf3d06b83240bde47a2b15a88633d
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py boundaries
+{"count": 0, "violations": []}
+exit 0
+
+$ PYTHONPATH=src python3 scripts/mm_status.py secrets
+{"count": 0, "hits": []}
+exit 0
+
+$ python3 -m ruff check src tests scripts backend apps
+All checks passed!
+exit 0
+
+$ python3 -m mypy src
+Success: no issues found in 284 source files
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest tests/room_mode -q
+11 passed
+exit 0
+
+$ PYTHONPATH=src python3 -m pytest --tb=no
+707 passed, 2 warnings
+exit 0
+
+$ ./scripts/verify_all.sh
+MOVIE_MUSE_PROTOTYPE_VERIFICATION=NOT_READY missing_executable_gate=migrations_backup_and_recovery
+exit 1

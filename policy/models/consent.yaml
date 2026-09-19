@@ -1,0 +1,11 @@
+# Consent and data-handling defaults. Training on user content is never implied.
+consent:
+  required_for:
+    public: false
+    internal: false
+    confidential: true
+    restricted: true
+  training_on_user_content: false
+  retention: minimum
+  cross_user_prompt_cache: false
+  no_training_default: true
