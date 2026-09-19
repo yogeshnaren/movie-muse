@@ -1317,4 +1317,15 @@ This file records orchestrator actions that the schema cannot store.
   and EXT-VIDEO-PROVIDER NOT_RUN. Did not import tests.video_previs.
 - Next runnable: MM-040, MM-041, MM-044
 
+## 2026-09-19T03:50:00Z
+
+- Implementer: MM-040 Audience Resonance Lab on
+  `cursor/mm-001-toolchain-baseline-04ec`.
+- MM-009/MM-010/MM-018/MM-020/MM-025 PASS unblocked MM-040. Moved MM-040 to
+  IN_PROGRESS. `pass_record` remains null.
+- Evidence tiers keep synthetic LLM hypotheses separate from expert/reader,
+  table-read/panel, previs-screening, and released-outcome data. Synthetic
+  output is never a human/bootstrap population sample. Human data requires
+  consent and RightsService provenance.
+
 
